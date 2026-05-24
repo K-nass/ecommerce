@@ -1,0 +1,60 @@
+{
+  "header": {
+    "deliveryModes": {
+      "title": "Delivery Options",
+      "scheduled": "Scheduled",
+      "now": "NOW",
+      "nowEta": "120 mins",
+      "electronics": "Electronic…",
+      "fastDelivery": "Fast Delivery",
+      "fastDeliveryDesc": "Get it by tomorrow",
+      "standardDelivery": "Standard Delivery",
+      "standardDeliveryDesc": "Delivery in 3-5 business days",
+      "freeShipping": "Free Shipping",
+      "freeShippingDesc": "On orders over $50"
+    },
+    "mainNav": {
+      "shop": "Shop",
+      "deals": "Deals",
+      "about": "About Us",
+      "contact": "Contact",
+      "help": "Help & Support",
+      "blog": "Blog",
+      "account": "Account",
+      "myOrders": "My Orders",
+      "wishlist": "Wishlist",
+      "signIn": "Sign In",
+      "signUp": "Sign Up",
+      "logout": "Log Out"
+    },
+    "categoryNav": {
+      "allCategories": "All Categories",
+      "electronics": "Electronics",
+      "fashion": "Fashion",
+      "home": "Home & Garden",
+      "sports": "Sports & Outdoors",
+      "books": "Books & Media",
+      "toys": "Toys & Games",
+      "beauty": "Beauty & Personal Care",
+      "grocery": "Grocery & Food",
+      "viewAll": "View All Categories"
+    },
+    "search": {
+      "placeholder": "Search products...",
+      "button": "Search",
+      "noResults": "No products found"
+    },
+    "cart": {
+      "label": "Cart",
+      "itemCount": "{count, plural, =0 {Cart} one {# item} other {# items}}"
+    },
+    "common": {
+      "language": "Language",
+      "english": "English",
+      "arabic": "العربية",
+      "currency": "Currency",
+      "usd": "USD",
+      "sar": "SAR"
+    }
+  }
+}
