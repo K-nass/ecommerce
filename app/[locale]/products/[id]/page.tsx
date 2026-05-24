@@ -1,9 +1,10 @@
 // Product detail page - displays individual product
-export default function ProductDetailPage({
+export default async function ProductDetailPage({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ locale: string; id: string }>;
 }) {
+  const { id } = await params;
   return (
     <div>
       {/* Product detail content */}
