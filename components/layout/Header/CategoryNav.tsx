@@ -30,7 +30,7 @@ export default async function CategoryNav({
           <span className="whitespace-nowrap">{t("allCategories")}</span>
         </button>
 
-        <div className="no-scrollbar min-w-0 flex-1 overflow-x-auto">
+        <div className="no-scrollbar min-w-0 flex-1 overflow-x-auto overflow-y-hidden">
           <ul
             className="flex w-max items-center whitespace-nowrap pe-2 text-[13px] font-semibold text-primary-dark gap-4 sm:gap-6 md:gap-8"
           >
