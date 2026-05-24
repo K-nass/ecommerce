@@ -20,6 +20,7 @@
       "contact": "Contact",
       "help": "Help & Support",
       "blog": "Blog",
+      "loginRegister": "Login & Register",
       "account": "Account",
       "myOrders": "My Orders",
       "wishlist": "Wishlist",
@@ -41,6 +42,8 @@
     },
     "search": {
       "placeholder": "Search products...",
+      "mainPlaceholderPrefix": "Search ",
+      "mainPlaceholderHighlight": "50,000+ items",
       "button": "Search",
       "noResults": "No products found"
     },

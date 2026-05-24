@@ -2,7 +2,7 @@ import { DeliveryModeButton } from "./DeliveryModeButton";
 
 export default function DeliveryModes() {
   return (
-    <div className="flex items-center gap-3">
+    <div className="no-scrollbar flex w-full items-center gap-3 overflow-x-auto py-2">
       <DeliveryModeButton
         label="Scheduled"
         icon={{ src: "/scheduled.avif", alt: "Scheduled" }}
