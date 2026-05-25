@@ -6,6 +6,7 @@ import { notFound } from "next/navigation";
 
 import { routing } from "@/i18n/routing";
 import Header from "@/components/layout/Header/Header";
+import { AuthModal } from "@/features/auth/AuthModal";
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
@@ -27,6 +28,7 @@ export default async function RootLayout({
         <NextIntlClientProvider>
           <Header params={params} />
           <div className="container mx-auto px-4">{children}</div>
+          <AuthModal />
         </NextIntlClientProvider>
       </body>
     </html>

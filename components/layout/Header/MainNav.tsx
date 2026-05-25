@@ -5,11 +5,13 @@ import { useTranslations } from "next-intl";
 import Logo from "./Logo";
 import { SearchInput } from "@/components/layout/Header/SearchInput";
 import Image from "next/image";
+import { useAuthModalStore } from "@/stores/auth/useAuthModalStore";
 
 export default function MainNav() {
   const t = useTranslations("header.mainNav");
   const tSearch = useTranslations("header.search");
   const authLabel = t("loginRegister");
+  const openAuthModal = useAuthModalStore((s) => s.open);
 
   return (
     <div className="flex flex-wrap items-center gap-3 md:gap-4">
@@ -44,7 +46,8 @@ export default function MainNav() {
 
         <button
           type="button"
-          className="inline-flex items-center text-sm font-semibold text-text-primary gap-1"
+          onClick={() => openAuthModal("login")}
+          className="inline-flex items-center text-sm font-semibold text-text-primary gap-1 transition hover:text-primary"
         >
           <Image src="/icons/user.svg" width={25} height={25} alt="user icon" />
           <span className="hidden whitespace-nowrap md:inline">{authLabel}</span>
