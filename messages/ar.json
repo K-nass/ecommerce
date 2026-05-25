@@ -20,6 +20,7 @@
       "contact": "اتصل بنا",
       "help": "المساعدة والدعم",
       "blog": "المدونة",
+      "loginRegister": "تسجيل الدخول",
       "account": "حسابي",
       "myOrders": "طلباتي",
       "wishlist": "قائمة الرغبات",
@@ -41,6 +42,8 @@
     },
     "search": {
       "placeholder": "ابحث عن المنتجات...",
+      "mainPlaceholderPrefix": "ابحث عن ",
+      "mainPlaceholderHighlight": "50,000+ منتج",
       "button": "بحث",
       "noResults": "لم يتم العثور على منتجات"
     },
