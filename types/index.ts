@@ -30,3 +30,11 @@ export interface User {
   name: string;
   createdAt: Date;
 }
+
+export interface BannerItem {
+  id: string;
+  imageSrc: string;
+  alt: string;
+  href?: string;
+  priority?: boolean;
+}
