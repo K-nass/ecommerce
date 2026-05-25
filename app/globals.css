@@ -1,9 +1,5 @@
 @import "tailwindcss";
 
-* {
-  box-sizing: border-box;
-}
-
 button {
   cursor: pointer;
 }
@@ -27,6 +23,11 @@ button {
   --color-border: #e5e5e5;
 }
 
+@layer base {
+  body {
+    font-family: var(--font-montserrat), sans-serif;
+  }
+}
 @layer utilities {
   .header-gradient {
     background: linear-gradient(rgb(157, 176, 196), rgb(255, 255, 255));
