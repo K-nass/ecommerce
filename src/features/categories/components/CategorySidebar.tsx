@@ -1,0 +1,46 @@
+"use client";
+
+import Link from "next/link";
+import { cn } from "@/shared/utils/cn";
+import type { CategoryMenuItem } from "../types";
+
+type CategorySidebarProps = {
+  categories: CategoryMenuItem[];
+  activeCategoryId: number | null;
+  onActiveCategoryChange: (categoryId: number) => void;
+};
+
+function toCategoryHref(slug: string) {
+  return `/products?category=${encodeURIComponent(slug)}`;
+}
+
+export default function CategorySidebar({
+  categories,
+  activeCategoryId,
+  onActiveCategoryChange,
+}: CategorySidebarProps) {
+  return (
+    <aside className="bg-surface border-e border-gray-200 overflow-y-auto">
+      <ul className="py-2">
+        {categories.map((category) => {
+          const isActive = category.id === activeCategoryId;
+          return (
+            <li key={category.id}>
+              <Link
+                href={toCategoryHref(category.slug)}
+                onMouseEnter={() => onActiveCategoryChange(category.id)}
+                onFocus={() => onActiveCategoryChange(category.id)}
+                className={cn(
+                  "flex w-full items-center px-4 py-2 text-[13px] text-text-primary transition-colors hover:bg-gray-200",
+                  isActive && "bg-gray-200 font-semibold",
+                )}
+              >
+                {category.name}
+              </Link>
+            </li>
+          );
+        })}
+      </ul>
+    </aside>
+  );
+}
