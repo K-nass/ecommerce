@@ -4,8 +4,12 @@
   box-sizing: border-box;
 }
 
+button {
+  cursor: pointer;
+}
+
 @theme {
-  --color-primary: #004a97;
+  --color-primary: #0e5aa7;
   --color-primary-dark: #00387b;
 
   --color-secondary: #e3000f;
@@ -29,5 +33,12 @@
   }
   .header-shadow {
     box-shadow: 0 4px 24px 0 rgba(0, 0, 0, 0.06);
+  }
+  .no-scrollbar {
+    scrollbar-width: none; /* Modern standard */
+  }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
   }
 }
