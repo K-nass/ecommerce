@@ -2,8 +2,8 @@
   "header": {
     "deliveryModes": {
       "title": "خيارات التسليم",
-      "scheduled": "مجدول",
-      "now": "الآن",
+      "scheduled": "توصيل ب موعد",
+      "now": "توصيل سريع",
       "nowEta": "120 دقيقة",
       "electronics": "إلكترونيات…",
       "fastDelivery": "التسليم السريع",
