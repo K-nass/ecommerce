@@ -18,15 +18,14 @@ export default async function RootLayout({
   children: ReactNode;
   params: Promise<{ locale: string }>;
 }>) {
-  const { locale: rawLocale } = await params;
-  if (!hasLocale(routing.locales, rawLocale)) notFound();
-  const locale = rawLocale;
-
+  const { locale } = await params;
+  if (!hasLocale(routing.locales, locale)) notFound();
+ const dir = locale === 'ar' ? 'rtl' : 'ltr';
   return (
-    <html lang={locale} dir={locale === "ar" ? "rtl" : "ltr"}>
+    <html lang={locale} dir={dir}>
       <body className="min-h-full flex flex-col">
         <NextIntlClientProvider>
-          <Header />
+          <Header params={params} />
           <div className="container mx-auto px-4">{children}</div>
         </NextIntlClientProvider>
       </body>
