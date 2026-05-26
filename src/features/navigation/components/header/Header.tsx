@@ -8,7 +8,7 @@ export default function Header({
   params: Promise<{ locale: string }>;
 }) {
   return (
-    <header className="header-gradient header-shadow">
+    <header className="header-gradient header-shadow mb-4">
       <div className="container mx-auto px-4 flex flex-col gap-3 p-2.5 md:gap-4">
         <DeliveryModes />
         <MainNav />

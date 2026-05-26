@@ -31,7 +31,7 @@ export default async function RootLayout({
       <body className={cn("min-h-full flex flex-col", montserrat.variable)}>
         <NextIntlClientProvider>
           <Header params={params} />
-          <div className="container mx-auto px-4">{children}</div>
+          <div className="container mx-auto px-4 flex flex-col gap-30">{children}</div>
           <AuthModal />
         </NextIntlClientProvider>
       </body>
