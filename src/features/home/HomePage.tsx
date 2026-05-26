@@ -4,7 +4,7 @@ import HeroSwiper from "./components/HeroSwiper";
 
 export function HomePage() {
   return (
-    <main className="flex flex-col gap-4">
+    <main className="flex flex-col gap-y-5">
       <HeroSwiper />
       <CardSlider title="Daily Offers" />
       <ContentSection title="Top Categories" />
