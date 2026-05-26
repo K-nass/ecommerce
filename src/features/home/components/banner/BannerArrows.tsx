@@ -3,23 +3,35 @@ import { cn } from "@/shared/utils/cn";
 type BannerArrowsProps = {
   onPrevious: () => void;
   onNext: () => void;
-  className?: string;
+  className?: string; // Controls the wrapper positioning if needed
+  buttonClassName?: string; // For passing custom background, hover, borders on the fly
+  iconClassName?: string; // For passing custom icon colors or sizing
   previousLabel?: string;
   nextLabel?: string;
   isRtl?: boolean;
+  variant?: "hero" | "card"; // Out-of-the-box styling presets
+  strokeWidth?: number;
 };
 
-function ArrowIcon({ direction }: { direction: "left" | "right" }) {
+function ArrowIcon({
+  direction,
+  className,
+  strokeWidth,
+}: {
+  direction: "left" | "right";
+  className?: string;
+  strokeWidth: number;
+}) {
   const rotationClass = direction === "left" ? "rotate-180" : "";
 
   return (
     <svg
       viewBox="0 0 24 24"
       aria-hidden="true"
-      className={cn("h-5 w-5 text-white", rotationClass)}
+      className={cn("h-5 w-5 transition-transform", rotationClass, className)}
       fill="none"
       stroke="currentColor"
-      strokeWidth="2.5"
+      strokeWidth={strokeWidth}
     >
       <path d="M8 4l8 8-8 8" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
@@ -30,38 +42,79 @@ export default function BannerArrows({
   onPrevious,
   onNext,
   className,
-  previousLabel = "Previous banner",
-  nextLabel = "Next banner",
+  buttonClassName,
+  iconClassName,
+  previousLabel = "Previous slide",
+  nextLabel = "Next slide",
   isRtl = false,
+  variant = "hero", // Defaults to your current hero look
+  strokeWidth = 2.5,
 }: BannerArrowsProps) {
-  const previousPositionClass = isRtl ? "right-3" : "left-3";
-  const nextPositionClass = isRtl ? "left-3" : "right-3";
+  // 1. Structural positions based on LTR/RTL and variant types
+  const isHero = variant === "hero";
+
+  const previousPositionClass = isRtl
+    ? isHero
+      ? "right-3"
+      : "right-0 translate-x-1/2"
+    : isHero
+      ? "left-3"
+      : "left-0 -translate-x-1/2";
+
+  const nextPositionClass = isRtl
+    ? isHero
+      ? "left-3"
+      : "left-0 -translate-x-1/2"
+    : isHero
+      ? "right-3"
+      : "right-0 translate-x-1/2";
+
   const previousDirection = isRtl ? "right" : "left";
   const nextDirection = isRtl ? "left" : "right";
 
+  // 2. Base Variant Styles
+  const variantButtonStyles = isHero
+    ? "bg-black/35 text-white hover:bg-black/55 focus-visible:outline-white"
+    : "bg-white text-slate-500 border border-slate-500";
+
   return (
     <div className={cn("pointer-events-none absolute inset-0 z-20", className)}>
+      {/* PREVIOUS BUTTON */}
       <button
         type="button"
         onClick={onPrevious}
         aria-label={previousLabel}
         className={cn(
-          "pointer-events-auto absolute top-1/2 -translate-y-1/2 rounded-full bg-black/35 p-2.5 transition hover:bg-black/55 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white",
+          "pointer-events-auto absolute top-1/2 -translate-y-1/2 rounded-full p-2.5 transition duration-200 cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 disabled:opacity-0 disabled:pointer-events-none",
           previousPositionClass,
+          variantButtonStyles,
+          buttonClassName, // Lets you pass arbitrary classes on top
         )}
       >
-        <ArrowIcon direction={previousDirection} />
+        <ArrowIcon
+          direction={previousDirection}
+          className={iconClassName}
+          strokeWidth={strokeWidth}
+        />
       </button>
+
+      {/* NEXT BUTTON */}
       <button
         type="button"
         onClick={onNext}
         aria-label={nextLabel}
         className={cn(
-          "pointer-events-auto absolute top-1/2 -translate-y-1/2 rounded-full bg-black/35 p-2.5 transition hover:bg-black/55 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white",
+          "pointer-events-auto absolute top-1/2 -translate-y-1/2 rounded-full p-2.5 transition duration-200 cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 disabled:opacity-0 disabled:pointer-events-none",
           nextPositionClass,
+          variantButtonStyles,
+          buttonClassName, // Lets you pass arbitrary classes on top
         )}
       >
-        <ArrowIcon direction={nextDirection} />
+        <ArrowIcon
+          direction={nextDirection}
+          className={iconClassName}
+          strokeWidth={strokeWidth}
+        />
       </button>
     </div>
   );
