@@ -20,12 +20,16 @@ const nextConfig: NextConfig = {
         hostname: "images.unsplash.com",
       },
       {
-        protocol:"https",
-        hostname:"media.giphy.com"
+        protocol: "https",
+        hostname: "media.giphy.com",
       },
       {
-        protocol:"https",
-        hostname:"cdn.jsdelivr.net"
+        protocol: "https",
+        hostname: "cdn.jsdelivr.net",
+      },
+      {
+        protocol: "https",
+        hostname: "cdn.mafrservices.com",
       },
     ],
   },
