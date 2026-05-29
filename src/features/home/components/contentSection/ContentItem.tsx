@@ -16,7 +16,7 @@ export default function ContentItem({ item }: { item: ContentItem }) {
           alt={item.title}
           width={135}
           height={135}
-          className="object-contain max-h-full max-w-full"
+          className="object-contain"
         />
       </div>
       <div className="w-full text-center flex-1 flex items-center justify-center">

@@ -21,6 +21,8 @@ button {
   --color-text-secondary: #666666;
 
   --color-border: #e5e5e5;
+  --color-border-subtle: #e0e7ef;
+  --color-discount: #bc1e20;
 }
 
 @layer base {
