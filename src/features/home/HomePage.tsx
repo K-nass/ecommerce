@@ -1,4 +1,5 @@
 import { Banner } from "./components/banner";
+import CardGrid from "./components/cardGrid/CardGrid";
 import CardSlider from "./components/cardSlider/CardSlider";
 import type { CardSlideItem } from "./components/cardSlider/Slide";
 import ContentSection from "./components/contentSection/ContentSection";
@@ -69,21 +70,20 @@ export function HomePage() {
   return (
     <main className="flex flex-col gap-y-5">
       <HeroSwiper />
-      <CardSlider title="Daily Offers" items={sliderCards} variant="slider" />
+      <CardSlider title="Daily Offers" items={sliderCards} />
       <ContentSection title="Top Categories" />
       <ProductSlider title="Best sellers" />
-      <CardSlider items={sliderCards} variant="slider" />
+      <CardSlider items={sliderCards} />
       <ProductSlider />
-      <CardSlider
+      <CardGrid
         title="Featured promotions"
         items={promoCards}
-        variant="grid"
         gridClassName="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4"
         cardClassName="aspect-[16/9]"
         slideSizes="(max-width: 640px) 100vw, (max-width: 1280px) 50vw, 25vw"
       />
       <ProductSlider />
-      <CardSlider title="Explore more deals" items={sliderCards} variant="slider" />
+      <CardSlider title="Explore more deals" items={sliderCards} />
       <ProductSlider title="Trending Now" />
       <Banner
         title="Carrefour leaflets"
@@ -91,10 +91,9 @@ export function HomePage() {
         alt="banner"
         className="h-42.5 w-full sm:h-57.5 lg:h-75"
       />
-      <CardSlider
+      <CardGrid
         title="Electronics Zone"
         items={promoCards}
-        variant="grid"
         gridClassName="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4"
         cardClassName="aspect-[4/5]"
         slideSizes="(max-width: 640px) 100vw, (max-width: 1280px) 50vw, 25vw"
