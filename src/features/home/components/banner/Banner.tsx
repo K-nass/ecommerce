@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { cn } from "@/shared/utils/cn";
+import SectionTitle from "@/components/ui/SectionTitle";
 
 type BannerProps = {
   imageSrc: string;
@@ -13,9 +14,11 @@ type BannerProps = {
   className?: string;
   overlay?: ReactNode;
   sizes?: string;
+  title?: string;
 };
 
 export default function Banner({
+  title,
   imageSrc,
   alt,
   href,
@@ -32,6 +35,7 @@ export default function Banner({
         className,
       )}
     >
+      {title && <SectionTitle title={title} />}
       <Image
         src={imageSrc}
         alt={alt}
