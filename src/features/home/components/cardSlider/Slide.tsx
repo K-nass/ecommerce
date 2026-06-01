@@ -1,22 +1,34 @@
 import { cn } from "@/shared/utils/cn";
 import Image from "next/image";
 
-interface Slide {
-  id: number;
+export interface CardSlideItem {
+  id: number | string;
   image: string;
   title: string;
   borderColor?: string;
 }
 
 interface SlideProps {
-  slide: Slide;
+  slide: CardSlideItem;
   hasBorder?: boolean;
+  aspectClassName?: string;
+  imageClassName?: string;
+  sizes?: string;
+  priority?: boolean;
 }
-export default function Slide({ slide, hasBorder = true }: SlideProps) {
+export default function Slide({
+  slide,
+  hasBorder = true,
+  aspectClassName = "aspect-3/4",
+  imageClassName,
+  sizes = "(max-width: 480px) 75vw, (max-width: 768px) 45vw, (max-width: 1024px) 30vw, 20vw",
+  priority = false,
+}: SlideProps) {
   return (
     <div
       className={cn(
-        "relative aspect-3/4 w-full overflow-hidden rounded-xl",
+        "relative w-full overflow-hidden rounded-xl",
+        aspectClassName,
         hasBorder && "border-2",
         hasBorder && (slide.borderColor || "border-primary-dark"),
       )}
@@ -25,9 +37,9 @@ export default function Slide({ slide, hasBorder = true }: SlideProps) {
         src={slide.image}
         alt={slide.title}
         fill
-        sizes="(max-w-480px) 75vw, (max-w-768px) 45vw, (max-w-1024px) 30vw, 20vw"
-        priority={slide.id <= 2}
-        className={cn("object-cover rounded-xl", hasBorder && "p-1")}
+        sizes={sizes}
+        priority={priority}
+        className={cn("rounded-xl object-cover", hasBorder && "p-1", imageClassName)}
       />
     </div>
   );

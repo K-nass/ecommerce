@@ -7,97 +7,134 @@ import type { Swiper as SwiperType } from "swiper/types";
 import { Navigation, Pagination } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/pagination";
-import { BannerArrows } from "../banner";
-import Slide from "./Slide";
+
 import SectionTitle from "@/components/ui/SectionTitle";
-export const offerImages = [
-  {
-    id: 1,
-    image:
-      "https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=281&h=364&fit=crop",
-    title: "Mega Flash Sale",
-  },
-  {
-    id: 2,
-    image:
-      "https://images.unsplash.com/photo-1542838132-92c53300491e?w=281&h=364&fit=crop",
-    title: "Daily Supermarket Deals",
-  },
-  {
-    id: 3,
-    image:
-      "https://images.unsplash.com/photo-1483985988355-763728e1935b?w=281&h=364&fit=crop",
-    title: "Fashion & Apparel",
-  },
-  {
-    id: 4,
-    image:
-      "https://images.unsplash.com/photo-1531297484001-80022131f5a1?w=281&h=364&fit=crop",
-    title: "Electronics & Tech",
-  },
-  {
-    id: 5,
-    image:
-      "https://images.unsplash.com/photo-1612817288484-6f916006741a?w=281&h=364&fit=crop",
-    title: "Beauty & Cosmetics Packs",
-  },
-  {
-    id: 6,
-    image:
-      "https://images.unsplash.com/photo-1601924994987-69e26d50dc26?w=281&h=364&fit=crop",
-    title: "Weekly Leaflet Offers",
-  },
-];
-export default function CardSlider({ title }: { title: string }) {
+import { cn } from "@/shared/utils/cn";
+
+import { BannerArrows } from "../banner";
+import Slide, { type CardSlideItem } from "./Slide";
+
+type CommonCardSliderProps = {
+  title?: string;
+  items: CardSlideItem[];
+  className?: string;
+  gridClassName?: string;
+  cardClassName?: string;
+  imageClassName?: string;
+  slideSizes?: string;
+};
+
+type SliderCardSliderProps = CommonCardSliderProps & {
+  variant: "slider";
+  showArrows?: boolean;
+};
+
+type GridCardSliderProps = CommonCardSliderProps & {
+  variant: "grid";
+  showArrows?: never;
+};
+
+type CardSliderProps = SliderCardSliderProps | GridCardSliderProps;
+
+export default function CardSlider({
+  title,
+  items,
+  variant,
+  showArrows = true,
+  className,
+  gridClassName = "grid grid-cols-2 gap-3 md:grid-cols-4",
+  cardClassName = "aspect-3/4",
+  imageClassName,
+  slideSizes,
+}: CardSliderProps) {
+  const resolvedVariant = variant;
   const locale = useLocale();
   const isRtl = locale === "ar";
   const [swiper, setSwiper] = useState<SwiperType | null>(null);
 
   const onPrevious = () => swiper?.slidePrev();
   const onNext = () => swiper?.slideNext();
+  const shouldShowArrows = resolvedVariant === "slider" && showArrows && items.length > 1;
+
+  const renderSlider = () => (
+    <Swiper
+      key={locale}
+      dir={isRtl ? "rtl" : "ltr"}
+      modules={[Navigation, Pagination]}
+      spaceBetween={12}
+      slidesPerView={1.3}
+      onSwiper={setSwiper}
+      loop={items.length > 1}
+      breakpoints={{
+        480: {
+          slidesPerView: 2,
+          slidesOffsetBefore: 80,
+        },
+        768: {
+          slidesPerView: 3,
+          slidesOffsetBefore: 80,
+        },
+        1024: {
+          slidesPerView: 4,
+          slidesOffsetBefore: 80,
+        },
+      }}
+      className="w-full"
+    >
+      {items.map((slide, index) => (
+        <SwiperSlide key={slide.id}>
+          <Slide
+            slide={slide}
+            hasBorder={false}
+            aspectClassName={cardClassName}
+            imageClassName={imageClassName}
+            sizes={slideSizes}
+            priority={index === 0}
+          />
+        </SwiperSlide>
+      ))}
+    </Swiper>
+  );
+
+  const renderGrid = () => (
+    <div className={gridClassName}>
+      {items.map((slide, index) => (
+        <Slide
+          key={slide.id}
+          slide={slide}
+          hasBorder={false}
+          aspectClassName={cardClassName}
+          imageClassName={imageClassName}
+          sizes={slideSizes ?? "(max-width: 768px) 50vw, 25vw"}
+          priority={index < 2}
+        />
+      ))}
+    </div>
+  );
+
+  if (resolvedVariant === "grid") {
+    return (
+      <section className={cn("group relative w-full pb-4", className)}>
+        {title ? <SectionTitle title={title} /> : null}
+        {renderGrid()}
+      </section>
+    );
+  }
 
   return (
-    <div className="group relative w-full pb-4 cursor-pointer">
-      <SectionTitle title={title} />
-      <Swiper
-        key={locale}
-        dir={isRtl ? "rtl" : "ltr"}
-        modules={[Navigation, Pagination]}
-        spaceBetween={12}
-        slidesPerView={1.3}
-        onSwiper={setSwiper}
-        loop={true}
-        breakpoints={{
-          480: {
-            slidesPerView: 2,
-            slidesOffsetBefore: 80,
-          },
-          768: {
-            slidesPerView: 3,
-            slidesOffsetBefore: 80,
-          },
-          1024: {
-            slidesPerView: 4,
-            slidesOffsetBefore: 80,
-          },
-        }}
-        className="w-full"
-      >
-        {offerImages.map((slide) => (
-          <SwiperSlide key={slide.id}>
-            <Slide key={slide.id} slide={slide} hasBorder={false} />
-          </SwiperSlide>
-        ))}
-      </Swiper>
-
-      <BannerArrows
-        onPrevious={onPrevious}
-        onNext={onNext}
-        isRtl={isRtl}
-        variant="card"
-        strokeWidth={2}
-        iconClassName="h-7 w-7"
-      />
-    </div>
+    <section className={cn("group relative w-full pb-4", className)}>
+      {title ? <SectionTitle title={title} /> : null}
+      {renderSlider()}
+      {shouldShowArrows ? (
+        <BannerArrows
+          onPrevious={onPrevious}
+          onNext={onNext}
+          isRtl={isRtl}
+          variant="card"
+          strokeWidth={2}
+          iconClassName="h-7 w-7"
+        />
+      ) : null}
+    </section>
   );
 }
