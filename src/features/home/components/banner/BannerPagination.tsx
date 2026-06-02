@@ -1,11 +1,5 @@
 import { cn } from "@/shared/utils/cn";
-
-type BannerPaginationProps = {
-  total: number;
-  currentIndex: number;
-  onSelect: (index: number) => void;
-  className?: string;
-};
+import type { BannerPaginationProps } from "../../types";
 
 export default function BannerPagination({
   total,

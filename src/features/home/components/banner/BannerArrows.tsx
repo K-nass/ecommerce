@@ -1,17 +1,5 @@
 import { cn } from "@/shared/utils/cn";
-
-type BannerArrowsProps = {
-  onPrevious: () => void;
-  onNext: () => void;
-  className?: string; // Controls the wrapper positioning if needed
-  buttonClassName?: string; // For passing custom background, hover, borders on the fly
-  iconClassName?: string; // For passing custom icon colors or sizing
-  previousLabel?: string;
-  nextLabel?: string;
-  isRtl?: boolean;
-  variant?: "hero" | "card"; // Out-of-the-box styling presets
-  strokeWidth?: number;
-};
+import type { BannerArrowsProps } from "../../types";
 
 function ArrowIcon({
   direction,

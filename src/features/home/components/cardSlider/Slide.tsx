@@ -1,12 +1,6 @@
 import { cn } from "@/shared/utils/cn";
 import Image from "next/image";
-
-export interface CardSlideItem {
-  id: number | string;
-  image: string;
-  title: string;
-  borderColor?: string;
-}
+import type { CardSlideItem } from "../../types";
 
 interface SlideProps {
   slide: CardSlideItem;
@@ -44,3 +38,5 @@ export default function Slide({
     </div>
   );
 }
+
+export type { CardSlideItem } from "../../types";

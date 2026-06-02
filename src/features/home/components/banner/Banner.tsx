@@ -1,21 +1,9 @@
-import type { ReactNode } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
 import { cn } from "@/shared/utils/cn";
 import SectionTitle from "@/components/ui/SectionTitle";
-
-type BannerProps = {
-  imageSrc: string;
-  alt: string;
-  href?: string;
-  priority?: boolean;
-  loading?: "lazy" | "eager";
-  className?: string;
-  overlay?: ReactNode;
-  sizes?: string;
-  title?: string;
-};
+import type { BannerProps } from "../../types";
 
 export default function Banner({
   title,

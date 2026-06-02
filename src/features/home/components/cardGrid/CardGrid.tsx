@@ -1,16 +1,7 @@
 import SectionTitle from "@/components/ui/SectionTitle";
 import { cn } from "@/shared/utils/cn";
-import Slide, { CardSlideItem } from "../cardSlider/Slide";
-
-type CardGridProps = {
-  title?: string;
-  items: CardSlideItem[];
-  className?: string;
-  gridClassName?: string;
-  cardClassName?: string;
-  imageClassName?: string;
-  slideSizes?: string;
-};
+import Slide from "../cardSlider/Slide";
+import type { CardGridProps } from "../../types";
 
 export default function CardGrid({
   title,
