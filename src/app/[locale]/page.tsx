@@ -1,5 +1,5 @@
-import { HomePage } from "@/features/home";
+import { HomePage, homePageMockData } from "@/features/home";
 
 export default function Page() {
-  return <HomePage />;
+  return <HomePage {...homePageMockData} />;
 }

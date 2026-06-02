@@ -1,10 +1,7 @@
 import Image from "next/image";
-interface ContentItem {
-  id: number;
-  image: string;
-  title: string;
-}
-export default function ContentItem({ item }: { item: ContentItem }) {
+import type { ContentItemProps } from "../../types";
+
+export default function ContentItem({ item }: ContentItemProps) {
   return (
     <div
       key={item.id}

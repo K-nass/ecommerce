@@ -12,17 +12,8 @@ import SectionTitle from "@/components/ui/SectionTitle";
 import { cn } from "@/shared/utils/cn";
 
 import { BannerArrows } from "../banner";
-import Slide, { type CardSlideItem } from "./Slide";
-
-type CardSliderProps = {
-  title?: string;
-  items: CardSlideItem[];
-  className?: string;
-  cardClassName?: string;
-  imageClassName?: string;
-  slideSizes?: string;
-  showArrows?: boolean;
-};
+import Slide from "./Slide";
+import type { CardSliderProps } from "../../types";
 
 export default function CardSlider({
   title,

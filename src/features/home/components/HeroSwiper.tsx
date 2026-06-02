@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { useLocale } from "next-intl";
 import { A11y, Autoplay, Keyboard } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -9,38 +9,13 @@ import type { Swiper as SwiperType } from "swiper/types";
 import "swiper/css";
 
 import { Banner, BannerArrows, BannerPagination } from "./banner";
-import type { BannerItem } from "../types";
-
-const HERO_BANNERS: BannerItem[] = [
-  {
-    id: "eid-special-1",
-    imageSrc:
-      "/hero1.jpg",
-    alt: "Eid special hero banner",
-    priority: true,
-  },
-  {
-    id: "eid-special-2",
-    imageSrc:
-      "/hero2.webp",
-    alt: "Eid special hero banner",
-    priority: true,
-  },
-  {
-    id: "eid-special-3",
-    imageSrc:
-      "/hero3.webp",
-    alt: "Eid special hero banner",
-    priority: true,
-  },
-];
+import type { HeroSwiperProps } from "../types";
 
 const AUTO_PLAY_MS = 4500;
 
-export default function HeroSwiper() {
+export default function HeroSwiper({ banners }: HeroSwiperProps) {
   const locale = useLocale();
   const isRtl = locale === "ar";
-  const banners = useMemo(() => HERO_BANNERS, []);
   const total = banners.length;
   const [currentIndex, setCurrentIndex] = useState(0);
   const [swiper, setSwiper] = useState<SwiperType | null>(null);
