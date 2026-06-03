@@ -1,44 +1,37 @@
 "use client";
 
-import { FormEvent, useEffect, useState } from "react";
+import { useEffect, useRef, useState, useActionState } from "react";
 import { useLocale } from "next-intl";
+import { toast } from "sonner";
 
-import { useAuthStore } from "../store/useAuthStore";
 import { PatternTiles } from "./PatternTiles";
 import { AuthHeader } from "./AuthHeader";
 import { LoginForm } from "./LoginForm";
 import { RegisterForm } from "./RegisterForm";
+import { OtpForm } from "./OtpForm";
 import { AuthFeedback } from "./AuthFeedback";
+import { loginAction, registerAction, otpAction } from "../actions";
+import { useAuthStore } from "../store/useAuthStore";
 
-type AuthMode = "login" | "register";
-type ContactMethod = "email" | "phone";
+type AuthMode = "login" | "register" | "otp";
 
 export default function AuthGateway() {
   const locale = useLocale();
   const isRtl = locale === "ar";
   const [mode, setMode] = useState<AuthMode>("login");
-  const [loginMethod, setLoginMethod] = useState<ContactMethod>("email");
-  const [loginForm, setLoginForm] = useState({
-    email: "",
-    phone: "",
-    password: "",
-  });
-  const [registerForm, setRegisterForm] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    phone: "",
-    password: "",
-    password_confirmation: "",
-    profile_image: null as File | null,
-    policy: false,
-  });
+  const [loginMethod, setLoginMethod] = useState<"email" | "phone">("email");
   const [profilePreview, setProfilePreview] = useState<string | null>(null);
-  const [feedback, setFeedback] = useState<string | null>(null);
-  const [feedbackError, setFeedbackError] = useState<string | null>(null);
+  const [profileFileName, setProfileFileName] = useState<string | undefined>();
+  const [otpEmail, setOtpEmail] = useState("");
 
-  const { login, register, loading, error } = useAuthStore();
+  const setAuthData = useAuthStore((s) => s.setAuthData);
+
+  const [loginState, loginFormAction, loginPending] = useActionState(loginAction, null);
+  const [registerState, registerFormAction, registerPending] = useActionState(registerAction, null);
+  const [otpState, otpFormAction, otpPending] = useActionState(otpAction, null);
+
   const isLogin = mode === "login";
+  const registerHandledRef = useRef(false);
 
   useEffect(() => {
     return () => {
@@ -48,59 +41,31 @@ export default function AuthGateway() {
     };
   }, [profilePreview]);
 
-  async function onLoginSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    setFeedback(null);
-    setFeedbackError(null);
-
-    const payload =
-      loginMethod === "email"
-        ? { email: loginForm.email.trim(), password: loginForm.password }
-        : { phone: loginForm.phone.trim(), password: loginForm.password };
-
-    try {
-      await login(payload);
-      setFeedback("You are logged in successfully.");
-    } catch (submitError) {
-      const message =
-        submitError instanceof Error ? submitError.message : "Login failed.";
-      setFeedbackError(message);
+  useEffect(() => {
+    if (mode === "register") {
+      registerHandledRef.current = false;
     }
-  }
+  }, [mode]);
 
-  async function onRegisterSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    setFeedback(null);
-    setFeedbackError(null);
-
-    const payload = {
-      first_name: registerForm.firstName.trim(),
-      last_name: registerForm.lastName.trim(),
-      email: registerForm.email.trim(),
-      phone: registerForm.phone.trim(),
-      password: registerForm.password,
-      password_confirmation: registerForm.password_confirmation,
-      avatar: registerForm.profile_image,
-      policy: registerForm.policy,
-    };
-
-    try {
-      await register(payload);
-      setFeedback("Account created successfully.");
-      setMode("login");
-    } catch (submitError) {
-      const message =
-        submitError instanceof Error ? submitError.message : "Register failed.";
-      setFeedbackError(message);
+  useEffect(() => {
+    if (!registerState) return;
+    const noFieldErrors = !registerState.fieldErrors || Object.keys(registerState.fieldErrors).length === 0;
+    if (noFieldErrors && registerState.payload?.email && !registerHandledRef.current) {
+      registerHandledRef.current = true;
+      setOtpEmail(registerState.payload.email);
+      setMode("otp");
     }
-  }
+  }, [registerState]);
+
+  useEffect(() => {
+    if (otpState?.success && otpState.data) {
+      setAuthData(otpState.data);
+      toast.success(otpState.message || "Logged in successfully!");
+    }
+  }, [otpState, setAuthData]);
 
   function onProfileImageChange(file: File | null) {
-    setRegisterForm((current) => ({
-      ...current,
-      profile_image: file,
-    }));
-
+    setProfileFileName(file?.name);
     setProfilePreview((current) => {
       if (current) {
         URL.revokeObjectURL(current);
@@ -109,88 +74,87 @@ export default function AuthGateway() {
     });
   }
 
+  function handleOtpMode() {
+    setOtpEmail("");
+    setMode("otp");
+  }
+
+  function renderForm() {
+    switch (mode) {
+      case "login":
+        return (
+          <LoginForm
+            action={loginFormAction}
+            pending={loginPending}
+            state={loginState}
+            method={loginMethod}
+            onMethodChange={setLoginMethod}
+            onToggleMode={() => setMode("register")}
+            onOtpMode={handleOtpMode}
+          />
+        );
+      case "register":
+        return (
+          <RegisterForm
+            action={registerFormAction}
+            pending={registerPending}
+            state={registerState}
+            profilePreview={profilePreview}
+            profileFileName={profileFileName}
+            onProfileImageChange={onProfileImageChange}
+            onToggleMode={() => setMode("login")}
+          />
+        );
+      case "otp":
+        return (
+          <OtpForm
+            action={otpFormAction}
+            pending={otpPending}
+            state={otpState}
+            email={otpEmail}
+            onBack={() => setMode("login")}
+          />
+        );
+    }
+  }
+
+  function getFeedbackMessage() {
+    if (mode === "otp") {
+      return {
+        error: otpState && !otpState.success ? otpState.message : null,
+        success: otpState?.success ? otpState.message : null,
+      };
+    }
+    if (isLogin) {
+      return {
+        error: loginState && !loginState.success ? loginState.message : null,
+        success: loginState?.success ? loginState.message : null,
+      };
+    }
+    return {
+      error: registerState && !registerState.success ? registerState.message : null,
+      success: registerState?.success ? registerState.message : null,
+    };
+  }
+
+  const { error: feedbackError, success: feedbackSuccess } = getFeedbackMessage();
+
   return (
     <section
       dir={isRtl ? "rtl" : "ltr"}
-      className="relative isolate min-h-[760px] overflow-hidden rounded-3xl  "
+      className="relative isolate min-h-[760px] overflow-hidden rounded-3xl"
     >
       <PatternTiles />
 
       <div className="relative z-10 flex min-h-[760px] items-center justify-center p-2">
         <div className="w-full max-w-[480px] rounded-xl border border-border/80 bg-white/92 p-4 shadow-[0_16px_38px_rgba(0,74,151,0.15)] backdrop-blur-md sm:p-6">
-          <AuthHeader isLogin={isLogin} onToggleMode={() => setMode(isLogin ? "register" : "login")} />
+          <AuthHeader isLogin={mode === "login"} isOtp={mode === "otp"} />
 
-          {isLogin ? (
-            <LoginForm
-              isLogin={isLogin}
-              email={loginForm.email}
-              phone={loginForm.phone}
-              password={loginForm.password}
-              method={loginMethod}
-              loading={loading}
-              onEmailChange={(value) =>
-                setLoginForm((current) => ({ ...current, email: value }))
-              }
-              onPhoneChange={(value) =>
-                setLoginForm((current) => ({ ...current, phone: value }))
-              }
-              onPasswordChange={(value) =>
-                setLoginForm((current) => ({ ...current, password: value }))
-              }
-              onMethodChange={setLoginMethod}
-              onToggleMode={() => setMode("register")}
-              onSubmit={onLoginSubmit}
-            />
-          ) : (
-            <RegisterForm
-              isLogin={isLogin}
-              firstName={registerForm.firstName}
-              lastName={registerForm.lastName}
-              email={registerForm.email}
-              phone={registerForm.phone}
-              password={registerForm.password}
-              passwordConfirmation={registerForm.password_confirmation}
-              loading={loading}
-              profilePreview={profilePreview}
-              profileFileName={registerForm.profile_image?.name}
-              policy={registerForm.policy}
-              onFirstNameChange={(value) =>
-                setRegisterForm((current) => ({ ...current, firstName: value }))
-              }
-              onLastNameChange={(value) =>
-                setRegisterForm((current) => ({ ...current, lastName: value }))
-              }
-              onEmailChange={(value) =>
-                setRegisterForm((current) => ({ ...current, email: value }))
-              }
-              onPhoneChange={(value) =>
-                setRegisterForm((current) => ({ ...current, phone: value }))
-              }
-              onPasswordChange={(value) =>
-                setRegisterForm((current) => ({ ...current, password: value }))
-              }
-              onPasswordConfirmationChange={(value) =>
-                setRegisterForm((current) => ({
-                  ...current,
-                  password_confirmation: value,
-                }))
-              }
-              onProfileImageChange={onProfileImageChange}
-              onPolicyChange={(value) =>
-                setRegisterForm((current) => ({ ...current, policy: value }))
-              }
-              onToggleMode={() => setMode("login")}
-              onSubmit={onRegisterSubmit}
-            />
-          )}
+          {renderForm()}
 
-          <AuthFeedback
-            error={error || feedbackError}
-            feedback={feedback}
-          />
+          <AuthFeedback error={feedbackError} success={feedbackSuccess} />
         </div>
       </div>
     </section>
   );
 }
-

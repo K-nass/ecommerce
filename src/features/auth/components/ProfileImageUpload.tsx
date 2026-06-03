@@ -8,12 +8,14 @@ interface ProfileImageUploadProps {
   preview: string | null;
   fileName?: string;
   onChange: (file: File | null) => void;
+  name?: string;
 }
 
 export function ProfileImageUpload({
   preview,
   fileName,
   onChange,
+  name,
 }: ProfileImageUploadProps) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [isDragging, setIsDragging] = useState(false);
@@ -56,10 +58,10 @@ export function ProfileImageUpload({
         accept="image/*"
         className="hidden"
         onChange={handleInputChange}
+        name={name}
       />
 
       {preview ? (
-        /* ── Preview State ── */
         <div className="flex items-center gap-4 rounded-xl border border-border bg-surface/60 p-3">
           <div className="relative shrink-0">
             <Image
@@ -70,7 +72,6 @@ export function ProfileImageUpload({
               unoptimized
               className="h-16 w-16 rounded-full border-2 border-primary object-cover shadow-md"
             />
-            {/* Remove button */}
             <button
               type="button"
               onClick={handleRemove}
@@ -93,7 +94,6 @@ export function ProfileImageUpload({
           </div>
         </div>
       ) : (
-        /* ── Drop Zone ── */
         <div
           role="button"
           tabIndex={0}
@@ -110,7 +110,6 @@ export function ProfileImageUpload({
               : "border-border bg-surface/60 hover:border-primary/60 hover:bg-surface",
           ].join(" ")}
         >
-          {/* Upload icon */}
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"

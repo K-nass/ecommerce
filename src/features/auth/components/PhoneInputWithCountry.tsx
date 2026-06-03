@@ -25,35 +25,33 @@ const COUNTRIES = [
 ];
 
 interface PhoneInputWithCountryProps {
-  value: string;
-  onChange: (value: string) => void;
   placeholder?: string;
+  error?: string;
+  name?: string;
+  defaultValue?: string;
 }
 
 export function PhoneInputWithCountry({
-  value,
-  onChange,
   placeholder = "Enter your phone number",
+  error,
+  name,
+  defaultValue,
 }: PhoneInputWithCountryProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedCountry, setSelectedCountry] = useState(COUNTRIES[0]); // Egypt by default
+  const [selectedCountry, setSelectedCountry] = useState(COUNTRIES[0]);
+  const [phoneValue, setPhoneValue] = useState(defaultValue || "");
 
   const handleCountrySelect = (country: (typeof COUNTRIES)[0]) => {
     setSelectedCountry(country);
     setIsOpen(false);
   };
 
-  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const phoneNumber = e.target.value;
-    onChange(phoneNumber);
-  };
-
   const getFlagUrl = (code: string) => {
-    return `https://flagcdn.com/w40/${code.toLowerCase()}.png`;
+    return "https://flagcdn.com/w40/" + code.toLowerCase() + ".webp";
   };
 
   return (
-    <div className="space-y-2">
+    <div>
       <div className="relative">
         <Phone className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-text-secondary" />
         <div className="flex">
@@ -61,7 +59,10 @@ export function PhoneInputWithCountry({
             <button
               type="button"
               onClick={() => setIsOpen(!isOpen)}
-              className="flex items-center gap-2 rounded-l-xl border border-r-0 border-border bg-background px-3 py-2.5 text-sm font-semibold transition hover:bg-surface"
+              className={
+                "flex items-center gap-2 rounded-l-xl border border-r-0 bg-background px-3 py-2.5 text-sm font-semibold transition hover:bg-surface " +
+                (error ? "border-red-500" : "border-border")
+              }
             >
               <Image
                 src={getFlagUrl(selectedCountry.code)}
@@ -103,25 +104,20 @@ export function PhoneInputWithCountry({
 
           <input
             type="tel"
-            required
             placeholder={placeholder}
-            value={value}
-            onChange={handlePhoneChange}
-            className="flex-1 rounded-r-xl border border-border bg-background px-4 py-2.5 text-sm text-text-primary outline-none transition focus:border-primary"
+            defaultValue={defaultValue}
+            onChange={(e) => setPhoneValue(e.target.value)}
+            className={
+              "flex-1 rounded-r-xl border bg-background px-4 py-2.5 text-sm text-text-primary outline-none transition focus:border-primary " +
+              (error ? "border-red-500" : "border-border")
+            }
           />
         </div>
       </div>
-      <div className="text-xs text-text-secondary">
-        Full number:{" "}
-        <Image
-          src={getFlagUrl(selectedCountry.code)}
-          alt={selectedCountry.code}
-          width={20}
-          height={13}
-          className="mb-0.5 inline-block h-3 w-5 rounded object-cover"
-        />{" "}
-        {selectedCountry.dialCode} {value}
-      </div>
+      {name && (
+        <input type="hidden" name={name} value={`${selectedCountry.dialCode}${phoneValue}`} />
+      )}
+      {error && <p className="mt-1 text-xs text-red-500">{error}</p>}
     </div>
   );
 }

@@ -15,6 +15,8 @@ export interface RegisterPayload {
   policy: boolean;
 }
 
+export type FieldErrors = Record<string, string>;
+
 export interface ForgetPasswordPayload {
   email: string;
 }
@@ -44,7 +46,12 @@ export interface SocialLoginPayload {
 
 export interface AuthLoginData {
   token: string;
-  permissions: string[];
-  email_verified: boolean;
-  role: string[];
+  permissions?: string[];
+  email_verified?: boolean;
+  role?: string[];
+}
+
+export interface OtpLoginPayload {
+  email: string;
+  otp: string;
 }

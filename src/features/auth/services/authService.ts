@@ -4,6 +4,7 @@ import type {
   ChangePasswordPayload,
   ForgetPasswordPayload,
   LoginPayload,
+  OtpLoginPayload,
   RegisterPayload,
   ResetPasswordPayload,
   SocialLoginPayload,
@@ -54,6 +55,15 @@ export const authService = {
     return apiFetch<ApiResponse<AuthLoginData | MessageData>>("/register", {
       method: "POST",
       body: toRegisterBody(payload),
+    });
+  },
+
+  otpLogin: async (
+    payload: OtpLoginPayload,
+  ): Promise<ApiResponse<AuthLoginData>> => {
+    return apiFetch<ApiResponse<AuthLoginData>>("/otp-login", {
+      method: "POST",
+      body: JSON.stringify(payload),
     });
   },
 

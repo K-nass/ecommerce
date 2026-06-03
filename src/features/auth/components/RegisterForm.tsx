@@ -1,115 +1,121 @@
 "use client";
 
-import { FormEvent } from "react";
-import { Mail, Phone, User } from "lucide-react";
+import { useEffect, useRef } from "react";
+import { Mail, User } from "lucide-react";
 import { PhoneInputWithCountry } from "./PhoneInputWithCountry";
 import { PasswordInput } from "./PasswordInput";
 import { ProfileImageUpload } from "./ProfileImageUpload";
+import type { ActionState } from "../actions/types";
 
 interface RegisterFormProps {
-  isLogin: boolean;
-  firstName: string;
-  lastName: string;
-  email: string;
-  phone: string;
-  password: string;
-  passwordConfirmation: string;
-  loading: boolean;
+  action: (formData: FormData) => void;
+  pending: boolean;
+  state: ActionState | null;
   profilePreview: string | null;
   profileFileName?: string;
-  policy: boolean;
-  onFirstNameChange: (value: string) => void;
-  onLastNameChange: (value: string) => void;
-  onEmailChange: (value: string) => void;
-  onPhoneChange: (value: string) => void;
-  onPasswordChange: (value: string) => void;
-  onPasswordConfirmationChange: (value: string) => void;
   onProfileImageChange: (file: File | null) => void;
-  onPolicyChange: (value: boolean) => void;
   onToggleMode: () => void;
-  onSubmit: (e: FormEvent<HTMLFormElement>) => void;
+}
+
+function inputClass(error?: string) {
+  return (
+    "w-full rounded-xl border bg-background pl-10 pr-4 py-2.5 text-sm text-text-primary outline-none transition focus:border-primary " +
+    (error ? "border-red-500" : "border-border")
+  );
+}
+
+function ErrorMsg({ message }: { message?: string }) {
+  if (!message) return null;
+  return <p className="mt-1 text-xs text-red-500">{message}</p>;
 }
 
 export function RegisterForm({
-  isLogin,
-  firstName,
-  lastName,
-  email,
-  phone,
-  password,
-  passwordConfirmation,
-  loading,
+  action,
+  pending,
+  state,
   profilePreview,
   profileFileName,
-  policy,
-  onFirstNameChange,
-  onLastNameChange,
-  onEmailChange,
-  onPhoneChange,
-  onPasswordChange,
-  onPasswordConfirmationChange,
   onProfileImageChange,
-  onPolicyChange,
   onToggleMode,
-  onSubmit,
 }: RegisterFormProps) {
+  const fieldErrors = state?.fieldErrors ?? {};
+  const p = state?.payload ?? {};
+  const formKey = useRef(0);
+
+  useEffect(() => {
+    if (state?.success) {
+      formKey.current += 1;
+    }
+  }, [state]);
+
   return (
-    <form className="mx-auto mt-4 max-w-md space-y-2.5" onSubmit={onSubmit}>
+    <form key={formKey.current} className="mx-auto mt-4 max-w-md space-y-2.5" action={action}>
       <div className="grid grid-cols-2 gap-2.5">
-        <div className="relative">
-          <User className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-text-secondary" />
-          <input
-            type="text"
-            required
-            placeholder="First name"
-            value={firstName}
-            onChange={(e) => onFirstNameChange(e.target.value)}
-            className="w-full rounded-xl border border-border bg-background pl-10 pr-4 py-2.5 text-sm text-text-primary outline-none transition focus:border-primary"
-          />
+        <div>
+          <div className="relative">
+            <User className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-text-secondary" />
+            <input
+              type="text"
+              name="firstName"
+              placeholder="First name"
+              defaultValue={p.firstName || ""}
+              className={inputClass(fieldErrors.first_name)}
+            />
+          </div>
+          <ErrorMsg message={fieldErrors.first_name} />
         </div>
-        <div className="relative">
-          <User className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-text-secondary" />
-          <input
-            type="text"
-            required
-            placeholder="Last name"
-            value={lastName}
-            onChange={(e) => onLastNameChange(e.target.value)}
-            className="w-full rounded-xl border border-border bg-background pl-10 pr-4 py-2.5 text-sm text-text-primary outline-none transition focus:border-primary"
-          />
+        <div>
+          <div className="relative">
+            <User className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-text-secondary" />
+            <input
+              type="text"
+              name="lastName"
+              placeholder="Last name"
+              defaultValue={p.lastName || ""}
+              className={inputClass(fieldErrors.last_name)}
+            />
+          </div>
+          <ErrorMsg message={fieldErrors.last_name} />
         </div>
       </div>
 
-      <div className="relative">
-        <Mail className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-text-secondary" />
-        <input
-          type="email"
-          required
-          placeholder="name@example.com"
-          value={email}
-          onChange={(e) => onEmailChange(e.target.value)}
-          className="w-full rounded-xl border border-border bg-background pl-10 pr-4 py-2.5 text-sm text-text-primary outline-none transition focus:border-primary"
-        />
+      <div>
+        <div className="relative">
+          <Mail className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-text-secondary" />
+          <input
+            type="email"
+            name="email"
+            placeholder="name@example.com"
+            defaultValue={p.email || ""}
+            className={inputClass(fieldErrors.email)}
+          />
+        </div>
+        <ErrorMsg message={fieldErrors.email} />
       </div>
 
       <PhoneInputWithCountry
-        value={phone}
-        onChange={onPhoneChange}
+        name="phone"
         placeholder="Enter your phone number"
+        error={fieldErrors.phone}
+        defaultValue={p.phone || ""}
       />
 
       <PasswordInput
-        value={password}
-        onChange={onPasswordChange}
+        name="password"
         placeholder="Create a password"
+        error={fieldErrors.password}
+        defaultValue={p.password || ""}
       />
+
       <PasswordInput
-        value={passwordConfirmation}
-        onChange={onPasswordConfirmationChange}
+        name="passwordConfirmation"
         placeholder="Confirm your password"
+        error={fieldErrors.password_confirmation}
+        defaultValue={p.passwordConfirmation || ""}
       />
 
       <ProfileImageUpload
+        name="avatar"
         preview={profilePreview}
         fileName={profileFileName}
         onChange={onProfileImageChange}
@@ -118,9 +124,9 @@ export function RegisterForm({
       <label className="flex cursor-pointer items-start gap-2 text-xs text-text-secondary">
         <input
           type="checkbox"
-          checked={policy}
-          onChange={(e) => onPolicyChange(e.target.checked)}
-          className="mt-0.5 h-4 w-4 rounded border-border text-primary focus:ring-primary"
+          name="policy"
+          defaultChecked={p.policy === "on"}
+          className={"mt-0.5 h-4 w-4 rounded border-border text-primary focus:ring-primary" + (fieldErrors.policy ? " border-red-500" : "")}
         />
         <span>
           I agree to the{" "}
@@ -133,6 +139,7 @@ export function RegisterForm({
           </a>
         </span>
       </label>
+      <ErrorMsg message={fieldErrors.policy} />
 
       <div className="flex items-center justify-center gap-2 text-xs text-text-secondary">
         <span>Already have an account?</span>
@@ -147,12 +154,11 @@ export function RegisterForm({
 
       <button
         type="submit"
-        disabled={loading}
+        disabled={pending}
         className="w-full rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-primary-dark disabled:cursor-not-allowed disabled:opacity-70"
       >
-        {loading ? "Creating account..." : "Create account"}
+        {pending ? "Creating account..." : "Create account"}
       </button>
     </form>
   );
 }
-
