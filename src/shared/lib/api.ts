@@ -31,25 +31,58 @@ export async function apiFetch<T>(
     headers.set("Authorization", `Bearer ${authToken}`);
   }
 
-  const response = await fetch(url, {
-    ...options,
-    headers,
-  });
+  const enableLogs = process.env.NEXT_PUBLIC_XHR_LOGS === "true";
+  const method = (options.method ?? "GET").toUpperCase();
+  const start = Date.now();
 
-  if (!response.ok) {
+  let response: Response;
+  try {
+    response = await fetch(url, {
+      ...options,
+      headers,
+    });
+  } catch (err: any) {
+    if (enableLogs) {
+      console.error(`❌ ${method} ${url} - network error`, err?.message ?? err);
+    }
+    throw err;
+  }
+
+  const duration = Date.now() - start;
+
+  let parsedBody: any = null;
+  try {
+    const ct = response.headers.get("content-type") || "";
+    if (ct.includes("application/json")) {
+      parsedBody = await response.clone().json();
+    } else {
+      parsedBody = await response.clone().text();
+    }
+  } catch {
+    parsedBody = "<unreadable>";
+  }
+
+  if (response.ok) {
+    if (enableLogs) {
+      console.log(`✅ ${method} ${url} ${response.status} ${duration}ms`, parsedBody);
+    }
+    return parsedBody as T;
+  } else {
     let errorMessage = `API Error: ${response.status} ${response.statusText}`;
 
-    try {
-      const errorData = (await response.json()) as { message?: string };
-      if (errorData?.message) {
-        errorMessage = errorData.message;
-      }
-    } catch {
-      // No-op fallback to status text.
+    if (parsedBody && typeof parsedBody === "object" && parsedBody.message) {
+      errorMessage = parsedBody.message;
+    } else if (typeof parsedBody === "string" && parsedBody.length) {
+      errorMessage = parsedBody;
+    }
+
+    if (enableLogs) {
+      console.error(`❌ ${method} ${url} ${response.status} ${duration}ms`, {
+        errorMessage,
+        response: parsedBody,
+      });
     }
 
     throw new Error(errorMessage);
   }
-
-  return response.json();
 }

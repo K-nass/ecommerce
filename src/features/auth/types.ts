@@ -5,12 +5,14 @@ export interface LoginPayload {
 }
 
 export interface RegisterPayload {
-  name: string;
-  email?: string;
-  phone?: string;
+  first_name: string;
+  last_name: string;
+  email: string;
+  phone: string;
   password: string;
-  password_confirmation?: string;
-  profile_image?: File | null;
+  password_confirmation: string;
+  avatar?: File | null;
+  policy: boolean;
 }
 
 export interface ForgetPasswordPayload {
@@ -46,4 +48,3 @@ export interface AuthLoginData {
   email_verified: boolean;
   role: string[];
 }
-

@@ -1,97 +1,101 @@
 "use client";
 
 import { FormEvent } from "react";
-import { Mail, User } from "lucide-react";
-import { AuthTabs } from "./AuthTabs";
+import { Mail, Phone, User } from "lucide-react";
 import { PhoneInputWithCountry } from "./PhoneInputWithCountry";
 import { PasswordInput } from "./PasswordInput";
 import { ProfileImageUpload } from "./ProfileImageUpload";
 
-type ContactMethod = "email" | "phone";
-
 interface RegisterFormProps {
   isLogin: boolean;
-  name: string;
+  firstName: string;
+  lastName: string;
   email: string;
   phone: string;
   password: string;
   passwordConfirmation: string;
-  method: ContactMethod;
   loading: boolean;
   profilePreview: string | null;
   profileFileName?: string;
-  onNameChange: (value: string) => void;
+  policy: boolean;
+  onFirstNameChange: (value: string) => void;
+  onLastNameChange: (value: string) => void;
   onEmailChange: (value: string) => void;
   onPhoneChange: (value: string) => void;
   onPasswordChange: (value: string) => void;
   onPasswordConfirmationChange: (value: string) => void;
-  onMethodChange: (method: ContactMethod) => void;
   onProfileImageChange: (file: File | null) => void;
+  onPolicyChange: (value: boolean) => void;
   onToggleMode: () => void;
   onSubmit: (e: FormEvent<HTMLFormElement>) => void;
 }
 
 export function RegisterForm({
   isLogin,
-  name,
+  firstName,
+  lastName,
   email,
   phone,
   password,
   passwordConfirmation,
-  method,
   loading,
   profilePreview,
   profileFileName,
-  onNameChange,
+  policy,
+  onFirstNameChange,
+  onLastNameChange,
   onEmailChange,
   onPhoneChange,
   onPasswordChange,
   onPasswordConfirmationChange,
-  onMethodChange,
   onProfileImageChange,
+  onPolicyChange,
   onToggleMode,
   onSubmit,
 }: RegisterFormProps) {
   return (
     <form className="mx-auto mt-4 max-w-md space-y-2.5" onSubmit={onSubmit}>
-      <AuthTabs method={method} onMethodChange={onMethodChange} isLogin={false} />
+      <div className="grid grid-cols-2 gap-2.5">
+        <div className="relative">
+          <User className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-text-secondary" />
+          <input
+            type="text"
+            required
+            placeholder="First name"
+            value={firstName}
+            onChange={(e) => onFirstNameChange(e.target.value)}
+            className="w-full rounded-xl border border-border bg-background pl-10 pr-4 py-2.5 text-sm text-text-primary outline-none transition focus:border-primary"
+          />
+        </div>
+        <div className="relative">
+          <User className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-text-secondary" />
+          <input
+            type="text"
+            required
+            placeholder="Last name"
+            value={lastName}
+            onChange={(e) => onLastNameChange(e.target.value)}
+            className="w-full rounded-xl border border-border bg-background pl-10 pr-4 py-2.5 text-sm text-text-primary outline-none transition focus:border-primary"
+          />
+        </div>
+      </div>
 
       <div className="relative">
-        <User className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-text-secondary" />
+        <Mail className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-text-secondary" />
         <input
-          type="text"
+          type="email"
           required
-          placeholder="John Doe"
-          value={name}
-          onChange={(e) => onNameChange(e.target.value)}
+          placeholder="name@example.com"
+          value={email}
+          onChange={(e) => onEmailChange(e.target.value)}
           className="w-full rounded-xl border border-border bg-background pl-10 pr-4 py-2.5 text-sm text-text-primary outline-none transition focus:border-primary"
         />
       </div>
 
-      {method === "email" ? (
-        <div className="relative">
-          <Mail className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-text-secondary" />
-          <input
-            type="email"
-            required
-            placeholder="name@example.com"
-            value={email}
-            onChange={(e) => onEmailChange(e.target.value)}
-            className="w-full rounded-xl border border-border bg-background pl-10 pr-4 py-2.5 text-sm text-text-primary outline-none transition focus:border-primary"
-          />
-        </div>
-      ) : (
-        <PhoneInputWithCountry
-          value={phone}
-          onChange={onPhoneChange}
-          placeholder="Enter your phone number"
-        />
-      )}
-
-      <ProfileImageUpload
-        preview={profilePreview}
-        fileName={profileFileName}
-        onChange={onProfileImageChange}
+      <PhoneInputWithCountry
+        value={phone}
+        onChange={onPhoneChange}
+        placeholder="Enter your phone number"
       />
 
       <PasswordInput
@@ -104,6 +108,31 @@ export function RegisterForm({
         onChange={onPasswordConfirmationChange}
         placeholder="Confirm your password"
       />
+
+      <ProfileImageUpload
+        preview={profilePreview}
+        fileName={profileFileName}
+        onChange={onProfileImageChange}
+      />
+
+      <label className="flex cursor-pointer items-start gap-2 text-xs text-text-secondary">
+        <input
+          type="checkbox"
+          checked={policy}
+          onChange={(e) => onPolicyChange(e.target.checked)}
+          className="mt-0.5 h-4 w-4 rounded border-border text-primary focus:ring-primary"
+        />
+        <span>
+          I agree to the{" "}
+          <a href="#" className="text-primary underline hover:text-primary-dark">
+            Terms & Conditions
+          </a>{" "}
+          and{" "}
+          <a href="#" className="text-primary underline hover:text-primary-dark">
+            Privacy Policy
+          </a>
+        </span>
+      </label>
 
       <div className="flex items-center justify-center gap-2 text-xs text-text-secondary">
         <span>Already have an account?</span>
@@ -126,3 +155,4 @@ export function RegisterForm({
     </form>
   );
 }
+

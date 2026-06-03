@@ -18,19 +18,20 @@ export default function AuthGateway() {
   const isRtl = locale === "ar";
   const [mode, setMode] = useState<AuthMode>("login");
   const [loginMethod, setLoginMethod] = useState<ContactMethod>("email");
-  const [registerMethod, setRegisterMethod] = useState<ContactMethod>("email");
   const [loginForm, setLoginForm] = useState({
     email: "",
     phone: "",
     password: "",
   });
   const [registerForm, setRegisterForm] = useState({
-    name: "",
+    firstName: "",
+    lastName: "",
     email: "",
     phone: "",
     password: "",
     password_confirmation: "",
     profile_image: null as File | null,
+    policy: false,
   });
   const [profilePreview, setProfilePreview] = useState<string | null>(null);
   const [feedback, setFeedback] = useState<string | null>(null);
@@ -73,13 +74,14 @@ export default function AuthGateway() {
     setFeedbackError(null);
 
     const payload = {
-      name: registerForm.name.trim(),
+      first_name: registerForm.firstName.trim(),
+      last_name: registerForm.lastName.trim(),
+      email: registerForm.email.trim(),
+      phone: registerForm.phone.trim(),
       password: registerForm.password,
       password_confirmation: registerForm.password_confirmation,
-      profile_image: registerForm.profile_image,
-      ...(registerMethod === "email"
-        ? { email: registerForm.email.trim() }
-        : { phone: registerForm.phone.trim() }),
+      avatar: registerForm.profile_image,
+      policy: registerForm.policy,
     };
 
     try {
@@ -112,8 +114,6 @@ export default function AuthGateway() {
       dir={isRtl ? "rtl" : "ltr"}
       className="relative isolate min-h-[760px] overflow-hidden rounded-3xl  "
     >
-      {/* <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_15%_20%,rgba(14,90,167,0.12),transparent_35%),radial-gradient(circle_at_80%_12%,rgba(207,158,54,0.12),transparent_32%),radial-gradient(circle_at_48%_90%,rgba(227,0,15,0.08),transparent_28%)]" /> */}
-
       <PatternTiles />
 
       <div className="relative z-10 flex min-h-[760px] items-center justify-center p-2">
@@ -144,17 +144,21 @@ export default function AuthGateway() {
           ) : (
             <RegisterForm
               isLogin={isLogin}
-              name={registerForm.name}
+              firstName={registerForm.firstName}
+              lastName={registerForm.lastName}
               email={registerForm.email}
               phone={registerForm.phone}
               password={registerForm.password}
               passwordConfirmation={registerForm.password_confirmation}
-              method={registerMethod}
               loading={loading}
               profilePreview={profilePreview}
               profileFileName={registerForm.profile_image?.name}
-              onNameChange={(value) =>
-                setRegisterForm((current) => ({ ...current, name: value }))
+              policy={registerForm.policy}
+              onFirstNameChange={(value) =>
+                setRegisterForm((current) => ({ ...current, firstName: value }))
+              }
+              onLastNameChange={(value) =>
+                setRegisterForm((current) => ({ ...current, lastName: value }))
               }
               onEmailChange={(value) =>
                 setRegisterForm((current) => ({ ...current, email: value }))
@@ -171,8 +175,10 @@ export default function AuthGateway() {
                   password_confirmation: value,
                 }))
               }
-              onMethodChange={setRegisterMethod}
               onProfileImageChange={onProfileImageChange}
+              onPolicyChange={(value) =>
+                setRegisterForm((current) => ({ ...current, policy: value }))
+              }
               onToggleMode={() => setMode("login")}
               onSubmit={onRegisterSubmit}
             />
@@ -187,3 +193,4 @@ export default function AuthGateway() {
     </section>
   );
 }
+
