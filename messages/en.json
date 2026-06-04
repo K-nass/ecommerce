@@ -59,5 +59,34 @@
       "usd": "USD",
       "sar": "SAR"
     }
+  },
+  "footer": {
+    "customerService": "Customer Service",
+    "serviceWarranty": "Service and Warranty",
+    "returnsExchanges": "Returns and Exchanges",
+    "securedOnlinePayment": "Secured Online Payment",
+    "shippingDelivery": "Shipping & Delivery",
+    "cashOnDelivery": "Cash on Delivery",
+    "aboutUs": "About Us",
+    "aboutKareemShop": "About Kareem Shop",
+    "ourCompany": "Our Company",
+    "communitySociety": "Community & Society",
+    "newsletter": "Newsletter",
+    "helpingYouSave": "Helping You Save",
+    "extendedWarranty": "Extended Warranty",
+    "loyaltyProgram": "Loyalty Program",
+    "helpSupport": "Help & Support",
+    "contactUs": "Contact Us",
+    "termsConditions": "Terms & Conditions",
+    "antiFraudDisclaimer": "Anti-Fraud Disclaimer",
+    "responsibleDisclosure": "Responsible Disclosure Policy",
+    "faq": "FAQs",
+    "findAStore": "Find A Store",
+    "privacyPolicy": "Privacy Policy",
+    "cookieSettings": "Cookie Settings",
+    "stayInTouch": "Stay in touch with us",
+    "chatWithUs": "Chat with us for assistance",
+    "callUs": "Call us for assistance",
+    "downloadOurApp": "Download Our App"
   }
 }
