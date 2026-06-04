@@ -23,13 +23,13 @@ export function OtpForm({ action, pending, state, email, onBack }: OtpFormProps)
   const inputsRef = useRef<Array<HTMLInputElement | null>>([]);
 
   useEffect(() => {
-    setOtp(p.otp ?? "");
+    // setOtp(p.otp ?? "");
   }, [p.otp]);
 
   useEffect(() => {
     if (state?.success) {
       toast.success(state.message || "Email verified successfully!");
-      setOtp("");
+      // setOtp("");
       formKey.current += 1;
       inputsRef.current[0]?.focus();
     }
@@ -116,7 +116,8 @@ export function OtpForm({ action, pending, state, email, onBack }: OtpFormProps)
   const digits = Array.from({ length: OTP_LENGTH }, (_, index) => otp[index] ?? "");
 
   return (
-    <form key={formKey.current} className="mx-auto mt-4 max-w-md" action={action}>
+    //removed key={formKey.current} from form need to handle later
+    <form className="mx-auto mt-4 max-w-md" action={action}>
       <div className="rounded-3xl border border-border/80 bg-white/95 p-6 shadow-[0_9px_30px_rgba(0,0,0,0.05)]">
         <div className="mb-5 flex items-center gap-3">
           <div className="grid h-12 w-12 place-items-center rounded-2xl bg-primary/10 text-primary">
@@ -142,7 +143,7 @@ export function OtpForm({ action, pending, state, email, onBack }: OtpFormProps)
               onChange={(event) => updateOtpValue(event.target.value, index)}
               onKeyDown={(event) => handleKeyDown(event, index)}
               onPaste={handlePaste}
-              ref={(element) => (inputsRef.current[index] = element)}
+              // ref={(element) => (inputsRef.current[index] = element)}
               className="h-14 w-12 rounded-3xl border border-border bg-background text-center text-2xl font-semibold text-text-primary outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/10 sm:w-14"
             />
           ))}
