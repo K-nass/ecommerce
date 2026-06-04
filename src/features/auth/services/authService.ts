@@ -4,6 +4,7 @@ import type {
   ChangePasswordPayload,
   ForgetPasswordPayload,
   LoginPayload,
+  OtpLoginPayload,
   RegisterPayload,
   ResetPasswordPayload,
   SocialLoginPayload,
@@ -16,40 +17,28 @@ type MessageData = {
 };
 
 function toRegisterBody(payload: RegisterPayload) {
-  if (payload.profile_image instanceof File) {
+  if (payload.avatar instanceof File) {
     const formData = new FormData();
-    formData.append("name", payload.name);
+    formData.append("first_name", payload.first_name);
+    formData.append("last_name", payload.last_name);
+    formData.append("email", payload.email);
+    formData.append("phone", payload.phone);
     formData.append("password", payload.password);
-
-    if (payload.password_confirmation) {
-      formData.append("password_confirmation", payload.password_confirmation);
-    }
-    if (payload.email) {
-      formData.append("email", payload.email);
-    }
-    if (payload.phone) {
-      formData.append("phone", payload.phone);
-    }
-
-    formData.append("profile_image", payload.profile_image);
+    formData.append("password_confirmation", payload.password_confirmation);
+    formData.append("policy", payload.policy ? "1" : "0");
+    formData.append("avatar", payload.avatar);
     return formData;
   }
 
-  const jsonPayload: Record<string, string> = {
-    name: payload.name,
+  return JSON.stringify({
+    first_name: payload.first_name,
+    last_name: payload.last_name,
+    email: payload.email,
+    phone: payload.phone,
     password: payload.password,
-  };
-  if (payload.password_confirmation) {
-    jsonPayload.password_confirmation = payload.password_confirmation;
-  }
-  if (payload.email) {
-    jsonPayload.email = payload.email;
-  }
-  if (payload.phone) {
-    jsonPayload.phone = payload.phone;
-  }
-
-  return JSON.stringify(jsonPayload);
+    password_confirmation: payload.password_confirmation,
+    policy: payload.policy ? "1" : "0",
+  });
 }
 
 export const authService = {
@@ -66,6 +55,15 @@ export const authService = {
     return apiFetch<ApiResponse<AuthLoginData | MessageData>>("/register", {
       method: "POST",
       body: toRegisterBody(payload),
+    });
+  },
+
+  otpLogin: async (
+    payload: OtpLoginPayload,
+  ): Promise<ApiResponse<AuthLoginData>> => {
+    return apiFetch<ApiResponse<AuthLoginData>>("/otp-login", {
+      method: "POST",
+      body: JSON.stringify(payload),
     });
   },
 
