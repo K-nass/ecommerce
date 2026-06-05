@@ -1,9 +1,6 @@
 import Breadcrumb from "@/components/ui/Breadcrumb";
-import {
-  buildCategoryBreadcrumbItems,
-  hasCategorySlug,
-} from "@/features/categories";
 import { categoryMenuService } from "@/features/categories/services/categoryMenuService";
+import { findCategoryPath } from "@/features/categories/utils/categoryBreadcrumbs";
 import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 
@@ -15,15 +12,21 @@ export default async function Page({
   const { locale, slug } = await params;
   const t = await getTranslations("header.breadcrumb");
   const categories = await categoryMenuService.getMenu(locale);
-  const breadcrumbItems = buildCategoryBreadcrumbItems({
-    categories,
-    homeLabel: t("home"),
-    slug,
-  });
 
-  if (!hasCategorySlug(categories, slug)) {
+  const categoryPath = findCategoryPath(categories, decodeURIComponent(slug));
+
+  // If path is null, the slug is invalid!
+  if (!categoryPath) {
     notFound();
   }
+
+  const breadcrumbItems = [
+    { label: t("home"), href: "/" },
+    ...categoryPath.map((category) => ({
+      label: category.name,
+      href: `/category/${category.slug}`,
+    })),
+  ];
 
   return (
     <div>
