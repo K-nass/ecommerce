@@ -58,6 +58,9 @@
       "currency": "Currency",
       "usd": "USD",
       "sar": "SAR"
+    },
+    "breadcrumb": {
+      "home": "Home"
     }
   }
 }
