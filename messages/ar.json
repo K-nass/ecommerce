@@ -58,6 +58,9 @@
       "currency": "العملة",
       "usd": "USD",
       "sar": "ريال سعودي"
+    },
+    "breadcrumb": {
+      "home": "الرئيسية"
     }
   }
 }
