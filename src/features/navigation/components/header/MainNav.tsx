@@ -6,12 +6,15 @@ import Logo from "./Logo";
 import { SearchInput } from "./SearchInput";
 import Image from "next/image";
 import { useAuthModalStore } from "@/features/auth/store/useAuthModalStore";
+import { useAuthStore } from "@/features/auth/store/useAuthStore";
+import { UserMenu } from "@/features/auth/components/UserMenu";
 
 export default function MainNav() {
   const t = useTranslations("header.mainNav");
   const tSearch = useTranslations("header.search");
   const authLabel = t("loginRegister");
   const openAuthModal = useAuthModalStore((s) => s.open);
+  const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
 
   return (
     <div className="flex flex-wrap items-center gap-3 md:gap-4">
@@ -44,15 +47,19 @@ export default function MainNav() {
           <span className="text-xl leading-none">🇪🇬</span>
         </button>
 
-        <button
-          type="button"
-          onClick={() => openAuthModal("login")}
-          className="inline-flex items-center text-sm font-semibold text-text-primary gap-1 transition hover:text-primary"
-        >
-          <Image src="/icons/user.svg" width={25} height={25} alt="user icon" />
-          <span className="hidden whitespace-nowrap md:inline">{authLabel}</span>
-          <span className="sr-only">{authLabel}</span>
-        </button>
+        {isAuthenticated ? (
+          <UserMenu />
+        ) : (
+          <button
+            type="button"
+            onClick={() => openAuthModal("login")}
+            className="inline-flex items-center text-sm font-semibold text-text-primary gap-1 transition hover:text-primary"
+          >
+            <Image src="/icons/user.svg" width={25} height={25} alt="user icon" />
+            <span className="hidden whitespace-nowrap md:inline">{authLabel}</span>
+            <span className="sr-only">{authLabel}</span>
+          </button>
+        )}
 
         <button
           type="button"

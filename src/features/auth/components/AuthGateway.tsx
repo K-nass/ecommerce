@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState, useActionState } from "react";
 import { useLocale } from "next-intl";
 import { toast } from "sonner";
+import { useRouter } from "@/i18n/navigation";
 
 import { PatternTiles } from "./PatternTiles";
 import { AuthHeader } from "./AuthHeader";
@@ -23,6 +24,8 @@ export default function AuthGateway() {
   const [profilePreview, setProfilePreview] = useState<string | null>(null);
   const [profileFileName, setProfileFileName] = useState<string | undefined>();
   const [otpEmail, setOtpEmail] = useState("");
+
+  const router = useRouter();
 
   const setAuthData = useAuthStore((s) => s.setAuthData);
 
@@ -61,8 +64,17 @@ export default function AuthGateway() {
     if (otpState?.success && otpState.data) {
       setAuthData(otpState.data);
       toast.success(otpState.message || "Logged in successfully!");
+      router.push("/");
     }
   }, [otpState, setAuthData]);
+
+  useEffect(() => {
+    if (loginState?.success && loginState.data) {
+      setAuthData(loginState.data);
+      toast.success(loginState.message || "Logged in successfully!");
+      router.push("/");
+    }
+  }, [loginState, setAuthData]);
 
   function onProfileImageChange(file: File | null) {
     setProfileFileName(file?.name);
@@ -158,3 +170,4 @@ export default function AuthGateway() {
     </section>
   );
 }
+
