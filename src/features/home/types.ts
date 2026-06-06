@@ -1,12 +1,3 @@
-export interface BannerItem {
-  id: string;
-  imageSrc: string;
-  alt: string;
-  title?: string;
-  href?: string;
-  priority?: boolean;
-}
-
 export interface CardSlideItem {
   id: number | string;
   image: string;
@@ -28,7 +19,12 @@ export interface ProductItem {
   originalPrice: number;
 }
 
-export interface BannerProps extends Omit<BannerItem, "id"> {
+export interface BannerProps {
+  imageSrc: string;
+  alt: string;
+  title?: string;
+  href?: string;
+  priority?: boolean;
   loading?: "lazy" | "eager";
   className?: string;
   overlay?: import("react").ReactNode;
@@ -53,10 +49,6 @@ export interface BannerPaginationProps {
   currentIndex: number;
   onSelect: (index: number) => void;
   className?: string;
-}
-
-export interface HeroSwiperProps {
-  banners: BannerItem[];
 }
 
 export interface CardSliderProps {
@@ -93,23 +85,36 @@ export interface ProductSliderProps {
   items: ProductItem[];
 }
 
-export interface HomePageProps {
-  heroBanners: BannerItem[];
-  dailyOffersTitle: string;
-  dailyOffers: CardSlideItem[];
-  topCategoriesTitle: string;
-  topCategories: ContentSectionItem[];
-  bestSellersTitle: string;
-  bestSellers: ProductItem[];
-  featuredProductsTitle: string;
-  moreProductsTitle: string;
-  featuredPromotionsTitle: string;
-  featuredPromotions: CardSlideItem[];
-  trendingNowTitle: string;
-  trendingProducts: ProductItem[];
-  exploreMoreDealsTitle: string;
-  exploreMoreDeals: CardSlideItem[];
-  leafletBanner: BannerItem;
-  electronicsZoneTitle: string;
-  electronicsZone: CardSlideItem[];
+export interface HomePageSection {
+  id: number;
+  type: string;
+  title: string;
+  endpoint: string;
+  order: number;
+}
+
+export interface HomeContentPage {
+  id: number;
+  title: string;
+  slug: string;
+  is_active: boolean;
+  sections: HomePageSection[];
+}
+
+export interface HeroBannerImage {
+  desktop: string;
+  mobile: string;
+}
+
+export interface HeroBanner {
+  id: number;
+  title: string;
+  slug: string;
+  description: string;
+  image: HeroBannerImage;
+  status: boolean;
+}
+
+export interface HeroSwiperProps {
+  endpoint: string;
 }
