@@ -1,4 +1,4 @@
-﻿import type { ProductDetail } from "./types";
+﻿import type { PriceInfo } from "./types";
 
 export function extractIdFromSlug(slug: string): number | null {
   const parts = slug.split("-");
@@ -7,7 +7,7 @@ export function extractIdFromSlug(slug: string): number | null {
   return Number.isNaN(id) ? null : id;
 }
 
-export function getDisplayPrice(product: ProductDetail): number {
+export function getDisplayPrice(product: PriceInfo): number {
   if (product.has_flash_sale && product.price_after_flash_sale != null) {
     return product.price_after_flash_sale;
   }
@@ -17,31 +17,31 @@ export function getDisplayPrice(product: ProductDetail): number {
   return product.current_price;
 }
 
-export function getOriginalPrice(product: ProductDetail): number {
+export function getOriginalPrice(product: PriceInfo): number {
   return product.price;
 }
 
-export function getDiscountPercent(product: ProductDetail): number | null {
+export function getDiscountPercent(product: PriceInfo): number | null {
   const display = getDisplayPrice(product);
   const original = getOriginalPrice(product);
   if (original <= 0 || display >= original) return null;
   return Math.round(((original - display) / original) * 100);
 }
 
-export function getSortedImages(product: ProductDetail): string[] {
+export function getSortedImages(product: { images: { original: Record<string, string> } }): string[] {
   const keys = Object.keys(product.images.original).sort(
     (a, b) => Number(a) - Number(b),
   );
   return keys.map((k) => product.images.original[k]);
 }
 
-export function getAverageRating(reviews: ProductDetail["reviews"]): number {
+export function getAverageRating(reviews: { rating: number }[]): number {
   if (reviews.length === 0) return 0;
   const sum = reviews.reduce((acc, r) => acc + r.rating, 0);
   return Math.round((sum / reviews.length) * 10) / 10;
 }
 
-export function getStockStatus(product: ProductDetail): {
+export function getStockStatus(product: { in_stock: number; quantity: number; sold_quantity: number }): {
   inStock: boolean;
   remaining: number;
 } {

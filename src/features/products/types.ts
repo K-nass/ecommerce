@@ -36,6 +36,26 @@ export interface ProductImages {
   original: Record<string, string>;
 }
 
+export interface RelatedProduct {
+  id: number;
+  name: string;
+  price: number;
+  current_price: number;
+  price_after_discount: number | null;
+  price_after_flash_sale: number | null;
+  has_discount: boolean;
+  has_flash_sale: boolean;
+  discount_type: string | null;
+  discount_amount: number | null;
+  quantity: number;
+  ratings: number;
+  discount_valid?: boolean;
+  image: {
+    thumbnail: string;
+    original: Record<string, string>;
+  };
+}
+
 export interface ProductDetail {
   id: number;
   name: string;
@@ -64,5 +84,14 @@ export interface ProductDetail {
   images: ProductImages;
   variants: ProductVariant[];
   reviews: ProductReview[];
-  related_products: ProductDetail[];
+  related_products: RelatedProduct[];
 }
+
+export type PriceInfo = {
+  has_flash_sale: boolean;
+  price_after_flash_sale: number | null;
+  has_discount: boolean;
+  price_after_discount: number | null;
+  current_price: number;
+  price: number;
+};

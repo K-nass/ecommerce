@@ -1,4 +1,4 @@
-﻿import { getTranslations } from "next-intl/server";
+import { getTranslations } from "next-intl/server";
 import Breadcrumb from "@/components/ui/Breadcrumb";
 import { ProductPageContent } from "./ProductPageContent";
 import ProductSlider from "@/features/home/productSlider/ProductSlider";
@@ -15,7 +15,7 @@ export async function ProductDetailsPage({ product, locale }: ProductDetailsPage
 
   const mappedRelated = product.related_products.map((rp) => ({
     id: rp.id,
-    image: rp.images?.thumbnail || "",
+    image: rp.image?.thumbnail || "",
     title: rp.name,
     price: getDisplayPrice(rp),
     originalPrice: getOriginalPrice(rp),

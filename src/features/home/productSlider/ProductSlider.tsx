@@ -5,6 +5,7 @@ import { BannerArrows } from "../components/banner";
 import { useLocale } from "next-intl";
 import { useState } from "react";
 import { Navigation, Pagination } from "swiper/modules";
+import "swiper/css";
 import { Swiper, SwiperSlide } from "swiper/react";
 import type { Swiper as SwiperType } from "swiper/types";
 import type { ProductSliderProps } from "../types";
