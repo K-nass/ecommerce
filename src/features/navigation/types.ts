@@ -37,16 +37,7 @@ export interface ContactInfo {
   phoneNumber: string;
 }
 
-export interface AttributionLogo {
-  imageSrc: string;
-  alt: string;
-}
-
 export interface FooterData {
-  logo: {
-    imageSrc: string;
-    alt: string;
-  };
   columns: FooterColumn[];
   socialLinks: SocialLink[];
   contactInfo: ContactInfo;
@@ -54,10 +45,7 @@ export interface FooterData {
     title: string;
     appStore: AppStoreBadge;
     googlePlay: AppStoreBadge;
-    huaweiAppGallery: AppStoreBadge;
   };
   cookieSettingsLabel: string;
-  copyright: string;
-  attributionLogo: AttributionLogo;
 }
 

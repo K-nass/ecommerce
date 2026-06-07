@@ -1,11 +1,12 @@
+import Image from "next/image";
 import { footerService } from "../../services/footerService";
-import Logo from "@/features/navigation/components/header/Logo";
+import Logo from "@/components/ui/Logo";
 import FooterColumn from "./FooterColumn";
 import FooterBottomRow from "./FooterBottomRow";
 import FooterContactCard from "./FooterContactCard";
 import FooterAccordion from "./FooterAccordion";
 import FooterAccordionItem from "./FooterAccordionItem";
-import FooterCopyright from "./FooterCopyright";
+
 
 interface FooterProps {
   params: Promise<{ locale: string }>;
@@ -32,7 +33,7 @@ export default async function Footer({ params }: FooterProps) {
         {/* ── Mobile Accordion ── */}
         <div className="lg:hidden">
           <div className="border-b border-white pb-4">
-            <Logo src={data.logo.imageSrc} alt={data.logo.alt} />
+              <Logo src="/footerLogo.png" alt="Kareem Shop" />
             <p className="mt-4 text-xs leading-normal font-normal text-white">{data.contactInfo.stayInTouchText}</p>
             <div className="mt-2 flex">
               {data.socialLinks.map((s) => (
@@ -42,12 +43,12 @@ export default async function Footer({ params }: FooterProps) {
                   aria-label={s.label}
                   className="pr-2 transition-opacity hover:opacity-80 dark:hover:text-white"
                 >
-                  <img
+                  <Image
                     alt={s.label}
-                    loading="lazy"
                     width={24}
                     height={24}
                     src={socialIconUrls[s.platform]}
+                    unoptimized
                   />
                 </a>
               ))}
@@ -57,7 +58,7 @@ export default async function Footer({ params }: FooterProps) {
           <FooterAccordion columns={data.columns} />
 
           <FooterAccordionItem title={data.bottomRow.title}>
-            <div className="pt-2">
+            <div>
               <FooterBottomRow data={data.bottomRow} />
             </div>
           </FooterAccordionItem>
@@ -71,7 +72,7 @@ export default async function Footer({ params }: FooterProps) {
         <div className="hidden lg:block">
           <div className="grid grid-cols-5 gap-4">
             <div>
-              <Logo src={data.logo.imageSrc} alt={data.logo.alt} />
+              <Logo src="/footerLogo.png" alt="Kareem Shop" />
               <p className="mt-4 text-xs leading-normal font-normal text-white">{data.contactInfo.stayInTouchText}</p>
               <div className="mt-2 flex">
                 {data.socialLinks.map((s) => (
@@ -81,12 +82,12 @@ export default async function Footer({ params }: FooterProps) {
                     aria-label={s.label}
                     className="pr-2 transition-opacity hover:opacity-80 dark:hover:text-white"
                   >
-                    <img
+                    <Image
                       alt={s.label}
-                      loading="lazy"
                       width={24}
                       height={24}
                       src={socialIconUrls[s.platform]}
+                      unoptimized
                     />
                   </a>
                 ))}
@@ -105,17 +106,11 @@ export default async function Footer({ params }: FooterProps) {
             ))}
           </div>
 
-          <div className="mt-6 flex justify-end">
+          <div className="flex justify-end">
             <FooterBottomRow data={data.bottomRow} />
           </div>
         </div>
       </div>
-
-      {/* ── Copyright Bar ── */}
-      <FooterCopyright
-        copyright={data.copyright}
-        attributionLogo={data.attributionLogo}
-      />
     </footer>
   );
 }

@@ -2,11 +2,19 @@ import { apiFetch } from "@/shared/lib/api";
 import type { ApiResponse } from "@/shared/types";
 import type { FooterData } from "../types";
 
+// ---------------------------------------------------------------------------
+// Footer data is fully dynamic — all content (links, social, contact info,
+// app badges, copyright, logos) will be fetched from the backend /footer
+// endpoint.  The mock data below simulates that API response so development
+// can proceed without a running backend.  Replace with the real API call
+// when the endpoint is available.
+// ---------------------------------------------------------------------------
+
 export const footerService = {
   getFooter: async (lang: string): Promise<FooterData> => {
-    // Backend dev: uncomment when API is ready
+    // Backend dev: uncomment when /footer endpoint is ready
     // const response = await apiFetch<ApiResponse<FooterData>>(
-    //   `/general/footer?lang=${lang}`
+    //   `/footer?lang=${lang}`
     // );
     // return response.data;
 
@@ -18,10 +26,6 @@ function getMockFooterData(lang: string): FooterData {
   const isAr = lang === "ar";
 
   return {
-    logo: {
-      imageSrc: "https://cdnprod.mafretailproxy.com/mafrp-web/assets/en/images/default/logo-white.svg",
-      alt: isAr ? "كريم شوب" : "Kareem Shop",
-    },
     columns: [
       { id: 1, title: null, links: [] },
       {
@@ -84,30 +88,17 @@ function getMockFooterData(lang: string): FooterData {
       title: isAr ? "حمل تطبيقنا" : "Download Our App",
       appStore: {
         platform: "ios",
-        imageSrc: "/app-store-badge.svg",
+        imageSrc: "/images/badges/app-store.svg",
         url: "#",
         alt: "App Store",
       },
       googlePlay: {
         platform: "android",
-        imageSrc: "/google-play-badge.svg",
+        imageSrc: "/images/badges/play-store.svg",
         url: "#",
         alt: "Google Play",
       },
-      huaweiAppGallery: {
-        platform: "android",
-        imageSrc: "/huawei-badge.png",
-        url: "#",
-        alt: "Huawei AppGallery",
-      },
     },
     cookieSettingsLabel: isAr ? "إعدادات ملفات تعريف الارتباط" : "Cookie Settings",
-    copyright: isAr
-      ? `© ${new Date().getFullYear()} كريم شوب. جميع الحقوق محفوظة.`
-      : `© ${new Date().getFullYear()} Kareem Shop. All rights reserved.`,
-    attributionLogo: {
-      imageSrc: "/attribution-logo.svg",
-      alt: isAr ? "كريم شوب" : "Kareem Shop",
-    },
   };
 }

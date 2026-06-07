@@ -11,7 +11,7 @@ export default function FooterColumn({ column, cookieSettingsLabel }: Props) {
 
   return (
     <div>
-      <h3 className="mb-4 text-xs leading-normal font-bold text-white">{column.title}</h3>
+      <h3 className="mb-3.5 text-sm leading-normal font-normal text-white">{column.title}</h3>
       <ul>
         {column.links.map((link) => (
           <li key={link.id}>
@@ -27,7 +27,7 @@ export default function FooterColumn({ column, cookieSettingsLabel }: Props) {
       {cookieSettingsLabel && (
         <button
           type="button"
-          className="mt-3 block text-left text-xs leading-normal font-normal text-white underline-offset-4 transition-colors hover:text-white hover:underline"
+          className="text-xs leading-normal font-normal text-white transition-colors hover:text-white hover:underline"
         >
           {cookieSettingsLabel}
         </button>

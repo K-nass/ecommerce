@@ -2,7 +2,7 @@
 
 import { ChevronDown, ShoppingCart } from "lucide-react";
 import { useTranslations } from "next-intl";
-import Logo from "./Logo";
+import Logo from "@/components/ui/Logo";
 import { SearchInput } from "./SearchInput";
 import Image from "next/image";
 import { useAuthModalStore } from "@/features/auth/store/useAuthModalStore";
@@ -16,7 +16,7 @@ export default function MainNav() {
   return (
     <div className="flex flex-wrap items-center gap-3 md:gap-4">
       <div className="flex items-center gap-x-4 md:gap-x-8">
-        <Logo src="/logo.png" alt="Carrefour" priority />
+        <Logo src="/headerLogo.png" alt="Carrefour" priority />
 
         <button
           type="button"

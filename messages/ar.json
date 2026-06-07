@@ -59,34 +59,5 @@
       "usd": "USD",
       "sar": "ريال سعودي"
     }
-  },
-  "footer": {
-    "customerService": "خدمة العملاء",
-    "serviceWarranty": "الخدمة والضمان",
-    "returnsExchanges": "الإرجاع والاستبدال",
-    "securedOnlinePayment": "الدفع الآمن عبر الإنترنت",
-    "shippingDelivery": "الشحن والتوصيل",
-    "cashOnDelivery": "الدفع عند الاستلام",
-    "aboutUs": "معلومات عنا",
-    "aboutKareemShop": "عن كريم شوب",
-    "ourCompany": "شركتنا",
-    "communitySociety": "المسؤولية المجتمعية",
-    "newsletter": "النشرة البريدية",
-    "helpingYouSave": "نساعدك على التوفير",
-    "extendedWarranty": "الضمان الممتد",
-    "loyaltyProgram": "برنامج الولاء",
-    "helpSupport": "المساعدة والدعم",
-    "contactUs": "اتصل بنا",
-    "termsConditions": "الشروط والأحكام",
-    "antiFraudDisclaimer": "إخلاء مسؤولية الاحتيال",
-    "responsibleDisclosure": "سياسة الإفصاح المسؤول",
-    "faq": "الأسئلة الشائعة",
-    "findAStore": "ابحث عن متجر",
-    "privacyPolicy": "سياسة الخصوصية",
-    "cookieSettings": "إعدادات ملفات تعريف الارتباط",
-    "stayInTouch": "ابق على تواصل معنا",
-    "chatWithUs": "تحدث معنا للمساعدة",
-    "callUs": "اتصل بنا للمساعدة",
-    "downloadOurApp": "حمل تطبيقنا"
   }
 }

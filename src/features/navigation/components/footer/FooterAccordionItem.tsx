@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, type ReactNode } from "react";
+import ChevronIcon from "@/components/ui/icons/ChevronIcon";
 
 interface Props {
   title: string;
@@ -22,18 +23,10 @@ export default function FooterAccordionItem({
         onClick={() => setOpen((prev) => !prev)}
         className="flex w-full items-center justify-between py-4 text-left text-xs text-white transition-colors hover:no-underline"
       >
-        <span className="font-bold">{title}</span>
-        <svg
+        <span className="text-sm font-normal">{title}</span>
+        <ChevronIcon
           className={`size-4 shrink-0 text-white transition-transform duration-200 ${open ? "rotate-180" : ""}`}
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-          fill="none"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        >
-          <path d="M6 9l6 6 6-6" />
-        </svg>
+        />
       </button>
       {open && <div className="pb-4">{children}</div>}
     </div>

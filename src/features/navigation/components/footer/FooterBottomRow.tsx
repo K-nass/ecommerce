@@ -1,3 +1,4 @@
+import Image from "next/image";
 import type { FooterData } from "../../types";
 
 interface Props {
@@ -5,23 +6,28 @@ interface Props {
 }
 
 export default function FooterBottomRow({ data }: Props) {
-  const badges = [
-    { badge: data.appStore, key: "appstore" },
-    { badge: data.googlePlay, key: "google" },
-    { badge: data.huaweiAppGallery, key: "huawei" },
-  ];
-
   return (
     <div className="flex items-center justify-end gap-2">
-      {badges.map(({ badge, key }) => (
-        <a key={key} href={badge.url}>
-          <img
-            src={badge.imageSrc}
-            alt={badge.alt ?? badge.platform}
-            className="h-8 w-auto"
-          />
-        </a>
-      ))}
+      <a href={data.appStore.url}>
+        <Image
+          src={data.appStore.imageSrc}
+          alt={data.appStore.alt ?? data.appStore.platform}
+          width={100}
+          height={30}
+          className="w-25 h-[1.852rem]"
+          unoptimized
+        />
+      </a>
+      <a href={data.googlePlay.url}>
+        <Image
+          src={data.googlePlay.imageSrc}
+          alt={data.googlePlay.alt ?? data.googlePlay.platform}
+          width={100}
+          height={33}
+          className="w-25 h-[2.04rem]"
+          unoptimized
+        />
+      </a>
       <span className="ml-2 text-xs leading-normal font-normal text-white">{data.title}</span>
     </div>
   );
