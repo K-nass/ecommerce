@@ -1,14 +1,54 @@
 export interface CardSlideItem {
   id: number | string;
-  image: string;
+  image: {
+    desktop: string;
+    mobile: string;
+  };
   title: string;
   borderColor?: string;
 }
 
-export interface ContentSectionItem {
+export interface ApiFlashSale {
   id: number;
-  image: string;
-  title: string;
+  name: string;
+  discription: string;
+  slug: string;
+  start_date: string;
+  end_date: string;
+  image: {
+    desktop: string;
+    mobile: string;
+  };
+}
+
+export interface HomeCategory {
+  id: number;
+  name: string;
+  slug: string;
+  image: {
+    desktop: string;
+    mobile: string;
+  };
+}
+
+
+export interface ApiProduct {
+  id: number;
+  name: string;
+  price: number;
+  current_price: number;
+  price_after_discount: number;
+  price_after_flash_sale: number | null;
+  has_discount: boolean;
+  discount_type: string;
+  discount_amount: number;
+  quantity: number;
+  discount_valid: boolean;
+  ratings: number;
+  image: {
+    thumbnail: string;
+    original: Record<string, string>;
+  };
 }
 
 export interface ProductItem {
@@ -20,15 +60,9 @@ export interface ProductItem {
 }
 
 export interface BannerProps {
-  imageSrc: string;
-  alt: string;
+  endpoint?: string;
   title?: string;
-  href?: string;
-  priority?: boolean;
-  loading?: "lazy" | "eager";
-  className?: string;
-  overlay?: import("react").ReactNode;
-  sizes?: string;
+  promotion?: Promotion;
 }
 
 export interface BannerArrowsProps {
@@ -73,11 +107,11 @@ export interface CardGridProps {
 
 export interface ContentSectionProps {
   title: string;
-  items: ContentSectionItem[];
+  endpoint: string;
 }
 
 export interface ContentItemProps {
-  item: ContentSectionItem;
+  item: HomeCategory;
 }
 
 export interface ProductSliderProps {
@@ -117,4 +151,44 @@ export interface HeroBanner {
 
 export interface HeroSwiperProps {
   endpoint: string;
+}
+
+export interface PromotionImage {
+  desktop: string;
+  mobile: string;
+}
+
+export interface Promotion {
+  id: number;
+  name: string;
+  status: boolean;
+  image: PromotionImage;
+}
+
+export interface ApiBrandWithProducts {
+  id: number;
+  name: string;
+  slug: string;
+  image: PromotionImage;
+  status: boolean;
+  products: ApiProduct[];
+}
+
+export interface ApiCoupon {
+  id: number;
+  code: string;
+  name: string;
+  image: string;
+  borderColor: string;
+  borderless: boolean;
+  discount: string;
+  discount_type: string;
+  max_discount_amount: string | null;
+  start_date: string;
+  end_date: string;
+  limiter: number;
+  used: number;
+  status: boolean;
+  is_valid: boolean;
+  created_at: string;
 }

@@ -13,6 +13,7 @@ export default function ProductSlider({ title, items }: ProductSliderProps) {
   const locale = useLocale();
   const isRtl = locale === "ar";
   const [swiper, setSwiper] = useState<SwiperType | null>(null);
+  const [isLocked, setIsLocked] = useState(true);
 
   const onPrevious = () => swiper?.slidePrev();
   const onNext = () => swiper?.slideNext();
@@ -26,8 +27,14 @@ export default function ProductSlider({ title, items }: ProductSliderProps) {
         modules={[Navigation, Pagination]}
         spaceBetween={12}
         slidesPerView="auto"
-        onSwiper={setSwiper}
-        loop={true}
+        onSwiper={(s) => {
+          setSwiper(s);
+          setIsLocked(s.isLocked);
+        }}
+        onLock={() => setIsLocked(true)}
+        onUnlock={() => setIsLocked(false)}
+        loop={items.length >= 6}
+        watchOverflow={true}
         className="w-full"
       >
         {items.map((product) => (
@@ -43,14 +50,16 @@ export default function ProductSlider({ title, items }: ProductSliderProps) {
         ))}
       </Swiper>
 
-      <BannerArrows
-        onPrevious={onPrevious}
-        onNext={onNext}
-        isRtl={isRtl}
-        variant="card"
-        strokeWidth={2}
-        iconClassName="h-7 w-7"
-      />
+      {!isLocked && (
+        <BannerArrows
+          onPrevious={onPrevious}
+          onNext={onNext}
+          isRtl={isRtl}
+          variant="card"
+          strokeWidth={2}
+          iconClassName="h-7 w-7"
+        />
+      )}
     </div>
   );
 }

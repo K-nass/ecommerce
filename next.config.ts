@@ -35,6 +35,16 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "mohammedtareq.me",
       },
+      {
+        protocol: "http",
+        hostname: "localhost",
+        port: "8000",
+      },
+      {
+        protocol: "http",
+        hostname: "127.0.0.1",
+        port: "8000",
+      },
     ],
   },
 };
