@@ -86,6 +86,8 @@ export interface ContentSectionProps {
 
 export interface ContentItemProps {
   item: ContentSectionItem;
+  className?: string;
+  isActive?: boolean;
 }
 
 export interface ProductSliderProps {

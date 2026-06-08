@@ -28,15 +28,15 @@ export default async function RootLayout({
   const { locale } = await params;
   const dir = locale === "ar" ? "rtl" : "ltr";
   return (
-    <html lang={locale} dir={dir}>
-      <body className={cn("min-h-full flex flex-col", montserrat.variable)}>
-        <NextIntlClientProvider>
+    <NextIntlClientProvider>
+      <html lang={locale} dir={dir}>
+        <body className={cn("min-h-screen flex flex-col", montserrat.variable)}>
           <Header params={params} />
-          <div className="container mx-auto px-4 flex flex-col">{children}</div>
+          <div className="container mx-auto px-4 flex flex-col grow">{children}</div>
           <Footer params={params} />
           <AuthModal />
-        </NextIntlClientProvider>
-      </body>
-    </html>
+        </body>
+      </html>
+    </NextIntlClientProvider>
   );
 }
