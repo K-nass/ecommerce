@@ -1,4 +1,5 @@
 import Breadcrumb from "@/components/ui/Breadcrumb";
+import SubCategorySlider from "@/features/categories/components/SubCategorySlider";
 import { categoryMenuService } from "@/features/categories/services/categoryMenuService";
 import { findCategoryPath } from "@/features/categories/utils/categoryBreadcrumbs";
 import { getTranslations } from "next-intl/server";
@@ -31,6 +32,7 @@ export default async function Page({
   return (
     <div>
       <Breadcrumb items={breadcrumbItems} />
+      <SubCategorySlider />
     </div>
   );
 }

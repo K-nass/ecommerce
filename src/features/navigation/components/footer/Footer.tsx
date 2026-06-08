@@ -28,7 +28,7 @@ export default async function Footer({ params }: FooterProps) {
   const data = await footerService.getFooter(locale);
 
   return (
-    <footer className="bg-primary text-white">
+    <footer className="bottom-0 w-full bg-primary text-white">
       <div className="px-10 py-6">
         {/* ── Mobile Accordion ── */}
         <div className="lg:hidden">
