@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
 import { NextIntlClientProvider } from "next-intl";
 import { routing } from "@/i18n/routing";
 import Header from "@/features/navigation/components/header/Header";
+import Footer from "@/features/navigation/components/footer/Footer";
 import { AuthModal } from "@/features/auth/components/AuthModal";
 import { Montserrat } from "next/font/google";
 import { cn } from "@/shared/utils/cn";
@@ -32,6 +33,7 @@ export default async function RootLayout({
         <NextIntlClientProvider>
           <Header params={params} />
           <div className="container mx-auto px-4 flex flex-col">{children}</div>
+          <Footer params={params} />
           <AuthModal />
         </NextIntlClientProvider>
       </body>

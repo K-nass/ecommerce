@@ -340,35 +340,35 @@ export const homePageMockData = {
       originalPrice: 240,
     },
     {
-      id: 16,
+      id: 17,
       image:
         "https://images.unsplash.com/photo-1511381939415-e44015466834?w=300&h=300&fit=crop",
       title: "Pure Vanilla Extract - 50ml",
       price: 190,
       originalPrice: 240,
     },{
-      id: 16,
+      id: 18,
       image:
         "https://images.unsplash.com/photo-1511381939415-e44015466834?w=300&h=300&fit=crop",
       title: "Pure Vanilla Extract - 50ml",
       price: 190,
       originalPrice: 240,
     },{
-      id: 16,
+      id: 19,
       image:
         "https://images.unsplash.com/photo-1511381939415-e44015466834?w=300&h=300&fit=crop",
       title: "Pure Vanilla Extract - 50ml",
       price: 190,
       originalPrice: 240,
     },{
-      id: 16,
+      id: 20,
       image:
         "https://images.unsplash.com/photo-1511381939415-e44015466834?w=300&h=300&fit=crop",
       title: "Pure Vanilla Extract - 50ml",
       price: 190,
       originalPrice: 240,
     },{
-      id: 16,
+      id: 21,
       image:
         "https://images.unsplash.com/photo-1511381939415-e44015466834?w=300&h=300&fit=crop",
       title: "Pure Vanilla Extract - 50ml",

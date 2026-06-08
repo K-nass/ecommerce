@@ -82,5 +82,33 @@
     "outOfStock": "غير متوفر",
     "loading": "جاري تحميل السلة...",
     "cartItems": "{count, plural, =0 {0 عناصر} one {# عنصر} other {# عناصر}}"
+},
+  "product": {
+    "home": "الرئيسية",
+    "currency": "ج.م",
+    "reviews": "تقييم",
+    "reviewsTitle": "تقييمات العملاء",
+    "noReviews": "لا توجد تقييمات بعد",
+    "inStock": "متوفر: {count} قطعة",
+    "outOfStock": "غير متوفر",
+    "sku": "رمز المنتج",
+    "quantity": "الكمية",
+    "addToCart": "أضف إلى السلة",
+    "addedToCart": "تمت إضافة {name} × {count} إلى السلة",
+    "description": "الوصف",
+    "additionalInfo": "معلومات إضافية",
+    "height": "الارتفاع",
+    "width": "العرض",
+    "length": "الطول",
+    "weight": "الوزن",
+    "cm": "سم",
+    "g": "جم",
+    "deliveryTitle": "التوصيل",
+    "deliveryDesc": "التوصيل خلال 2-5 أيام عمل",
+    "shippingTitle": "شحن مجاني",
+    "shippingDesc": "شحن مجاني للطلبات فوق 500 ج.م",
+    "returnsTitle": "إرجاع سهل",
+    "returnsDesc": "إرجاع مجاني خلال 14 يوم",
+    "relatedProducts": "منتجات ذات صلة"
   }
 }
