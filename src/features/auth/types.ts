@@ -1,6 +1,6 @@
 export interface LoginPayload {
   email?: string;
-  phone?: string;
+  phone_number?: string;
   password: string;
 }
 

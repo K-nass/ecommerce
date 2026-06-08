@@ -27,11 +27,11 @@ export async function loginAction(
   const payload =
     method === "email"
       ? { email: email.trim(), password }
-      : { phone: phone.trim(), password };
+      : { phone_number: phone.trim(), password };
 
   try {
-    await authService.login(payload);
-    return { success: true, message: "Login successful." };
+    const response = await authService.login(payload);
+    return { success: true, message: response.message || "Login successful.", data: response.data };
   } catch (error) {
     if (error instanceof ApiError) {
       const mapped: Record<string, string> = {};

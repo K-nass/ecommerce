@@ -9,3 +9,4 @@ export { ProfileImageUpload } from "./ProfileImageUpload";
 export { PatternTiles } from "./PatternTiles";
 export { PhoneInputWithCountry } from "./PhoneInputWithCountry";
 export { PasswordInput } from "./PasswordInput";
+export { UserMenu } from "./UserMenu";
