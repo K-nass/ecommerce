@@ -34,6 +34,10 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "cdn.mafrservices.com",
       },
+      {
+        protocol: "https",
+        hostname: "mohammedtareq.me",
+      },
     ],
   },
 };
