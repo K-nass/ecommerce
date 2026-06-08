@@ -63,6 +63,26 @@
       "home": "الرئيسية"
     }
   },
+  "cartPage": {
+    "title": "سلة التسوق",
+    "breadcrumb": "سلة التسوق",
+    "emptyTitle": "سلة التسوق فارغة",
+    "emptyDescription": "ابدأ بإضافة منتجات إلى سلة التسوق",
+    "startShopping": "تسوق الآن",
+    "subtotal": "المجموع الفرعي",
+    "shipping": "الشحن",
+    "freeShipping": "مجاني",
+    "total": "الإجمالي",
+    "checkout": "إتمام الشراء",
+    "minimumOrder": "الحد الأدنى للطلب هو {amount} ريال",
+    "freeShippingOver": "الشحن مجاني للطلبات فوق {amount} ريال",
+    "youMightAlsoLike": "قد يعجبك أيضاً",
+    "remove": "إزالة",
+    "quantity": "الكمية",
+    "outOfStock": "غير متوفر",
+    "loading": "جاري تحميل السلة...",
+    "cartItems": "{count, plural, =0 {0 عناصر} one {# عنصر} other {# عناصر}}"
+},
   "product": {
     "home": "الرئيسية",
     "currency": "ج.م",
