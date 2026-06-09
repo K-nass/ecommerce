@@ -59,6 +59,11 @@
       "usd": "USD",
       "sar": "SAR"
     },
+    "location": {
+      "addLocation": "Add delivery location",
+      "searchPlaceholder": "Search for an area, street or building",
+      "poweredBy": "powered by "
+    },
     "breadcrumb": {
       "home": "Home"
     }

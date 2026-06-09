@@ -59,6 +59,11 @@
       "usd": "USD",
       "sar": "ريال سعودي"
     },
+    "location": {
+      "addLocation": "إضافة موقع التوصيل",
+      "searchPlaceholder": "ابحث عن منطقة، شارع أو مبنى",
+      "poweredBy": "مشغل بواسطة "
+    },
     "breadcrumb": {
       "home": "الرئيسية"
     }
