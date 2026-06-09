@@ -8,13 +8,15 @@ import Image from "next/image";
 import { useAuthModalStore } from "@/features/auth/store/useAuthModalStore";
 import { useAuthStore } from "@/features/auth/store/useAuthStore";
 import { UserMenu } from "@/features/auth/components/UserMenu";
-
+import { useState } from "react";
+import { LocationSidebar } from "./LocationSidebar";
 export default function MainNav() {
   const t = useTranslations("header.mainNav");
   const tSearch = useTranslations("header.search");
   const authLabel = t("loginRegister");
   const openAuthModal = useAuthModalStore((s) => s.open);
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
+  const [isLocationSidebarOpen, setLocationSidebarOpen] = useState(false);
 
   return (
     <div className="flex flex-wrap items-center gap-3 md:gap-4">
@@ -23,6 +25,7 @@ export default function MainNav() {
 
         <button
           type="button"
+          onClick={() => setLocationSidebarOpen(true)}
           className="inline-flex items-center text-sm font-semibold text-text-primary"
         >
           <span className="hidden whitespace-nowrap md:inline">Maadi - Cairo</span>
@@ -72,6 +75,11 @@ export default function MainNav() {
           </span>
         </button>
       </div>
+
+      <LocationSidebar 
+        isOpen={isLocationSidebarOpen} 
+        onClose={() => setLocationSidebarOpen(false)} 
+      />
     </div>
   );
 }
