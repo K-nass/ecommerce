@@ -1,4 +1,4 @@
-import CategoryNav from "./CategoryNav";
+﻿import CategoryNav from "./CategoryNav";
 import DeliveryModes from "./DeliveryModes";
 import MainNav from "./MainNav";
 
@@ -8,7 +8,7 @@ export default function Header({
   params: Promise<{ locale: string }>;
 }) {
   return (
-    <header className="header-gradient header-shadow mb-4">
+    <header className="header-gradient header-shadow sticky top-0 z-50">
       <div className="container mx-auto px-4 flex flex-col gap-3 p-2.5 md:gap-4">
         <DeliveryModes />
         <MainNav />
