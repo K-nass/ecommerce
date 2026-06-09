@@ -22,7 +22,7 @@ function toRegisterBody(payload: RegisterPayload) {
     formData.append("first_name", payload.first_name);
     formData.append("last_name", payload.last_name);
     formData.append("email", payload.email);
-    formData.append("phone", payload.phone);
+    formData.append("phone_number", payload.phone_number);
     formData.append("password", payload.password);
     formData.append("password_confirmation", payload.password_confirmation);
     formData.append("policy", payload.policy ? "1" : "0");
@@ -34,7 +34,7 @@ function toRegisterBody(payload: RegisterPayload) {
     first_name: payload.first_name,
     last_name: payload.last_name,
     email: payload.email,
-    phone: payload.phone,
+    phone_number: payload.phone_number,
     password: payload.password,
     password_confirmation: payload.password_confirmation,
     policy: payload.policy ? "1" : "0",
