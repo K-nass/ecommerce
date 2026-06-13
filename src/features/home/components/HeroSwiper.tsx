@@ -52,7 +52,7 @@ function HeroBannerImage({
   );
 }
 
-export default function HeroSwiper({ endpoint }: HeroSwiperProps) {
+export default function HeroSwiper({ type }: HeroSwiperProps) {
   const locale = useLocale();
   const isRtl = locale === "ar";
   const [banners, setBanners] = useState<HeroBanner[]>([]);
@@ -64,7 +64,7 @@ export default function HeroSwiper({ endpoint }: HeroSwiperProps) {
     let isMounted = true;
 
     async function loadBanners() {
-      const items = await homePageService.getHeroBanners(endpoint);
+      const items = await homePageService.getHeroBanners();
 
       if (isMounted) {
         setBanners(items);
@@ -76,7 +76,7 @@ export default function HeroSwiper({ endpoint }: HeroSwiperProps) {
     return () => {
       isMounted = false;
     };
-  }, [endpoint]);
+  }, [type]);
 
   const goTo = (index: number) => {
     if (!swiper) return;

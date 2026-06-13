@@ -5,9 +5,9 @@ import type { ContentSectionProps } from "../../types";
 
 export default async function ContentSection({
   title,
-  endpoint,
+  type,
 }: ContentSectionProps) {
-  const categories = await homePageService.getCategories(endpoint);
+  const categories = await homePageService.getCategories();
 
   if (!categories || categories.length === 0) {
     return null;

@@ -28,20 +28,20 @@ export const homePageService = {
     return homePage.sections;
   },
 
-  getHeroBanners: async (endpoint: string): Promise<HeroBanner[]> => {
-    const response = await apiFetch<ApiResponse<HeroBanner[]>>(endpoint);
+  getHeroBanners: async (): Promise<HeroBanner[]> => {
+    const response = await apiFetch<ApiResponse<HeroBanner[]>>("/general/banners");
 
     return response.data;
   },
 
-  getPromotions: async (endpoint: string): Promise<Promotion[]> => {
-    const response = await apiFetch<ApiResponse<Promotion[]>>(endpoint);
+  getPromotions: async (): Promise<Promotion[]> => {
+    const response = await apiFetch<ApiResponse<Promotion[]>>("/general/promotions");
 
     return response.data;
   },
 
-  getCategories: async (endpoint: string): Promise<HomeCategory[]> => {
-    const response = await apiFetch<ApiResponse<HomeCategory[]>>(endpoint);
+  getCategories: async (): Promise<HomeCategory[]> => {
+    const response = await apiFetch<ApiResponse<HomeCategory[]>>("/general/categories");
 
     return response.data;
   },
@@ -53,20 +53,28 @@ export const homePageService = {
   //   return response.data || [];
   // },
 
-  getFlashSales: async (endpoint: string): Promise<ApiFlashSale[]> => {
-    const response = await apiFetch<ApiResponse<ApiFlashSale[]>>(endpoint);
+  getProductsBySectionType: async (type: string): Promise<ApiProduct[]> => {
+    const response = await apiFetch<ApiResponse<ApiProduct[]>>(
+      `/general/products/section?type=${type}`
+    );
 
     return response.data;
   },
 
-  getBrandsWithProducts: async (endpoint: string): Promise<ApiBrandWithProducts[]> => {
-    const response = await apiFetch<ApiResponse<ApiBrandWithProducts[]>>(endpoint);
+  getFlashSales: async (): Promise<ApiFlashSale[]> => {
+    const response = await apiFetch<ApiResponse<ApiFlashSale[]>>("/general/flash-sales");
 
     return response.data;
   },
 
-  getCoupons: async (endpoint: string): Promise<ApiCoupon[]> => {
-    const response = await apiFetch<ApiResponse<ApiCoupon[]>>(endpoint);
+  getBrandsWithProducts: async (): Promise<ApiBrandWithProducts[]> => {
+    const response = await apiFetch<ApiResponse<ApiBrandWithProducts[]>>("/general/brands");
+
+    return response.data;
+  },
+
+  getCoupons: async (): Promise<ApiCoupon[]> => {
+    const response = await apiFetch<ApiResponse<ApiCoupon[]>>("/general/coupons");
 
     return response.data;
   },

@@ -1,30 +1,28 @@
 import CardSlider from "./CardSlider";
 import { homePageService } from "../../services/homePageService";
-import type { CardSlideItem, ApiFlashSale } from "../../types";
 
 interface FlashSalesSectionProps {
   title: string;
-  endpoint: string;
+  type: string;
 }
 
 export default async function FlashSalesSection({
   title,
-  endpoint,
+  type,
 }: FlashSalesSectionProps) {
-  const flashSales = await homePageService.getFlashSales(endpoint);
+  let items;
+  if (type === "coupons") {
+    items = await homePageService.getCoupons();
+  } else {
+    // defaults to flash-sales
+    items = await homePageService.getFlashSales();
+  }
 
-  if (!flashSales || flashSales.length === 0) {
+  if (!items || items.length === 0) {
     return null;
   }
 
-  const items: CardSlideItem[] = flashSales.map((sale: ApiFlashSale) => ({
-    id: sale.id,
-    title: sale.name,
-    image: {
-      desktop: sale.image.desktop,
-      mobile: sale.image.mobile,
-    },
-  }));
-
-  return <CardSlider title={title} items={items} />;
+  // Pass the raw backend data straight into the UI component
+  // No mappers, adapters, or normalizers here!
+  return <CardSlider title={title} items={items as any} />;
 }

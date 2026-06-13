@@ -60,7 +60,7 @@ export interface ProductItem {
 }
 
 export interface BannerProps {
-  endpoint?: string;
+  type?: string;
   title?: string;
   promotion?: Promotion;
 }
@@ -107,7 +107,7 @@ export interface CardGridProps {
 
 export interface ContentSectionProps {
   title: string;
-  endpoint: string;
+  type: string;
 }
 
 export interface ContentItemProps {
@@ -123,7 +123,7 @@ export interface HomePageSection {
   id: number;
   type: string;
   title: string;
-  endpoint: string;
+  endpoint?: string; // Optional now that 'type' is the main driver
   order: number;
 }
 
@@ -150,7 +150,7 @@ export interface HeroBanner {
 }
 
 export interface HeroSwiperProps {
-  endpoint: string;
+  type: string;
 }
 
 export interface PromotionImage {

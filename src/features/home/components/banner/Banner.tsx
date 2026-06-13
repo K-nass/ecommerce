@@ -4,11 +4,11 @@ import SectionTitle from "@/components/ui/SectionTitle";
 import { homePageService } from "../../services/homePageService";
 import type { BannerProps } from "../../types";
 
-export default async function Banner({ endpoint, title, promotion: initialPromotion }: BannerProps) {
+export default async function Banner({ type, title, promotion: initialPromotion }: BannerProps) {
   let promotion = initialPromotion;
 
-  if (!promotion && endpoint) {
-    const promotions = await homePageService.getPromotions(endpoint);
+  if (!promotion) {
+    const promotions = await homePageService.getPromotions();
     if (promotions.length > 0) {
       promotion = promotions[0];
     }
