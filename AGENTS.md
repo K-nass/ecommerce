@@ -1,3 +1,4 @@
+> **Feature Progress:** Cart (Not Yet Completed)
 # Project Architecture & Constraints Blueprint (Feature-First)
 
 This file is the architectural single source of truth for all AI agents, assistants, and LLMs working on this repository. Follow the folder responsibilities and boundary rules below.
@@ -6,33 +7,33 @@ This file is the architectural single source of truth for all AI agents, assista
 
 ```text
 .
-├── AGENTS.md
-├── CLAUDE.md
-├── messages/                 # next-intl JSON messages (repo root)
-├── public/                   # static assets
-├── next.config.ts            # Next + next-intl plugin config
-├── tsconfig.json             # `@/*` points to `src/*`
-└── src/
-    ├── app/                  # Next.js App Router (routing + layouts only)
-    ├── components/
-    │   └── ui/               # reusable, presentational primitives ONLY
-    ├── features/             # business/domain ownership (feature-first)
-    │   ├── auth/
-    │   ├── cart/
-    │   ├── checkout/
-    │   ├── home/
-    │   ├── navigation/
-    │   ├── products/
-    │   ├── categories/
-    │   └── ...               # new ecommerce features go here
-    ├── shared/               # reusable infrastructure (no domain logic)
-    │   ├── lib/              # shared clients (fetch wrappers, SDK instances)
-    │   ├── hooks/            # generic reusable hooks (non-domain)
-    │   ├── utils/            # helpers like `cn`, formatters, etc.
-    │   ├── constants/        # cross-feature constants (keys, enums)
-    │   └── types/            # cross-feature types (API response, core models)
-    ├── stores/               # global cross-feature state only
-    └── i18n/                 # next-intl routing/navigation helpers
+â”œâ”€â”€ AGENTS.md
+â”œâ”€â”€ CLAUDE.md
+â”œâ”€â”€ messages/                 # next-intl JSON messages (repo root)
+â”œâ”€â”€ public/                   # static assets
+â”œâ”€â”€ next.config.ts            # Next + next-intl plugin config
+â”œâ”€â”€ tsconfig.json             # `@/*` points to `src/*`
+â””â”€â”€ src/
+    â”œâ”€â”€ app/                  # Next.js App Router (routing + layouts only)
+    â”œâ”€â”€ components/
+    â”‚   â””â”€â”€ ui/               # reusable, presentational primitives ONLY
+    â”œâ”€â”€ features/             # business/domain ownership (feature-first)
+    â”‚   â”œâ”€â”€ auth/
+    â”‚   â”œâ”€â”€ cart/
+    â”‚   â”œâ”€â”€ checkout/
+    â”‚   â”œâ”€â”€ home/
+    â”‚   â”œâ”€â”€ navigation/
+    â”‚   â”œâ”€â”€ products/
+    â”‚   â”œâ”€â”€ categories/
+    â”‚   â””â”€â”€ ...               # new ecommerce features go here
+    â”œâ”€â”€ shared/               # reusable infrastructure (no domain logic)
+    â”‚   â”œâ”€â”€ lib/              # shared clients (fetch wrappers, SDK instances)
+    â”‚   â”œâ”€â”€ hooks/            # generic reusable hooks (non-domain)
+    â”‚   â”œâ”€â”€ utils/            # helpers like `cn`, formatters, etc.
+    â”‚   â”œâ”€â”€ constants/        # cross-feature constants (keys, enums)
+    â”‚   â””â”€â”€ types/            # cross-feature types (API response, core models)
+    â”œâ”€â”€ stores/               # global cross-feature state only
+    â””â”€â”€ i18n/                 # next-intl routing/navigation helpers
 ```
 
 ## Folder Responsibilities
@@ -51,7 +52,7 @@ This file is the architectural single source of truth for all AI agents, assista
 - Rules:
   - Prefer colocation: put feature UI + state + services together.
   - Feature code can import from `shared/*` and `components/ui/*`.
-  - Cross-feature imports are allowed, but prefer the owning feature’s public surface:
+  - Cross-feature imports are allowed, but prefer the owning featureâ€™s public surface:
     - Prefer `src/features/<feature>/index.ts` over deep internal paths.
 
 ### `src/components/ui/` (presentational primitives only)
@@ -66,7 +67,7 @@ This file is the architectural single source of truth for all AI agents, assista
   - API/fetch clients, generic hooks, formatting helpers, shared constants, shared base types.
 - Rules:
   - `shared/*` must not import from `features/*`.
-  - If the code “speaks ecommerce” (cart totals, product pricing rules), it belongs in that feature.
+  - If the code â€œspeaks ecommerceâ€‌ (cart totals, product pricing rules), it belongs in that feature.
 
 ### `src/stores/` (global cross-feature state)
 - Only for state shared across multiple features (rare).
@@ -81,7 +82,7 @@ This file is the architectural single source of truth for all AI agents, assista
 
 ## Page Composition Philosophy
 
-Pages in `src/app/` should mostly compose feature-level “page components”.
+Pages in `src/app/` should mostly compose feature-level â€œpage componentsâ€‌.
 
 Example:
 ```ts
@@ -96,21 +97,21 @@ export default function Page() {
 ## Shared vs Feature: How to Decide
 
 Put it in a **feature** when:
-- It’s tied to a domain (cart, checkout, auth, products, categories).
+- Itâ€™s tied to a domain (cart, checkout, auth, products, categories).
 - It changes when that domain evolves.
 - It uses feature state, feature services, or feature-specific types.
 
 Put it in **shared** when:
-- It’s infrastructure (API client), a generic helper (`cn`, `formatMoney`), or cross-feature types (`ApiResponse`).
+- Itâ€™s infrastructure (API client), a generic helper (`cn`, `formatMoney`), or cross-feature types (`ApiResponse`).
 - It has no knowledge of ecommerce concepts.
 
 Put it in **components/ui** when:
-- It’s a pure presentational primitive with no domain ownership.
+- Itâ€™s a pure presentational primitive with no domain ownership.
 - It can be used anywhere without importing business logic.
 
 ## Ecommerce Examples (Where New Code Goes)
 
-- Add “Wishlist”:
+- Add â€œWishlistâ€‌:
   - `src/features/wishlist/components/WishlistButton.tsx`
   - `src/features/wishlist/store/useWishlistStore.ts`
   - `src/features/wishlist/services/wishlistService.ts`
@@ -130,10 +131,10 @@ Put it in **components/ui** when:
 
 ## Anti-Patterns (Do Not Do)
 
-- Putting domain logic in `src/app/` (pages/layouts become “god components”).
+- Putting domain logic in `src/app/` (pages/layouts become â€œgod componentsâ€‌).
 - Creating global folders by file type (e.g. `src/services/*`, `src/hooks/*`) instead of feature ownership.
 - A giant `shared/components` dumping ground.
 - Feature stores placed in `src/stores/`.
-- Deep cross-feature imports into another feature’s internals (prefer feature public exports).
+- Deep cross-feature imports into another featureâ€™s internals (prefer feature public exports).
 - Deep route-only component folders that duplicate features (keep folders shallow).
 
