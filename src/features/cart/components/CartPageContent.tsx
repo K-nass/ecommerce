@@ -5,7 +5,6 @@ import Link from "next/link";
 import { ShoppingBag, Loader2 } from "lucide-react";
 import { useAuthStore } from "@/features/auth/store/useAuthStore";
 import { useGuestCartStore } from "../store/useGuestCartStore";
-import { useSyncCartOnLogin } from "../hooks/useSyncCartOnLogin";
 import { cartService } from "../services/cartService";
 import { CartSection } from "./CartSection";
 import { CartSummary } from "./CartSummary";
@@ -21,7 +20,6 @@ export function CartPageContent() {
   const guestItems = useGuestCartStore((s) => s.items);
   const guestRemoveItem = useGuestCartStore((s) => s.removeItem);
   const guestUpdateQuantity = useGuestCartStore((s) => s.updateQuantity);
-  useSyncCartOnLogin();
 
   const [source, setSource] = useState<CartSource>("loading");
   const [serverItems, setServerItems] = useState<CartItem[]>([]);
@@ -33,7 +31,7 @@ export function CartPageContent() {
       cartService
         .getCart()
         .then((cart) => {
-          setServerItems(cart.items);
+          setServerItems(cart?.items ?? []);
           setSource("server");
         })
         .catch((err) => {

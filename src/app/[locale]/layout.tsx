@@ -5,6 +5,7 @@ import { routing } from "@/i18n/routing";
 import Header from "@/features/navigation/components/header/Header";
 import Footer from "@/features/navigation/components/footer/Footer";
 import { AuthModal } from "@/features/auth/components/AuthModal";
+import { CartSyncProvider } from "@/features/cart/components/CartSyncProvider";
 import { Montserrat } from "next/font/google";
 import { cn } from "@/shared/utils/cn";
 
@@ -32,6 +33,9 @@ export default async function RootLayout({
       <body className={cn("flex flex-col", montserrat.variable)}>
         <NextIntlClientProvider>
           <Header params={params} />
+          <CartSyncProvider>
+            <div className="container mx-auto px-4 flex flex-col">{children}</div>
+          </CartSyncProvider>
           <div className="container mx-auto px-4 flex flex-col min-h-screen">{children}</div>
           <Footer params={params} />
           <AuthModal />

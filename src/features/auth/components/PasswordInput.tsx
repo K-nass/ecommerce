@@ -8,6 +8,7 @@ interface PasswordInputProps {
   error?: string;
   name?: string;
   defaultValue?: string;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 export function PasswordInput({
@@ -15,6 +16,7 @@ export function PasswordInput({
   error,
   name,
   defaultValue,
+  onChange,
 }: PasswordInputProps) {
   const [showPassword, setShowPassword] = useState(false);
 
@@ -38,6 +40,7 @@ export function PasswordInput({
           name={name}
           placeholder={placeholder}
           defaultValue={defaultValue}
+          onChange={onChange}
           className={
             "w-full rounded-xl border bg-background pl-10 pr-4 py-2.5 text-sm text-text-primary outline-none transition focus:border-primary " +
             (error ? "border-red-500" : "border-border")

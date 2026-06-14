@@ -35,7 +35,7 @@ export async function registerAction(
   }
 
   try {
-    await authService.register({
+    const response = await authService.register({
       first_name: firstName,
       last_name: lastName,
       email,
@@ -46,7 +46,14 @@ export async function registerAction(
       ...(avatar && avatar.size > 0 ? { avatar } : {}),
     });
 
-    return { success: true, message: "Account created successfully." };
+    const data = response.data as Record<string, unknown>;
+    const otpStatus = data?.otp_status !== undefined ? String(data.otp_status) : "true";
+
+    return {
+      success: true,
+      message: response.message || "Account created successfully.",
+      payload: { email, phone, otp_status: otpStatus },
+    };
   } catch (error) {
     if (error instanceof ApiError) {
       const mapped: Record<string, string> = {};

@@ -15,6 +15,24 @@ export interface RegisterPayload {
   policy: boolean;
 }
 
+export interface LoginWithoutVerificationPayload {
+  email?: string;
+  phone_number?: string;
+  password: string;
+}
+
+export interface SendOtpCodePayload {
+  email?: string;
+  phone_number?: string;
+}
+
+export interface OtpLoginPayload {
+  email?: string;
+  phone_number?: string;
+  otp_id?: string;
+  code: string;
+}
+
 export type FieldErrors = Record<string, string>;
 
 export interface ForgetPasswordPayload {
@@ -49,9 +67,12 @@ export interface AuthLoginData {
   permissions?: string[];
   email_verified?: boolean;
   role?: string[];
+  email?: string;
+  phone_number?: string;
 }
 
-export interface OtpLoginPayload {
-  email: string;
-  otp: string;
+export interface RegisterResponseData {
+  message?: string;
+  otp_status?: boolean;
+  email?: string;
 }

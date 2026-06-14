@@ -9,35 +9,37 @@ export async function otpAction(
   formData: FormData,
 ): Promise<ActionState> {
   const email = (formData.get("email") as string) || "";
-  const otp = (formData.get("otp") as string) || "";
+  const phone = (formData.get("phone") as string) || "";
+  const code = (formData.get("code") as string) || "";
+  const otpId = (formData.get("otpId") as string) || "";
 
-  if (!email) {
-    return { success: false, message: "Email is required.", payload: { email, otp } };
-  }
-
-  if (otp.length !== 6) {
+  if (code.length !== 6) {
     return {
       success: false,
-      fieldErrors: { otp: "Code must be exactly 6 digits." },
+      fieldErrors: { code: "Code must be exactly 6 digits." },
       message: "Please enter a valid 6-digit code.",
-      payload: { email, otp },
+      payload: { email, phone, code, otpId },
     };
   }
 
   try {
-    const response = await authService.otpLogin({ email, otp });
+    const payload = email
+      ? { email: email.trim(), code }
+      : { phone_number: phone.trim(), code, ...(otpId ? { otp_id: otpId } : {}) };
+
+    const response = await authService.otpLogin(payload);
 
     if (!response.success) {
       return {
         success: false,
         message: response.message || "Verification failed.",
-        payload: { email },
+        payload: { email, phone },
       };
     }
 
     return {
       success: true,
-      message: response.message || "Email verified successfully.",
+      message: response.message || "Email verified successfully!",
       data: response.data,
     };
   } catch (error) {
@@ -50,13 +52,13 @@ export async function otpAction(
         success: false,
         message: error.message,
         fieldErrors: Object.keys(mapped).length ? mapped : undefined,
-        payload: { email },
+        payload: { email, phone },
       };
     }
     return {
       success: false,
       message: "Network error. Please try again.",
-      payload: { email },
+      payload: { email, phone },
     };
   }
 }

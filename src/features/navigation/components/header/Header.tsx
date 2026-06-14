@@ -1,6 +1,7 @@
-﻿import CategoryNav from "./CategoryNav";
+import CategoryNav from "./CategoryNav";
 import DeliveryModes from "./DeliveryModes";
 import MainNav from "./MainNav";
+import { VerificationBanner } from "@/features/auth/components/VerificationBanner";
 
 export default function Header({
   params,
@@ -14,6 +15,7 @@ export default function Header({
         <MainNav />
         <CategoryNav params={params} />
       </div>
+      <VerificationBanner />
     </header>
   );
 }
