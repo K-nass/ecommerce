@@ -29,6 +29,7 @@ export default function CategoryProducts({
         return (
           <ProductCard
             key={product.id}
+            productId={product.id}
             image={product.image.thumbnail}
             title={product.name}
             price={product.current_price}
