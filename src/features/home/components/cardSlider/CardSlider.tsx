@@ -27,10 +27,11 @@ export default function CardSlider({
   const locale = useLocale();
   const isRtl = locale === "ar";
   const [swiper, setSwiper] = useState<SwiperType | null>(null);
+  const [isLocked, setIsLocked] = useState(true);
 
   const onPrevious = () => swiper?.slidePrev();
   const onNext = () => swiper?.slideNext();
-  const shouldShowArrows = showArrows && items.length > 1;
+  const shouldShowArrows = showArrows && !isLocked && items.length > 1;
 
   return (
     <section className={cn("group relative w-full pb-4", className)}>
@@ -41,23 +42,20 @@ export default function CardSlider({
         modules={[Navigation, Pagination]}
         spaceBetween={12}
         slidesPerView={1.3}
-        onSwiper={setSwiper}
-        loop={items.length > 1}
-        breakpoints={{
-          480: {
-            slidesPerView: 2,
-            slidesOffsetBefore: 80,
-          },
-          768: {
-            slidesPerView: 3,
-            slidesOffsetBefore: 80,
-          },
-          1024: {
-            slidesPerView: 4,
-            slidesOffsetBefore: 80,
-          },
+        onSwiper={(s) => {
+          setSwiper(s);
+          setIsLocked(s.isLocked);
         }}
-        className="w-full"
+        onLock={() => setIsLocked(true)}
+        onUnlock={() => setIsLocked(false)}
+        loop={items.length >= 6}
+        watchOverflow={true}
+        breakpoints={{
+          480: { slidesPerView: 2 },
+          768: { slidesPerView: 3 },
+          1024: { slidesPerView: 4 },
+        }}
+        className="w-full px-4 md:px-20"
       >
         {items.map((slide, index) => (
           <SwiperSlide key={slide.id}>

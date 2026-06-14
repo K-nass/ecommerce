@@ -1,5 +1,5 @@
 import { cn } from "@/shared/utils/cn";
-import Image from "next/image";
+import { getImageProps } from "next/image";
 import type { CardSlideItem } from "../../types";
 
 interface SlideProps {
@@ -18,6 +18,26 @@ export default function Slide({
   sizes = "(max-width: 480px) 75vw, (max-width: 768px) 45vw, (max-width: 1024px) 30vw, 20vw",
   priority = false,
 }: SlideProps) {
+  const commonImageProps = {
+    alt: slide.title,
+    fill: true,
+    sizes,
+    priority,
+    className: cn("rounded-xl object-cover", hasBorder && "p-1", imageClassName),
+  };
+
+  const {
+    props: { srcSet: desktopSrcSet },
+  } = getImageProps({
+    ...commonImageProps,
+    src: slide.image.desktop || "",
+  });
+
+  const { props: mobileImageProps } = getImageProps({
+    ...commonImageProps,
+    src: slide.image.mobile || slide.image.desktop || "",
+  });
+
   return (
     <div
       className={cn(
@@ -27,14 +47,10 @@ export default function Slide({
         hasBorder && (slide.borderColor || "border-primary-dark"),
       )}
     >
-      <Image
-        src={slide.image}
-        alt={slide.title}
-        fill
-        sizes={sizes}
-        priority={priority}
-        className={cn("rounded-xl object-cover", hasBorder && "p-1", imageClassName)}
-      />
+      <picture className="block h-full w-full">
+        <source media="(min-width: 640px)" srcSet={desktopSrcSet} />
+        <img {...mobileImageProps} alt={slide.title} />
+      </picture>
     </div>
   );
 }

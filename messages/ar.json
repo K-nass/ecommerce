@@ -1,68 +1,73 @@
 {
-    "header":  {
-                   "deliveryModes":  {
-                                         "title":  "خيارات التسليم",
-                                         "scheduled":  "توصيل ب موعد",
-                                         "now":  "توصيل سريع",
-                                         "nowEta":  "120 دقيقة",
-                                         "electronics":  "إلكترونيات…",
-                                         "fastDelivery":  "التسليم السريع",
-                                         "fastDeliveryDesc":  "احصل عليه غدًا",
-                                         "standardDelivery":  "التسليم العادي",
-                                         "standardDeliveryDesc":  "التسليم في 3-5 أيام عمل",
-                                         "freeShipping":  "شحن مجاني",
-                                         "freeShippingDesc":  "على الطلبات فوق 50 ريال"
-                                     },
-                   "mainNav":  {
-                                   "shop":  "المتجر",
-                                   "deals":  "العروض",
-                                   "about":  "معلومات عنا",
-                                   "contact":  "اتصل بنا",
-                                   "help":  "المساعدة والدعم",
-                                   "blog":  "المدونة",
-                                   "loginRegister":  "تسجيل الدخول",
-                                   "account":  "حسابي",
-                                   "myOrders":  "طلباتي",
-                                   "wishlist":  "قائمة الرغبات",
-                                   "signIn":  "تسجيل الدخول",
-                                   "signUp":  "إنشاء حساب",
-                                   "logout":  "تسجيل الخروج"
-                               },
-                   "categoryNav":  {
-                                       "allCategories":  "جميع الفئات",
-                                       "electronics":  "الإلكترونيات",
-                                       "fashion":  "الموضة والملابس",
-                                       "home":  "المنزل والحديقة",
-                                       "sports":  "الرياضة والأنشطة الخارجية",
-                                       "books":  "الكتب والوسائط",
-                                       "toys":  "الألعاب",
-                                       "beauty":  "الجمال والعناية الشخصية",
-                                       "grocery":  "البقالة والطعام",
-                                       "viewAll":  "عرض جميع الفئات"
-                                   },
-                   "search":  {
-                                  "placeholder":  "ابحث عن المنتجات...",
-                                  "mainPlaceholderPrefix":  "ابحث عن ",
-                                  "mainPlaceholderHighlight":  "50,000+ منتج",
-                                  "button":  "بحث",
-                                  "noResults":  "لم يتم العثور على منتجات"
-                              },
-                   "cart":  {
-                                "label":  "سلة التسوق",
-                                "itemCount":  "{count, plural, =0 {السلة} one {عنصر واحد} other {# عناصر}}"
-                            },
-                   "common":  {
-                                  "language":  "اللغة",
-                                  "english":  "English",
-                                  "arabic":  "العربية",
-                                  "currency":  "العملة",
-                                  "usd":  "USD",
-                                  "sar":  "ريال سعودي"
-                              },
-                   "breadcrumb":  {
-                                      "home":  "الرئيسية"
-                                  }
-               },
+    "header": {
+    "deliveryModes": {
+      "title": "خيارات التسليم",
+      "scheduled": "توصيل ب موعد",
+      "now": "توصيل سريع",
+      "nowEta": "120 دقيقة",
+      "electronics": "إلكترونيات…",
+      "fastDelivery": "التسليم السريع",
+      "fastDeliveryDesc": "احصل عليه غدًا",
+      "standardDelivery": "التسليم العادي",
+      "standardDeliveryDesc": "التسليم في 3-5 أيام عمل",
+      "freeShipping": "شحن مجاني",
+      "freeShippingDesc": "على الطلبات فوق 50 ريال"
+    },
+    "mainNav": {
+      "shop": "المتجر",
+      "deals": "العروض",
+      "about": "معلومات عنا",
+      "contact": "اتصل بنا",
+      "help": "المساعدة والدعم",
+      "blog": "المدونة",
+      "loginRegister": "تسجيل الدخول",
+      "account": "حسابي",
+      "myOrders": "طلباتي",
+      "wishlist": "قائمة الرغبات",
+      "signIn": "تسجيل الدخول",
+      "signUp": "إنشاء حساب",
+      "logout": "تسجيل الخروج"
+    },
+    "categoryNav": {
+      "allCategories": "جميع الفئات",
+      "electronics": "الإلكترونيات",
+      "fashion": "الموضة والملابس",
+      "home": "المنزل والحديقة",
+      "sports": "الرياضة والأنشطة الخارجية",
+      "books": "الكتب والوسائط",
+      "toys": "الألعاب",
+      "beauty": "الجمال والعناية الشخصية",
+      "grocery": "البقالة والطعام",
+      "viewAll": "عرض جميع الفئات"
+    },
+    "search": {
+      "placeholder": "ابحث عن المنتجات...",
+      "mainPlaceholderPrefix": "ابحث عن ",
+      "mainPlaceholderHighlight": "50,000+ منتج",
+      "button": "بحث",
+      "noResults": "لم يتم العثور على منتجات"
+    },
+    "cart": {
+      "label": "سلة التسوق",
+      "itemCount": "{count, plural, =0 {السلة} one {عنصر واحد} other {# عناصر}}"
+    },
+    "common": {
+      "language": "اللغة",
+      "english": "English",
+      "arabic": "العربية",
+      "currency": "العملة",
+      "usd": "USD",
+      "sar": "ريال سعودي"
+    },
+    "breadcrumb": {
+      "home": "الرئيسية"
+    },
+    "filters": {
+      "seeMore": "عرض المزيد",
+      "seeLess": "عرض أقل"
+    }
+  }
+},
     "cartPage":  {
                      "title":  "سلة التسوق",
                      "breadcrumb":  "سلة التسوق",
