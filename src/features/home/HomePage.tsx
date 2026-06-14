@@ -73,6 +73,37 @@ export async function HomePage() {
   return (
     <main className="flex flex-col gap-y-5">
       {/* {sections.map(renderSection)} */}
+      {/* <HeroSwiper banners={heroBanners} />
+      <CardSlider title={dailyOffersTitle} items={dailyOffers} />
+      <ContentSection title={topCategoriesTitle} items={topCategories} />
+      <ProductSlider title={bestSellersTitle} items={bestSellers} />
+      <CardSlider items={dailyOffers} />
+      <ProductSlider title={featuredProductsTitle} items={bestSellers} />
+      <CardGrid
+        title={featuredPromotionsTitle}
+        items={featuredPromotions}
+        gridClassName="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4"
+        cardClassName="aspect-[16/9]"
+        slideSizes="(max-width: 640px) 100vw, (max-width: 1280px) 50vw, 25vw"
+      />
+      <ProductSlider title={moreProductsTitle} items={trendingProducts} />
+      <CardSlider title={exploreMoreDealsTitle} items={exploreMoreDeals} />
+      <ProductSlider title={trendingNowTitle} items={trendingProducts} />
+      <Banner
+        title={leafletBanner.title ?? "Carrefour leaflets"}
+        imageSrc={leafletBanner.imageSrc}
+        alt={leafletBanner.alt}
+        href={leafletBanner.href}
+        priority={leafletBanner.priority}
+        className="h-42.5 w-full sm:h-57.5 lg:h-75"
+      />
+      <CardGrid
+        title={electronicsZoneTitle}
+        items={electronicsZone}
+        gridClassName="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4"
+        cardClassName="aspect-[4/5]"
+        slideSizes="(max-width: 640px) 100vw, (max-width: 1280px) 50vw, 25vw"
+      /> */}
     </main>
   );
 }
