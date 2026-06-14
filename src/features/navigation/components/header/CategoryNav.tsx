@@ -41,7 +41,7 @@ export default async function CategoryNav({
             {items.map((item) => (
               <CategoryItem
                 key={item.id}
-                href={`/products?category=${item.slug}`}
+                href={`/category/${item.slug}`}
                 name={item.name}
               />
             ))}

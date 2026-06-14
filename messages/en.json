@@ -61,6 +61,10 @@
     },
     "breadcrumb": {
       "home": "Home"
+    },
+    "filters": {
+      "seeMore": "See more",
+      "seeLess": "See less"
     }
   }
 }

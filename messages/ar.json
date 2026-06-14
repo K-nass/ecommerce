@@ -61,6 +61,10 @@
     },
     "breadcrumb": {
       "home": "الرئيسية"
+    },
+    "filters": {
+      "seeMore": "عرض المزيد",
+      "seeLess": "عرض أقل"
     }
   }
 }

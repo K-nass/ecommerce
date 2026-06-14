@@ -6,6 +6,7 @@ interface ProductCardProps {
   price: number;
   originalPrice: number;
   currency?: string;
+  discountPercent?: number;
 }
 
 export default function ProductCard({
@@ -14,6 +15,7 @@ export default function ProductCard({
   price,
   originalPrice,
   currency = "EGP",
+  discountPercent,
 }: ProductCardProps) {
   const priceStr = price.toString();
   const integerPart = priceStr.split(".")[0];
@@ -24,9 +26,11 @@ export default function ProductCard({
   return (
     <div className="max-w-42.5">
       <div className="relative  w-fit p-2 border-2 border-border-subtle rounded-2xl">
-        <div className="absolute top-0 left-0 bg-discount text-white font-bold text-xs px-2.5 py-1 z-10 rounded-br-[16px] rounded-tl-[14px]">
-          10% OFF
-        </div>
+        {discountPercent && discountPercent > 0 ? (
+          <div className="absolute top-0 left-0 bg-discount text-white font-bold text-xs px-2.5 py-1 z-10 rounded-br-[16px] rounded-tl-[14px]">
+            {discountPercent}% OFF
+          </div>
+        ) : null}
         <Image
           className="object-contain"
           src={image}
