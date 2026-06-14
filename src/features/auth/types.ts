@@ -1,17 +1,21 @@
 export interface LoginPayload {
   email?: string;
-  phone?: string;
+  phone_number?: string;
   password: string;
 }
 
 export interface RegisterPayload {
-  name: string;
-  email?: string;
-  phone?: string;
+  first_name: string;
+  last_name: string;
+  email: string;
+  phone_number: string;
   password: string;
-  password_confirmation?: string;
-  profile_image?: File | null;
+  password_confirmation: string;
+  avatar?: File | null;
+  policy: boolean;
 }
+
+export type FieldErrors = Record<string, string>;
 
 export interface ForgetPasswordPayload {
   email: string;
@@ -42,8 +46,12 @@ export interface SocialLoginPayload {
 
 export interface AuthLoginData {
   token: string;
-  permissions: string[];
-  email_verified: boolean;
-  role: string[];
+  permissions?: string[];
+  email_verified?: boolean;
+  role?: string[];
 }
 
+export interface OtpLoginPayload {
+  email: string;
+  otp: string;
+}

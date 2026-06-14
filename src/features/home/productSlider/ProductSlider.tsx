@@ -1,10 +1,11 @@
-"use client";
+﻿"use client";
 import ProductCard from "@/components/ui/ProductCard";
 import SectionTitle from "@/components/ui/SectionTitle";
 import { BannerArrows } from "../components/banner";
 import { useLocale } from "next-intl";
 import { useState } from "react";
 import { Navigation, Pagination } from "swiper/modules";
+import "swiper/css";
 import { Swiper, SwiperSlide } from "swiper/react";
 import type { Swiper as SwiperType } from "swiper/types";
 import type { ProductSliderProps } from "../types";
@@ -45,6 +46,11 @@ export default function ProductSlider({ title, items }: ProductSliderProps) {
               price={product.price}
               originalPrice={product.originalPrice}
               currency="EGP"
+              productId={product.id}
+              slug={product.slug}
+              sku={product.sku}
+              inStock={product.inStock}
+              stockQuantity={product.stockQuantity}
             />
           </SwiperSlide>
         ))}

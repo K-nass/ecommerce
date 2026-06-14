@@ -1,3 +1,12 @@
+﻿export interface BannerItem {
+  id: string;
+  imageSrc: string;
+  alt: string;
+  title?: string;
+  href?: string;
+  priority?: boolean;
+}
+
 export interface CardSlideItem {
   id: number | string;
   image: {
@@ -57,6 +66,10 @@ export interface ProductItem {
   title: string;
   price: number;
   originalPrice: number;
+  slug?: string;
+  sku?: string;
+  inStock?: number;
+  stockQuantity?: number;
 }
 
 export interface BannerProps {
@@ -192,3 +205,5 @@ export interface ApiCoupon {
   is_valid: boolean;
   created_at: string;
 }
+
+

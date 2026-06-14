@@ -1,79 +1,108 @@
 "use client";
 
-import { FormEvent } from "react";
+import { useEffect, useRef } from "react";
 import { Mail } from "lucide-react";
 import { AuthTabs } from "./AuthTabs";
 import { PhoneInputWithCountry } from "./PhoneInputWithCountry";
 import { PasswordInput } from "./PasswordInput";
+import type { ActionState } from "../actions/types";
 
 type ContactMethod = "email" | "phone";
 
 interface LoginFormProps {
-  isLogin: boolean;
-  email: string;
-  phone: string;
-  password: string;
+  action: (formData: FormData) => void;
+  pending: boolean;
+  state: ActionState | null;
   method: ContactMethod;
-  loading: boolean;
-  onEmailChange: (value: string) => void;
-  onPhoneChange: (value: string) => void;
-  onPasswordChange: (value: string) => void;
   onMethodChange: (method: ContactMethod) => void;
   onToggleMode: () => void;
-  onSubmit: (e: FormEvent<HTMLFormElement>) => void;
+  onOtpMode: (email: string) => void;
+}
+
+function ErrorMsg({ message }: { message?: string }) {
+  if (!message) return null;
+  return <p className="mt-1 text-xs text-red-500">{message}</p>;
 }
 
 export function LoginForm({
-  isLogin,
-  email,
-  phone,
-  password,
+  action,
+  pending,
+  state,
   method,
-  loading,
-  onEmailChange,
-  onPhoneChange,
-  onPasswordChange,
   onMethodChange,
   onToggleMode,
-  onSubmit,
+  onOtpMode,
 }: LoginFormProps) {
+  const fieldErrors = state?.fieldErrors ?? {};
+  const p = state?.payload ?? {};
+  const formKey = useRef(0);
+  const formRef = useRef<HTMLFormElement | null>(null);
+
+  useEffect(() => {
+    if (state?.success) {
+      formKey.current += 1;
+    }
+  }, [state]);
+
+  const handleOtpMode = () => {
+    const formElement = formRef.current;
+    if (!formElement) return;
+    const emailInput = formElement.elements.namedItem("email") as HTMLInputElement | null;
+    const email = emailInput?.value.trim() ?? "";
+    onOtpMode(email);
+  };
+
   return (
-    <form className="mx-auto mt-4 max-w-md space-y-2.5" onSubmit={onSubmit}>
+    <form ref={formRef} key={formKey.current} className="mx-auto mt-4 max-w-md space-y-2.5" action={action}>
+      <input type="hidden" name="method" value={method} />
+
       <AuthTabs method={method} onMethodChange={onMethodChange} isLogin={true} />
 
       {method === "email" ? (
-        <div className="relative">
-          <Mail className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-text-secondary" />
-          <input
-            type="email"
-            required
-            placeholder="name@example.com"
-            value={email}
-            onChange={(e) => onEmailChange(e.target.value)}
-            className="w-full rounded-xl border border-border bg-background pl-10 pr-4 py-2.5 text-sm text-text-primary outline-none transition focus:border-primary"
-          />
+        <div>
+          <div className="relative">
+            <Mail className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-text-secondary" />
+            <input
+              type="email"
+              name="email"
+              placeholder="name@example.com"
+              defaultValue={p.email || ""}
+              className={
+                "w-full rounded-xl border bg-background pl-10 pr-4 py-2.5 text-sm text-text-primary outline-none transition focus:border-primary " +
+                (fieldErrors.email ? "border-red-500" : "border-border")
+              }
+            />
+          </div>
+          <ErrorMsg message={fieldErrors.email} />
         </div>
       ) : (
         <PhoneInputWithCountry
-          value={phone}
-          onChange={onPhoneChange}
+          name="phone"
           placeholder="Enter your phone number"
+          error={fieldErrors.phone}
+          defaultValue={p.phone || ""}
         />
       )}
 
       <PasswordInput
-        value={password}
-        onChange={onPasswordChange}
+        name="password"
         placeholder="Enter your password"
+        error={fieldErrors.password}
+        defaultValue={p.password || ""}
       />
-      
+
       <div className="flex items-center justify-between">
-        <button
-          type="button"
-          className="text-xs font-semibold text-primary transition hover:text-primary-dark"
-        >
-          Forgot the password?
-        </button>
+        {method === "email" ? (
+          <button
+            type="button"
+            onClick={handleOtpMode}
+            className="text-xs font-semibold text-primary transition hover:text-primary-dark"
+          >
+            Verify with OTP
+          </button>
+        ) : (
+          <div className="text-xs text-text-secondary">Switch to email to verify with OTP.</div>
+        )}
         <div className="flex items-center gap-2 text-xs text-text-secondary">
           <span>Don&apos;t have an account?</span>
           <button
@@ -88,10 +117,10 @@ export function LoginForm({
 
       <button
         type="submit"
-        disabled={loading}
+        disabled={pending}
         className="w-full rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-primary-dark disabled:cursor-not-allowed disabled:opacity-70"
       >
-        {loading ? "Signing in..." : "Sign in"}
+        {pending ? "Signing in..." : "Sign in"}
       </button>
     </form>
   );

@@ -1,5 +1,5 @@
 {
-  "header": {
+     "header": {
     "deliveryModes": {
       "title": "Delivery Options",
       "scheduled": "Scheduled",
@@ -67,4 +67,60 @@
       "seeLess": "See less"
     }
   }
+},
+    "cartPage":  {
+                     "title":  "Cart",
+                     "breadcrumb":  "Cart",
+                     "emptyTitle":  "Your cart is empty",
+                     "emptyDescription":  "Start adding items to your cart",
+                     "startShopping":  "Start Shopping",
+                     "subtotal":  "Subtotal",
+                     "shipping":  "Shipping",
+                     "freeShipping":  "Free",
+                     "total":  "Total",
+                     "checkout":  "Complete Purchase",
+                     "minimumOrder":  "Minimum order is {amount} EGP",
+                     "freeShippingOver":  "Free shipping on orders over {amount} EGP",
+                     "youMightAlsoLike":  "You Might Also Like",
+                     "remove":  "Remove",
+                     "quantity":  "Quantity",
+                     "outOfStock":  "Out of Stock",
+                     "loading":  "Loading cart...",
+                     "cartItems":  "{count, plural, =0 {0 items} one {# item} other {# items}}",
+                     "scheduledTitle":  "Scheduled Delivery",
+                     "scheduledEta":  "3-5 business days",
+                     "fastTitle":  "Fast Delivery",
+                     "fastEta":  "120 mins",
+                     "minOrderProgress":  "Add {amount} EGP more for minimum order",
+                     "freeShippingProgress":  "Add {amount} EGP more for free shipping",
+                     "freeShippingAchieved":  "Free shipping unlocked!"
+                 },
+    "product":  {
+                    "home":  "Home",
+                    "currency":  "EGP",
+                    "reviews":  "reviews",
+                    "reviewsTitle":  "Customer Reviews",
+                    "noReviews":  "No reviews yet.",
+                    "inStock":  "{count} in stock",
+                    "outOfStock":  "Out of Stock",
+                    "sku":  "SKU",
+                    "quantity":  "Quantity",
+                    "addToCart":  "Add to Cart",
+                    "addedToCart":  "{name} x {count} added to cart",
+                    "description":  "Description",
+                    "additionalInfo":  "Additional Information",
+                    "height":  "Height",
+                    "width":  "Width",
+                    "length":  "Length",
+                    "weight":  "Weight",
+                    "cm":  "cm",
+                    "g":  "g",
+                    "deliveryTitle":  "Delivery",
+                    "deliveryDesc":  "Delivery in 2-5 business days",
+                    "shippingTitle":  "Free Shipping",
+                    "shippingDesc":  "Free shipping on orders over 500 EGP",
+                    "returnsTitle":  "Easy Returns",
+                    "returnsDesc":  "14-day hassle-free returns",
+                    "relatedProducts":  "Related Products"
+                }
 }
