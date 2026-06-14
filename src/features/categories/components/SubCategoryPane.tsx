@@ -8,7 +8,7 @@ type SubCategoryPaneProps = {
 };
 
 function toCategoryHref(slug: string) {
-  return `/products?category=${encodeURIComponent(slug)}`;
+  return `/category/${encodeURIComponent(slug)}`;
 }
 
 export default function SubCategoryPane({ activeCategory }: SubCategoryPaneProps) {
@@ -25,9 +25,9 @@ export default function SubCategoryPane({ activeCategory }: SubCategoryPaneProps
                 {level2.name}
               </Link>
 
-              {level2.children.length > 0 && (
+              {level2?.children?.length > 0 && (
                 <ul className="mt-2 space-y-1">
-                  {level2.children.map((level3) => (
+                  {level2?.children?.map((level3) => (
                     <li key={level3.id}>
                       <Link
                         href={toCategoryHref(level3.slug)}

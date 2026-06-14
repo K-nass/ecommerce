@@ -9,15 +9,55 @@
 
 export interface CardSlideItem {
   id: number | string;
-  image: string;
+  image: {
+    desktop: string;
+    mobile: string;
+  };
   title: string;
   borderColor?: string;
 }
 
-export interface ContentSectionItem {
+export interface ApiFlashSale {
   id: number;
-  image: string;
-  title: string;
+  name: string;
+  discription: string;
+  slug: string;
+  start_date: string;
+  end_date: string;
+  image: {
+    desktop: string;
+    mobile: string;
+  };
+}
+
+export interface HomeCategory {
+  id: number;
+  name: string;
+  slug: string;
+  image: {
+    desktop: string;
+    mobile: string;
+  };
+}
+
+
+export interface ApiProduct {
+  id: number;
+  name: string;
+  price: number;
+  current_price: number;
+  price_after_discount: number;
+  price_after_flash_sale: number | null;
+  has_discount: boolean;
+  discount_type: string;
+  discount_amount: number;
+  quantity: number;
+  discount_valid: boolean;
+  ratings: number;
+  image: {
+    thumbnail: string;
+    original: Record<string, string>;
+  };
 }
 
 export interface ProductItem {
@@ -32,11 +72,10 @@ export interface ProductItem {
   stockQuantity?: number;
 }
 
-export interface BannerProps extends Omit<BannerItem, "id"> {
-  loading?: "lazy" | "eager";
-  className?: string;
-  overlay?: import("react").ReactNode;
-  sizes?: string;
+export interface BannerProps {
+  type?: string;
+  title?: string;
+  promotion?: Promotion;
 }
 
 export interface BannerArrowsProps {
@@ -57,10 +96,6 @@ export interface BannerPaginationProps {
   currentIndex: number;
   onSelect: (index: number) => void;
   className?: string;
-}
-
-export interface HeroSwiperProps {
-  banners: BannerItem[];
 }
 
 export interface CardSliderProps {
@@ -85,11 +120,11 @@ export interface CardGridProps {
 
 export interface ContentSectionProps {
   title: string;
-  items: ContentSectionItem[];
+  type: string;
 }
 
 export interface ContentItemProps {
-  item: ContentSectionItem;
+  item: HomeCategory;
 }
 
 export interface ProductSliderProps {
@@ -97,25 +132,78 @@ export interface ProductSliderProps {
   items: ProductItem[];
 }
 
-export interface HomePageProps {
-  heroBanners: BannerItem[];
-  dailyOffersTitle: string;
-  dailyOffers: CardSlideItem[];
-  topCategoriesTitle: string;
-  topCategories: ContentSectionItem[];
-  bestSellersTitle: string;
-  bestSellers: ProductItem[];
-  featuredProductsTitle: string;
-  moreProductsTitle: string;
-  featuredPromotionsTitle: string;
-  featuredPromotions: CardSlideItem[];
-  trendingNowTitle: string;
-  trendingProducts: ProductItem[];
-  exploreMoreDealsTitle: string;
-  exploreMoreDeals: CardSlideItem[];
-  leafletBanner: BannerItem;
-  electronicsZoneTitle: string;
-  electronicsZone: CardSlideItem[];
+export interface HomePageSection {
+  id: number;
+  type: string;
+  title: string;
+  endpoint?: string; // Optional now that 'type' is the main driver
+  order: number;
+}
+
+export interface HomeContentPage {
+  id: number;
+  title: string;
+  slug: string;
+  is_active: boolean;
+  sections: HomePageSection[];
+}
+
+export interface HeroBannerImage {
+  desktop: string;
+  mobile: string;
+}
+
+export interface HeroBanner {
+  id: number;
+  title: string;
+  slug: string;
+  description: string;
+  image: HeroBannerImage;
+  status: boolean;
+}
+
+export interface HeroSwiperProps {
+  type: string;
+}
+
+export interface PromotionImage {
+  desktop: string;
+  mobile: string;
+}
+
+export interface Promotion {
+  id: number;
+  name: string;
+  status: boolean;
+  image: PromotionImage;
+}
+
+export interface ApiBrandWithProducts {
+  id: number;
+  name: string;
+  slug: string;
+  image: PromotionImage;
+  status: boolean;
+  products: ApiProduct[];
+}
+
+export interface ApiCoupon {
+  id: number;
+  code: string;
+  name: string;
+  image: string;
+  borderColor: string;
+  borderless: boolean;
+  discount: string;
+  discount_type: string;
+  max_discount_amount: string | null;
+  start_date: string;
+  end_date: string;
+  limiter: number;
+  used: number;
+  status: boolean;
+  is_valid: boolean;
+  created_at: string;
 }
 
 

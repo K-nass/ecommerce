@@ -11,7 +11,7 @@ type CategorySidebarProps = {
 };
 
 function toCategoryHref(slug: string) {
-  return `/products?category=${encodeURIComponent(slug)}`;
+  return `/category/${encodeURIComponent(slug)}`;
 }
 
 export default function CategorySidebar({

@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { getImageProps } from "next/image";
+import { useEffect, useState } from "react";
 import { useLocale } from "next-intl";
 import { A11y, Autoplay, Keyboard } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -8,17 +9,74 @@ import type { Swiper as SwiperType } from "swiper/types";
 
 import "swiper/css";
 
-import { Banner, BannerArrows, BannerPagination } from "./banner";
-import type { HeroSwiperProps } from "../types";
+import { BannerArrows, BannerPagination } from "./banner";
+import { homePageService } from "../services/homePageService";
+import type { HeroBanner, HeroSwiperProps } from "../types";
 
 const AUTO_PLAY_MS = 4500;
 
-export default function HeroSwiper({ banners }: HeroSwiperProps) {
+function HeroBannerImage({
+  banner,
+  isFirst,
+}: {
+  banner: HeroBanner;
+  isFirst: boolean;
+}) {
+  const loading = isFirst ? "eager" : "lazy";
+  const commonImageProps = {
+    alt: banner.title,
+    className: "h-full w-full object-cover object-center",
+    loading,
+    sizes: "100vw",
+  } as const;
+  const {
+    props: { srcSet: desktopSrcSet },
+  } = getImageProps({
+    ...commonImageProps,
+    src: banner.image.desktop,
+    width: 1440,
+    height: 300,
+  });
+  const { props: mobileImageProps } = getImageProps({
+    ...commonImageProps,
+    src: banner.image.mobile,
+    width: 640,
+    height: 170,
+  });
+
+  return (
+    <picture className="block h-full w-full">
+      <source media="(min-width: 640px)" srcSet={desktopSrcSet} />
+      <img {...mobileImageProps} alt={banner.title} />
+    </picture>
+  );
+}
+
+export default function HeroSwiper({ type }: HeroSwiperProps) {
   const locale = useLocale();
   const isRtl = locale === "ar";
+  const [banners, setBanners] = useState<HeroBanner[]>([]);
   const total = banners.length;
   const [currentIndex, setCurrentIndex] = useState(0);
   const [swiper, setSwiper] = useState<SwiperType | null>(null);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    async function loadBanners() {
+      const items = await homePageService.getHeroBanners();
+
+      if (isMounted) {
+        setBanners(items);
+      }
+    }
+
+    void loadBanners();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [type]);
 
   const goTo = (index: number) => {
     if (!swiper) return;
@@ -32,6 +90,10 @@ export default function HeroSwiper({ banners }: HeroSwiperProps) {
 
   const onPrevious = () => swiper?.slidePrev();
   const onNext = () => swiper?.slideNext();
+
+  if (total === 0) {
+    return null;
+  }
 
   return (
     <section className="w-full" dir={isRtl ? "rtl" : "ltr"} aria-label="Hero promotions">
@@ -62,13 +124,9 @@ export default function HeroSwiper({ banners }: HeroSwiperProps) {
         >
           {banners.map((banner, index) => (
             <SwiperSlide key={banner.id} className="h-full">
-              <Banner
-                imageSrc={banner.imageSrc}
-                alt={banner.alt}
-                href={banner.href}
-                priority={index === 0}
-                loading={index === 0 ? "eager" : "lazy"}
-              />
+              <article className="relative h-full w-full overflow-hidden rounded-sm bg-surface">
+                <HeroBannerImage banner={banner} isFirst={index === 0} />
+              </article>
             </SwiperSlide>
           ))}
         </Swiper>

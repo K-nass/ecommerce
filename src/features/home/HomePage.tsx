@@ -1,34 +1,79 @@
 import { Banner } from "./components/banner";
-import CardGrid from "./components/cardGrid/CardGrid";
-import CardSlider from "./components/cardSlider/CardSlider";
+import FlashSalesSection from "./components/cardSlider/FlashSalesSection";
 import ContentSection from "./components/contentSection/ContentSection";
+import ProductSliderSection from "./productSlider/ProductSliderSection";
 import HeroSwiper from "./components/HeroSwiper";
-import ProductSlider from "./productSlider/ProductSlider";
-import type { HomePageProps } from "./types";
+import BrandProductsSection from "./components/brandProducts/BrandProductsSection";
+import { homePageService } from "./services/homePageService";
+import type { HomePageSection } from "./types";
 
-export function HomePage({
-  heroBanners,
-  dailyOffersTitle,
-  dailyOffers,
-  topCategoriesTitle,
-  topCategories,
-  bestSellersTitle,
-  bestSellers,
-  featuredProductsTitle,
-  moreProductsTitle,
-  featuredPromotionsTitle,
-  featuredPromotions,
-  trendingNowTitle,
-  trendingProducts,
-  exploreMoreDealsTitle,
-  exploreMoreDeals,
-  leafletBanner,
-  electronicsZoneTitle,
-  electronicsZone,
-}: HomePageProps) {
+function renderSection(section: HomePageSection) {
+  // switch (section.type) {
+  //   case "banners":
+  //     return <HeroSwiper key={section.id} type={section.type} />;
+  //   case "promotions":
+  //     return (
+  //       <Banner
+  //         key={section.id}
+  //         type={section.type}
+  //         title={section.title}
+  //       />
+  //     );
+  //   case "best-category":
+  //   case "parent_category":
+  //     return (
+  //       <ContentSection
+  //         key={section.id}
+  //         type={section.type}
+  //         title={section.title}
+  //       />
+  //     );
+  //   case "flash-sales":
+  //   case "coupons":
+  //     return (
+  //       <FlashSalesSection
+  //         key={section.id}
+  //         type={section.type}
+  //         title={section.title}
+  //       />
+  //     );
+  //   case "brand":
+  //     return (
+  //       <BrandProductsSection
+  //         key={section.id}
+  //         type={section.type}
+  //         title={section.title}
+  //       />
+  //     );
+  //   case "best_product_sales":
+  //   case "flash_sales_product":
+  //   case "brands_product":
+  //   case "product_discount_today_or_low_qty":
+  //   case "flash_sales_end_today":
+  //   case "flash_sales_end_week":
+  //   case "product_for_parent_category":
+  //   case "new_arrivals":
+  //   case "all_product_discounts":
+  //     return (
+  //       <ProductSliderSection
+  //         key={section.id}
+  //         type={section.type}
+  //         title={section.title}
+  //       />
+  //     );
+  //   default:
+  //     console.warn(`[HomePage] Unknown section type: ${section.type}`);
+  //     return null;
+  // }
+}
+
+export async function HomePage() {
+  const sections = await homePageService.getHomePageSections();
+
   return (
     <main className="flex flex-col gap-y-5">
-      <HeroSwiper banners={heroBanners} />
+      {/* {sections.map(renderSection)} */}
+      {/* <HeroSwiper banners={heroBanners} />
       <CardSlider title={dailyOffersTitle} items={dailyOffers} />
       <ContentSection title={topCategoriesTitle} items={topCategories} />
       <ProductSlider title={bestSellersTitle} items={bestSellers} />
@@ -58,7 +103,7 @@ export function HomePage({
         gridClassName="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4"
         cardClassName="aspect-[4/5]"
         slideSizes="(max-width: 640px) 100vw, (max-width: 1280px) 50vw, 25vw"
-      />
+      /> */}
     </main>
   );
 }
