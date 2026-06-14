@@ -7,10 +7,10 @@ import { useAuthStore } from "@/features/auth/store/useAuthStore";
 import { useGuestCartStore } from "../store/useGuestCartStore";
 import { useSyncCartOnLogin } from "../hooks/useSyncCartOnLogin";
 import { cartService } from "../services/cartService";
-import { ProductCartItem } from "./ProductCartItem";
+import { CartSection } from "./CartSection";
 import { CartSummary } from "./CartSummary";
-import { calcSubtotal, calcTotalQuantity } from "../utils";
 import ProductSlider from "@/features/home/productSlider/ProductSlider";
+import { calcSubtotal, calcTotalQuantity } from "../utils";
 import type { CartItem, GuestCartItem } from "../types";
 
 type CartSource = "guest" | "server" | "loading";
@@ -58,13 +58,24 @@ export function CartPageContent() {
           sku: i.product.sku,
           in_stock: i.product.in_stock,
           stock_quantity: i.product.quantity,
+          deliveryType: "scheduled" as const,
         }))
       : guestItems;
 
-  const subtotal = calcSubtotal(
-    displayItems.map((i) => ({ price: i.current_price, quantity: i.quantity })),
+  const scheduledItems = displayItems.filter((i) => i.deliveryType === "scheduled");
+  const fastItems = displayItems.filter((i) => i.deliveryType === "fast");
+
+  const scheduledSubtotal = calcSubtotal(
+    scheduledItems.map((i) => ({ price: i.current_price, quantity: i.quantity })),
   );
-  const totalQuantity = calcTotalQuantity(displayItems);
+  const fastSubtotal = calcSubtotal(
+    fastItems.map((i) => ({ price: i.current_price, quantity: i.quantity })),
+  );
+  const scheduledQty = calcTotalQuantity(scheduledItems);
+  const fastQty = calcTotalQuantity(fastItems);
+  const combinedTotal = scheduledSubtotal + fastSubtotal;
+  const minimumOrderAmount = 100;
+  const checkoutEnabled = combinedTotal >= minimumOrderAmount;
 
   const handleUpdateQuantity = (productId: number, quantity: number) => {
     if (source === "server") {
@@ -135,46 +146,49 @@ export function CartPageContent() {
   }
 
   return (
-    <div className="grid grid-cols-1 gap-8 lg:grid-cols-[1fr_340px]">
-      <div className="space-y-6">
-        <div className="flex items-center justify-between">
-          <h2 className="text-xl font-bold">{t("title")}</h2>
-          <span className="text-sm text-gray-500">
-            {t("cartItems", { count: totalQuantity })}
-          </span>
+    <div className="space-y-10">
+      <div className="flex items-center justify-between">
+        <h2 className="text-xl font-bold">{t("title")}</h2>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="lg:col-span-2 space-y-8">
+          <CartSection
+            deliveryType="scheduled"
+            items={scheduledItems}
+            onUpdateQuantity={handleUpdateQuantity}
+            onRemove={handleRemove}
+          />
+          <CartSection
+            deliveryType="fast"
+            items={fastItems}
+            onUpdateQuantity={handleUpdateQuantity}
+            onRemove={handleRemove}
+          />
         </div>
 
-        <div className="space-y-4">
-          {displayItems.map((item) => (
-            <ProductCartItem
-              key={item.product_id}
-              item={item}
-              onUpdateQuantity={handleUpdateQuantity}
-              onRemove={handleRemove}
-            />
-          ))}
-        </div>
-
-        <div className="flex justify-between border-t border-border-subtle pt-4 text-sm">
-          <span className="text-gray-500">{t("subtotal")}</span>
-          <span className="font-bold tabular-nums">
-            {subtotal.toFixed(2)} EGP
-          </span>
-        </div>
-
-        {recommendedProducts.length > 0 && (
-          <div className="pt-6">
-            <ProductSlider
-              title={t("youMightAlsoLike")}
-              items={recommendedProducts}
+        <div className="lg:col-span-1">
+          <div className="sticky top-24">
+            <CartSummary
+              scheduledSubtotal={scheduledSubtotal}
+              scheduledQuantity={scheduledQty}
+              fastSubtotal={fastSubtotal}
+              fastQuantity={fastQty}
+              checkoutEnabled={checkoutEnabled}
+              minimumOrderAmount={minimumOrderAmount}
             />
           </div>
-        )}
+        </div>
       </div>
 
-      <div>
-        <CartSummary items={displayItems} />
-      </div>
+      {recommendedProducts.length > 0 && (
+        <div className="pt-4">
+          <ProductSlider
+            title={t("youMightAlsoLike")}
+            items={recommendedProducts}
+          />
+        </div>
+      )}
     </div>
   );
 }

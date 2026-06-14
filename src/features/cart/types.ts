@@ -1,4 +1,4 @@
-export interface CartItemProduct {
+﻿export interface CartItemProduct {
   id: number;
   name: string;
   slug: string;
@@ -50,6 +50,8 @@ export interface CartResponse {
   first_page_url: string;
 }
 
+export type DeliveryType = "scheduled" | "fast";
+
 export interface GuestCartItem {
   product_id: number;
   quantity: number;
@@ -61,6 +63,7 @@ export interface GuestCartItem {
   sku: string;
   in_stock: number;
   stock_quantity: number;
+  deliveryType: DeliveryType;
 }
 
 export interface AddBulkPayload {

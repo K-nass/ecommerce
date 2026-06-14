@@ -21,13 +21,13 @@ export default async function DeliveryModes() {
         textClass="text-primary"
         etaText="120 mins"
       />
-      <DeliveryModeButton
+      {/* <DeliveryModeButton
         label="Electronic…"
         icon={{ src: "/electronics.avif", alt: "Electronic" }}
         bgClass="bg-background"
         borderClass="border-primary"
         textClass="text-primary"
-      />
+      /> */}
     </div>
   );
 }

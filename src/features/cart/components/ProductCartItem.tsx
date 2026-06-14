@@ -29,55 +29,95 @@ export function ProductCartItem({ item, onUpdateQuantity, onRemove }: ProductCar
   const hasDiscount = displayPrice < originalPrice;
   const lineTotal = displayPrice * item.quantity;
 
+  const priceStr = displayPrice.toFixed(2);
+  const intPart = priceStr.split(".")[0];
+  const decPart = "." + priceStr.split(".")[1];
+
+  const origPriceStr = originalPrice.toFixed(2);
+  const origInt = origPriceStr.split(".")[0];
+  const origDec = "." + origPriceStr.split(".")[1];
+
+  const discountPercent = hasDiscount
+    ? Math.round((1 - displayPrice / originalPrice) * 100)
+    : 0;
+
   return (
-    <div className="flex gap-4 border-b border-border-subtle pb-4">
-      <div className="relative h-28 w-28 shrink-0 overflow-hidden rounded-xl bg-white">
-        <Image src={item.image} alt={item.name} fill className="object-cover" sizes="112px" />
+    <div className="flex gap-3 border border-border p-3 rounded-lg">
+      <div className="relative h-24 w-24 shrink-0 overflow-hidden rounded-lg bg-white">
+        <Image src={item.image} alt={item.name} fill className="object-cover" sizes="96px" />
       </div>
 
-      <div className="flex flex-1 flex-col justify-between">
-        <div className="flex justify-between gap-2">
-          <div className="min-w-0">
-            <h4 className="truncate text-sm font-medium">{item.name}</h4>
+      <div className="flex flex-1 min-w-0 gap-2">
+        <div className="flex flex-col justify-between flex-1 min-w-0">
+          <div>
+            <h4 className="truncate text-sm font-semibold">{item.name}</h4>
+            {item.sku && (
+              <p className="mt-0.5 text-[11px] text-text-secondary">SKU: {item.sku}</p>
+            )}
+            <p className="text-[11px] text-text-secondary">
+              {item.in_stock ? "In Stock" : "Out of Stock"}
+              {item.stock_quantity != null && ` (${item.stock_quantity})`}
+            </p>
           </div>
-          <button
-            onClick={() => onRemove(item.product_id)}
-            className="shrink-0 text-gray-400 hover:text-red-500 transition-colors"
-            aria-label="Remove"
-          >
-            <Trash2 className="h-4 w-4" />
-          </button>
+
+          <div className="flex items-center gap-2 mt-2">
+            {hasDiscount && (
+              <div className="flex items-center gap-1">
+                <span className="text-xs leading-4 font-medium text-gray-500 line-through">
+                  {origInt}
+                </span>
+                <div className="flex flex-col">
+                  <span className="text-[10px] leading-3 font-medium text-gray-500 line-through">{origDec}</span>
+                  <span className="text-[8px] leading-3 font-medium text-gray-500 line-through">EGP</span>
+                </div>
+              </div>
+            )}
+            <div className="flex items-center gap-1">
+              <span className="text-base leading-5 font-bold">{intPart}</span>
+              <div className="flex flex-col">
+                <span className="text-sm font-bold leading-3">{decPart}</span>
+                <span className="text-[10px] font-medium leading-3">EGP</span>
+              </div>
+            </div>
+            {hasDiscount && (
+              <span className="text-[10px] font-bold text-discount bg-red-50 px-1 py-0.5 rounded">
+                -{discountPercent}%
+              </span>
+            )}
+          </div>
         </div>
 
-        <div className="flex items-center gap-2">
-          {hasDiscount && (
-            <span className="text-sm text-gray-400 line-through">{originalPrice.toFixed(2)} EGP</span>
-          )}
-          <span className="text-sm font-bold">{displayPrice.toFixed(2)} EGP</span>
-        </div>
-
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-1 rounded-lg border border-border-subtle">
+        <div className="flex flex-col items-end justify-center gap-2 shrink-0">
+          <div className="flex items-center gap-1 rounded-lg border border-border">
+            <button
+              onClick={() => onRemove(item.product_id)}
+              className="flex h-7 w-7 items-center justify-center text-text-secondary hover:text-red-500 transition-colors"
+              aria-label="Remove"
+            >
+              <Trash2 className="h-3 w-3" />
+            </button>
+            <div className="h-4 w-px bg-border" />
             <button
               onClick={() => onUpdateQuantity(item.product_id, item.quantity - 1)}
               disabled={item.quantity <= 1}
-              className="flex h-8 w-8 items-center justify-center text-gray-600 hover:text-primary disabled:opacity-30 transition-colors"
+              className="flex h-7 w-7 items-center justify-center text-text-secondary hover:text-primary disabled:opacity-30 transition-colors"
             >
-              <Minus className="h-3.5 w-3.5" />
+              <Minus className="h-3 w-3" />
             </button>
-            <span className="flex h-8 w-10 items-center justify-center text-sm font-medium tabular-nums">
+            <span className="flex h-7 w-9 items-center justify-center text-sm font-medium tabular-nums">
               {item.quantity}
             </span>
             <button
               onClick={() => onUpdateQuantity(item.product_id, item.quantity + 1)}
               disabled={item.quantity >= item.stock_quantity}
-              className="flex h-8 w-8 items-center justify-center text-gray-600 hover:text-primary disabled:opacity-30 transition-colors"
+              className="flex h-7 w-7 items-center justify-center text-text-secondary hover:text-primary disabled:opacity-30 transition-colors"
             >
-              <Plus className="h-3.5 w-3.5" />
+              <Plus className="h-3 w-3" />
             </button>
           </div>
-
-          <span className="text-sm font-bold tabular-nums">{lineTotal.toFixed(2)} EGP</span>
+          <span className="text-xs font-semibold tabular-nums text-text-secondary">
+            {lineTotal.toFixed(2)} EGP
+          </span>
         </div>
       </div>
     </div>
