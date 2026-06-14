@@ -45,43 +45,40 @@ export default function CategoryNavClient({
         </div>
 
         <div
-          className="no-scrollbar min-w-0 flex-1 overflow-x-auto overflow-y-hidden"
+          className="relative flex-1 min-w-0"
           onMouseLeave={() => setHoveredCategory(null)}
         >
-          <ul className="flex w-max items-center whitespace-nowrap pe-2 text-sm text-primary-dark gap-4 sm:gap-6 md:gap-8">
-            {categories.map((item) => (
-              <li
-                key={item.id}
-                className="shrink-0"
-                onMouseEnter={() => setHoveredCategory(item)}
-                onFocus={() => setHoveredCategory(item)}
-              >
-                <Link
-                  href={`/products?category=${item.slug}`}
-                  className="rounded-md px-1.5 py-1 transition-colors font-bold leading-4"
+          <div className="no-scrollbar overflow-x-auto overflow-y-hidden">
+            <ul className="flex w-max items-center whitespace-nowrap pe-2 text-sm text-primary-dark gap-4 sm:gap-6 md:gap-8">
+              {categories.map((item) => (
+                <li
+                  key={item.id}
+                  className="shrink-0"
+                  onMouseEnter={() => setHoveredCategory(item)}
+                  onFocus={() => setHoveredCategory(item)}
                 >
-                  {item.name}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </div>
+                  <Link
+                    href={"/products?category=" + item.slug}
+                    className="rounded-md px-1.5 py-1 transition-colors font-bold leading-4"
+                  >
+                    {item.name}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
 
-      {hoveredCategory && (
-        <div
-          className="relative"
-          onMouseLeave={() => setHoveredCategory(null)}
-        >
-          <div className="pointer-events-auto absolute left-0 top-0 z-50 pt-2 w-full max-w-6xl">
-            <div className="rounded-xl bg-background shadow-lg overflow-hidden">
-              <div className={cn("min-h-95 max-h-[70dvh]")}>
-                <SubCategoryPane activeCategory={hoveredCategory} />
+          {hoveredCategory && (
+            <div className="absolute left-0 top-full z-50 pt-2 w-full max-w-6xl">
+              <div className="rounded-xl bg-background shadow-lg overflow-hidden">
+                <div className={cn("min-h-95 max-h-[70dvh]")}>
+                  <SubCategoryPane activeCategory={hoveredCategory} />
+                </div>
               </div>
             </div>
-          </div>
+          )}
         </div>
-      )}
+      </div>
     </nav>
   );
 }
