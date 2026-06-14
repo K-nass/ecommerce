@@ -58,7 +58,7 @@ export default function CategoryNavClient({
                   onFocus={() => setHoveredCategory(item)}
                 >
                   <Link
-                    href={"/products?category=" + item.slug}
+                    href={`/category/${item.slug}`}
                     className="rounded-md px-1.5 py-1 transition-colors font-bold leading-4"
                   >
                     {item.name}
