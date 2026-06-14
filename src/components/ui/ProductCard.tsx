@@ -1,10 +1,10 @@
-﻿"use client";
+"use client";
 
 import { useState, useCallback } from "react";
 import Image from "next/image";
 import { Trash2, Plus, Minus } from "lucide-react";
 import { cn } from "@/shared/utils/cn";
-import { useGuestCartStore } from "@/features/cart/store/useGuestCartStore";
+import { useCartActions } from "@/features/cart/hooks/useCartActions";
 import type { DeliveryType } from "@/features/cart/types";
 
 interface ProductCardProps {
@@ -36,20 +36,11 @@ export default function ProductCard({
   stockQuantity = 10,
   deliveryType = "scheduled",
 }: ProductCardProps) {
-  const addItem = useGuestCartStore((s) => s.addItem);
-  const removeItem = useGuestCartStore((s) => s.removeItem);
-  const updateQuantity = useGuestCartStore((s) => s.updateQuantity);
-  const cartItem = useGuestCartStore((s) =>
-    s.items.find((i) => i.product_id === productId),
-  );
-
+  const { quantity, isPending, addItem, increment, decrement } = useCartActions(productId);
   const [animating, setAnimating] = useState(false);
 
-  const quantity = cartItem?.quantity ?? 0;
-
-  const handleAdd = useCallback(() => {
-    addItem({
-      product_id: productId,
+  const handleAdd = useCallback(async () => {
+    await addItem({
       quantity: 1,
       name: title,
       image,
@@ -63,19 +54,15 @@ export default function ProductCard({
     });
     setAnimating(true);
     setTimeout(() => setAnimating(false), 300);
-  }, [addItem, productId, title, image, price, slug, sku, inStock, stockQuantity, deliveryType]);
+  }, [addItem, title, image, price, slug, sku, inStock, stockQuantity, deliveryType]);
 
-  const handleIncrement = useCallback(() => {
-    updateQuantity(productId, quantity + 1);
-  }, [updateQuantity, productId, quantity]);
+  const handleIncrement = useCallback(async () => {
+    await increment();
+  }, [increment]);
 
-  const handleDecrement = useCallback(() => {
-    if (quantity <= 1) {
-      removeItem(productId);
-    } else {
-      updateQuantity(productId, quantity - 1);
-    }
-  }, [quantity, removeItem, updateQuantity, productId]);
+  const handleDecrement = useCallback(async () => {
+    await decrement();
+  }, [decrement]);
 
   const priceStr = price.toString();
   const integerPart = priceStr.split(".")[0];
@@ -103,18 +90,21 @@ export default function ProductCard({
           <button
             type="button"
             onClick={handleAdd}
+            disabled={isPending}
             className={cn(
               "absolute right-0 bottom-0 bg-primary rounded-full w-10 h-10 text-white font-medium text-2xl border border-white flex items-center justify-center transition-transform duration-200 hover:scale-105",
               animating && "scale-110",
+              isPending && "opacity-70 cursor-not-allowed"
             )}
           >
             <Plus className="h-5 w-5" />
           </button>
         ) : (
-          <div className="absolute right-0 bottom-0 flex items-center gap-1 bg-primary rounded-full h-10 px-1 border border-white text-white transition-all duration-300">
+          <div className={cn("absolute right-0 bottom-0 flex items-center gap-1 bg-primary rounded-full h-10 px-1 border border-white text-white transition-all duration-300", isPending && "opacity-70 pointer-events-none")}>
             <button
               type="button"
               onClick={handleDecrement}
+              disabled={isPending}
               className="flex h-8 w-8 items-center justify-center rounded-full hover:bg-white/20 transition-colors"
               aria-label="Decrease quantity"
             >
@@ -130,6 +120,7 @@ export default function ProductCard({
             <button
               type="button"
               onClick={handleIncrement}
+              disabled={isPending}
               className="flex h-8 w-8 items-center justify-center rounded-full hover:bg-white/20 transition-colors"
               aria-label="Increase quantity"
             >
@@ -164,6 +155,3 @@ export default function ProductCard({
     </div>
   );
 }
-
-
-
