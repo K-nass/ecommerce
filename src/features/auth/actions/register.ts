@@ -39,7 +39,7 @@ export async function registerAction(
       first_name: firstName,
       last_name: lastName,
       email,
-      phone,
+      phone_number: phone,
       password,
       password_confirmation: passwordConfirmation,
       policy,
@@ -50,8 +50,10 @@ export async function registerAction(
   } catch (error) {
     if (error instanceof ApiError) {
       const mapped: Record<string, string> = {};
+      const KEY_MAP: Record<string, string> = { phone_number: "phone" };
       for (const [key, msgs] of Object.entries(error.fields)) {
-        mapped[key] = Array.isArray(msgs) ? msgs[0] : String(msgs);
+        const formKey = KEY_MAP[key] || key;
+        mapped[formKey] = Array.isArray(msgs) ? msgs[0] : String(msgs);
       }
       const hasFields = Object.keys(mapped).length > 0;
       return {

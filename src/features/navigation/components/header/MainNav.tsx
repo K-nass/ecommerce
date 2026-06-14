@@ -52,7 +52,7 @@ export default function MainNav() {
         ) : (
           <button
             type="button"
-            onClick={() => openAuthModal("login")}
+            onClick={() => openAuthModal()}
             className="inline-flex items-center text-sm font-semibold text-text-primary gap-1 transition hover:text-primary"
           >
             <Image src="/icons/user.svg" width={25} height={25} alt="user icon" />

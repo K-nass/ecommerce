@@ -1,31 +1,37 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { X } from "lucide-react";
+import { useEffect, useRef, useState, useActionState } from "react";
+import { X, Mail } from "lucide-react";
 import { PatternTiles } from "./PatternTiles";
+import { PhoneInputWithCountry } from "./PhoneInputWithCountry";
+import { PasswordInput } from "./PasswordInput";
+import { AuthTabs } from "./AuthTabs";
+import { AuthFeedback } from "./AuthFeedback";
 import { useAuthModalStore } from "../store/useAuthModalStore";
+import { useAuthStore } from "../store/useAuthStore";
+import { loginAction } from "../actions";
+import { useRouter } from "@/i18n/navigation";
+import { toast } from "sonner";
 
-type ModalTab = "login" | "register";
+type ContactMethod = "email" | "phone";
 
 export function AuthModal() {
-  const { isOpen, defaultMode, close } = useAuthModalStore();
+  const { isOpen, close } = useAuthModalStore();
 
   if (!isOpen) return null;
 
-  return <AuthModalContent defaultMode={defaultMode} close={close} />;
+  return <AuthModalContent close={close} />;
 }
 
-function AuthModalContent({
-  defaultMode,
-  close,
-}: {
-  defaultMode: ModalTab;
-  close: () => void;
-}) {
-  const [tab, setTab] = useState<ModalTab>(defaultMode);
-  const [identifier, setIdentifier] = useState("");
+function AuthModalContent({ close }: { close: () => void }) {
+  const [method, setMethod] = useState<ContactMethod>("email");
+  const [state, formAction, pending] = useActionState(loginAction, null);
+  const setAuthData = useAuthStore((s) => s.setAuthData);
+  const router = useRouter();
   const overlayRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  
+  
 
   useEffect(() => {
     const timer = setTimeout(() => inputRef.current?.focus(), 120);
@@ -47,18 +53,24 @@ function AuthModalContent({
     };
   }, []);
 
-  function handleOverlayClick(e: React.MouseEvent<HTMLDivElement>) {
+  /* Handle login success */
+  useEffect(() => {
+    if (state?.success && state.data) {
+      setAuthData(state.data);
+      toast.success(state.message || "Logged in successfully!");
+      close();
+    }
+  }, [state, setAuthData, close]);
+
+function handleOverlayClick(e: React.MouseEvent<HTMLDivElement>) {
     if (e.target === overlayRef.current) close();
   }
 
-  function handleContinue(e: React.FormEvent) {
-    e.preventDefault();
-    /* TODO: route to full login / register form with identifier pre-filled */
-    close();
-  }
+  const fieldErrors = state?.fieldErrors ?? {};
+  const payload = state?.payload ?? {};
 
   return (
-    /* ── Overlay ── */
+    /* ?? Overlay ?? */
     <div
       ref={overlayRef}
       onClick={handleOverlayClick}
@@ -67,10 +79,10 @@ function AuthModalContent({
       role="dialog"
       aria-label="Authentication"
     >
-      {/* ── Modal card ── */}
+      {/* ?? Modal card ?? */}
       <div className="relative w-full max-w-[480px] overflow-hidden rounded-2xl bg-background shadow-2xl">
 
-        {/* ── Top: animated pattern banner ── */}
+        {/* ?? Top: animated pattern banner ?? */}
         <div className="relative h-52 overflow-hidden bg-surface">
           <PatternTiles />
 
@@ -85,63 +97,88 @@ function AuthModalContent({
           </button>
         </div>
 
-        {/* ── Bottom: form area ── */}
+        {/* ?? Bottom: form area ?? */}
         <div className="px-6 pb-7 pt-5">
           {/* Heading */}
           <h2 className="mb-4 text-center text-xl font-bold text-text-primary">
             Hala! Let&apos;s get started
           </h2>
 
-          {/* Login / Sign up pill tabs */}
-          <div className="mb-5 flex rounded-xl border border-border bg-surface p-1">
-            <button
-              type="button"
-              onClick={() => setTab("login")}
-              className={[
-                "flex-1 rounded-lg py-2 text-sm font-semibold transition",
-                tab === "login"
-                  ? "bg-background text-text-primary shadow-sm"
-                  : "text-text-secondary hover:text-text-primary",
-              ].join(" ")}
-            >
-              Log in
-            </button>
-            <button
-              type="button"
-              onClick={() => setTab("register")}
-              className={[
-                "flex-1 rounded-lg py-2 text-sm font-semibold transition",
-                tab === "register"
-                  ? "bg-primary text-white shadow-sm"
-                  : "text-text-secondary hover:text-text-primary",
-              ].join(" ")}
-            >
-              Sign up
-            </button>
-          </div>
+          {/* Email / Phone method tabs */}
+          <AuthTabs method={method} onMethodChange={setMethod} isLogin={true} />
 
-          {/* Identifier form */}
-          <form onSubmit={handleContinue} className="space-y-3">
-            <input
-              ref={inputRef}
-              id="auth-modal-identifier"
-              type="text"
-              required
-              value={identifier}
-              onChange={(e) => setIdentifier(e.target.value)}
-              placeholder="Please enter email or mobile number"
-              className="w-full rounded-xl border border-border bg-background px-4 py-3 text-sm text-text-primary outline-none transition placeholder:text-text-secondary/70 focus:border-primary focus:ring-2 focus:ring-primary/10"
+          {/* Login form */}
+          <form
+            action={formAction}
+            className="mt-5 space-y-3"
+          >
+            <input type="hidden" name="method" value={method} />
+
+            {method === "email" ? (
+              <div>
+                <div className="relative">
+                  <Mail className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-text-secondary" />
+                  <input
+                    ref={inputRef}
+                    type="email"
+                    name="email"
+                    placeholder="name@example.com"
+                    defaultValue={payload.email || ""}
+                    className={
+                      "w-full rounded-xl border bg-background pl-10 pr-4 py-3 text-sm text-text-primary outline-none transition placeholder:text-text-secondary/70 focus:border-primary focus:ring-2 focus:ring-primary/10 " +
+                      (fieldErrors.email ? "border-red-500" : "border-border")
+                    }
+                  />
+                </div>
+                {fieldErrors.email && (
+                  <p className="mt-1 text-xs text-red-500">{fieldErrors.email}</p>
+                )}
+              </div>
+            ) : (
+              <PhoneInputWithCountry
+                name="phone"
+                placeholder="Enter your phone number"
+                error={fieldErrors.phone}
+                defaultValue={payload.phone || ""}
+              />
+            )}
+
+            <PasswordInput
+              name="password"
+              placeholder="Enter your password"
+              error={fieldErrors.password}
+              defaultValue={payload.password || ""}
             />
+
+            {state && !state.success && state.message && (
+              <AuthFeedback error={state.message} />
+            )}
 
             <button
               type="submit"
-              className="w-full rounded-xl bg-surface py-3 text-sm font-bold uppercase tracking-widest text-text-secondary transition hover:bg-primary hover:text-white"
+              disabled={pending}
+              className="w-full rounded-xl bg-primary py-3 text-sm font-bold uppercase tracking-widest text-white transition hover:bg-primary-dark disabled:cursor-not-allowed disabled:opacity-70"
             >
-              Continue
+              {pending ? "Signing in..." : "Sign in"}
             </button>
           </form>
 
-          {/* Divider with social hint */}
+          {/* Signup link */}
+          <p className="mt-4 text-center text-xs text-text-secondary">
+            Don&apos;t have an account?{" "}
+            <button
+              type="button"
+              onClick={() => {
+                close();
+                router.push("/auth");
+              }}
+              className="font-medium text-primary hover:underline"
+            >
+              Sign up
+            </button>
+          </p>
+
+          {/* Terms & Privacy */}
           <p className="mt-4 text-center text-xs text-text-secondary">
             By continuing, you agree to our{" "}
             <span className="cursor-pointer font-medium text-primary hover:underline">
