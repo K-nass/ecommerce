@@ -1,4 +1,4 @@
-export interface BannerItem {
+﻿export interface BannerItem {
   id: string;
   imageSrc: string;
   alt: string;
@@ -26,6 +26,10 @@ export interface ProductItem {
   title: string;
   price: number;
   originalPrice: number;
+  slug?: string;
+  sku?: string;
+  inStock?: number;
+  stockQuantity?: number;
 }
 
 export interface BannerProps extends Omit<BannerItem, "id"> {
@@ -113,3 +117,5 @@ export interface HomePageProps {
   electronicsZoneTitle: string;
   electronicsZone: CardSlideItem[];
 }
+
+

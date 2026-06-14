@@ -1,6 +1,7 @@
-﻿"use client";
+"use client";
 
 import { ChevronDown, ShoppingCart } from "lucide-react";
+import { useState, useEffect } from "react";
 import { useTranslations } from "next-intl";
 import Logo from "@/components/ui/Logo";
 import { SearchInput } from "./SearchInput";
@@ -16,6 +17,8 @@ import { cn } from "@/shared/utils/cn";
 import { Link } from "@/i18n/navigation";
 
 export default function MainNav() {
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => { setMounted(true); }, []);
   const t = useTranslations("header.mainNav");
   const tCommon = useTranslations("header.common");
   const tSearch = useTranslations("header.search");
@@ -104,7 +107,7 @@ export default function MainNav() {
           aria-label="Cart"
         >
           <ShoppingCart className="h-5 w-5" />
-          {cartCount > 0 && (
+          {mounted && cartCount > 0 && (
             <span className="absolute -top-1 -end-1 inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-secondary text-white font-bold px-1 text-xs">
               {cartCount}
             </span>

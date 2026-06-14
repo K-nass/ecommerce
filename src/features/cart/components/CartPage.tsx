@@ -11,7 +11,7 @@ export async function CartPage({ locale }: CartPageProps) {
   const tb = await getTranslations({ locale, namespace: "header.breadcrumb" });
 
   return (
-    <div className="py-6">
+    <div className="py-6 min-h-screen">
       <Breadcrumb
         items={[
           { label: tb("home"), href: "/" },
