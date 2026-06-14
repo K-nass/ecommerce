@@ -15,6 +15,7 @@ interface RegisterFormProps {
   profileFileName?: string;
   onProfileImageChange: (file: File | null) => void;
   onToggleMode: () => void;
+  onPasswordChange?: (password: string) => void;
 }
 
 function inputClass(error?: string) {
@@ -37,6 +38,7 @@ export function RegisterForm({
   profileFileName,
   onProfileImageChange,
   onToggleMode,
+  onPasswordChange,
 }: RegisterFormProps) {
   const fieldErrors = state?.fieldErrors ?? {};
   const p = state?.payload ?? {};
@@ -105,6 +107,7 @@ export function RegisterForm({
         placeholder="Create a password"
         error={fieldErrors.password}
         defaultValue={p.password || ""}
+        onChange={onPasswordChange ? (e) => onPasswordChange(e.target.value) : undefined}
       />
 
       <PasswordInput

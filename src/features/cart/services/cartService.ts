@@ -38,7 +38,7 @@ export const cartService = {
   },
 
   addBulkToCart: async (payload: AddBulkPayload): Promise<void> => {
-    await apiFetch<ApiResponse<{ message: string }>>("/cart/add-bulk", {
+    await apiFetch<ApiResponse<{ message: string }>>("/cart/bulk-items", {
       method: "POST",
       body: JSON.stringify(payload),
     });

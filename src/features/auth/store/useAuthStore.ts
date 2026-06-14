@@ -13,6 +13,8 @@ type AuthState = {
   role: string[];
   emailVerified: boolean;
   isAuthenticated: boolean;
+  email: string | null;
+  phoneNumber: string | null;
   loading: boolean;
   error: string | null;
   setAuthData: (authData: AuthLoginData) => void;
@@ -39,6 +41,8 @@ const initialState = {
   role: [],
   emailVerified: false,
   isAuthenticated: false,
+  email: null as string | null,
+  phoneNumber: null as string | null,
   loading: false,
   error: null as string | null,
 };
@@ -55,6 +59,8 @@ export const useAuthStore = create<AuthState>()(
           role: authData.role ?? [],
           emailVerified: authData.email_verified ?? false,
           isAuthenticated: Boolean(authData.token),
+          email: authData.email ?? null,
+          phoneNumber: authData.phone_number ?? null,
           error: null,
         });
       },
@@ -77,6 +83,8 @@ export const useAuthStore = create<AuthState>()(
             role: response.data.role ?? [],
             emailVerified: response.data.email_verified ?? false,
             isAuthenticated: Boolean(response.data.token),
+            email: response.data.email ?? null,
+            phoneNumber: response.data.phone_number ?? null,
             loading: false,
             error: null,
           });
@@ -104,6 +112,8 @@ export const useAuthStore = create<AuthState>()(
               role: data.role ?? [],
               emailVerified: data.email_verified ?? false,
               isAuthenticated: true,
+              email: data.email ?? null,
+              phoneNumber: data.phone_number ?? null,
               loading: false,
               error: null,
             });
@@ -137,6 +147,8 @@ export const useAuthStore = create<AuthState>()(
         role: state.role,
         emailVerified: state.emailVerified,
         isAuthenticated: state.isAuthenticated,
+        email: state.email,
+        phoneNumber: state.phoneNumber,
       }),
       onRehydrateStorage: () => (state) => {
         if (state?.token) {

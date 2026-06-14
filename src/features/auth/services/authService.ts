@@ -7,14 +7,11 @@ import type {
   OtpLoginPayload,
   RegisterPayload,
   ResetPasswordPayload,
+  SendOtpCodePayload,
   SocialLoginPayload,
   VerifyPasswordPayload,
 } from "@/features/auth/types";
 import type { ApiResponse } from "@/shared/types";
-
-type MessageData = {
-  message?: string;
-};
 
 function toRegisterBody(payload: RegisterPayload) {
   if (payload.avatar instanceof File) {
@@ -41,9 +38,21 @@ function toRegisterBody(payload: RegisterPayload) {
   });
 }
 
+type AuthResponse = ApiResponse<AuthLoginData>;
+type MessageResponse = ApiResponse<Record<string, unknown>>;
+
 export const authService = {
-  login: async (payload: LoginPayload): Promise<ApiResponse<AuthLoginData>> => {
-    return apiFetch<ApiResponse<AuthLoginData>>("/token", {
+  login: async (payload: LoginPayload): Promise<AuthResponse> => {
+    return apiFetch<AuthResponse>("/token", {
+      method: "POST",
+      body: JSON.stringify(payload),
+    });
+  },
+
+  sendOtpCode: async (
+    payload: SendOtpCodePayload,
+  ): Promise<MessageResponse> => {
+    return apiFetch<MessageResponse>("/send-otp-code", {
       method: "POST",
       body: JSON.stringify(payload),
     });
@@ -51,8 +60,8 @@ export const authService = {
 
   register: async (
     payload: RegisterPayload,
-  ): Promise<ApiResponse<AuthLoginData | MessageData>> => {
-    return apiFetch<ApiResponse<AuthLoginData | MessageData>>("/register", {
+  ): Promise<ApiResponse<AuthLoginData | Record<string, unknown>>> => {
+    return apiFetch<ApiResponse<AuthLoginData | Record<string, unknown>>>("/register", {
       method: "POST",
       body: toRegisterBody(payload),
     });
@@ -60,8 +69,8 @@ export const authService = {
 
   otpLogin: async (
     payload: OtpLoginPayload,
-  ): Promise<ApiResponse<AuthLoginData>> => {
-    return apiFetch<ApiResponse<AuthLoginData>>("/otp-login", {
+  ): Promise<AuthResponse> => {
+    return apiFetch<AuthResponse>("/otp-login", {
       method: "POST",
       body: JSON.stringify(payload),
     });
@@ -69,8 +78,8 @@ export const authService = {
 
   requestForgetPassword: async (
     payload: ForgetPasswordPayload,
-  ): Promise<ApiResponse<MessageData>> => {
-    return apiFetch<ApiResponse<MessageData>>("/forget-password", {
+  ): Promise<MessageResponse> => {
+    return apiFetch<MessageResponse>("/forget-password", {
       method: "POST",
       body: JSON.stringify(payload),
     });
@@ -78,8 +87,8 @@ export const authService = {
 
   forgetPassword: async (
     payload: VerifyPasswordPayload,
-  ): Promise<ApiResponse<MessageData>> => {
-    return apiFetch<ApiResponse<MessageData>>("/verify-forget-password-token", {
+  ): Promise<MessageResponse> => {
+    return apiFetch<MessageResponse>("/verify-forget-password-token", {
       method: "POST",
       body: JSON.stringify(payload),
     });
@@ -87,14 +96,14 @@ export const authService = {
 
   verifyForgetPasswordToken: async (
     payload: VerifyPasswordPayload,
-  ): Promise<ApiResponse<MessageData>> => {
+  ): Promise<MessageResponse> => {
     return authService.forgetPassword(payload);
   },
 
   verifyPassword: async (
     payload: VerifyPasswordPayload,
-  ): Promise<ApiResponse<MessageData>> => {
-    return apiFetch<ApiResponse<MessageData>>("/verify-password", {
+  ): Promise<MessageResponse> => {
+    return apiFetch<MessageResponse>("/verify-password", {
       method: "POST",
       body: JSON.stringify(payload),
     });
@@ -102,8 +111,8 @@ export const authService = {
 
   resetPassword: async (
     payload: ResetPasswordPayload,
-  ): Promise<ApiResponse<MessageData>> => {
-    return apiFetch<ApiResponse<MessageData>>("/reset-password", {
+  ): Promise<MessageResponse> => {
+    return apiFetch<MessageResponse>("/reset-password", {
       method: "POST",
       body: JSON.stringify(payload),
     });
@@ -111,8 +120,8 @@ export const authService = {
 
   changePassword: async (
     payload: ChangePasswordPayload,
-  ): Promise<ApiResponse<MessageData>> => {
-    return apiFetch<ApiResponse<MessageData>>("/change-password", {
+  ): Promise<MessageResponse> => {
+    return apiFetch<MessageResponse>("/change-password", {
       method: "POST",
       body: JSON.stringify(payload),
     });
@@ -120,15 +129,15 @@ export const authService = {
 
   socialLogin: async (
     payload: SocialLoginPayload,
-  ): Promise<ApiResponse<AuthLoginData | MessageData>> => {
-    return apiFetch<ApiResponse<AuthLoginData | MessageData>>("/social-login", {
+  ): Promise<ApiResponse<AuthLoginData | Record<string, unknown>>> => {
+    return apiFetch<ApiResponse<AuthLoginData | Record<string, unknown>>>("/social-login", {
       method: "POST",
       body: JSON.stringify(payload),
     });
   },
 
-  logout: async (): Promise<ApiResponse<MessageData>> => {
-    return apiFetch<ApiResponse<MessageData>>("/logout", {
+  logout: async (): Promise<MessageResponse> => {
+    return apiFetch<MessageResponse>("/logout", {
       method: "POST",
     });
   },

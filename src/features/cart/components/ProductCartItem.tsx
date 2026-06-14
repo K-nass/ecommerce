@@ -44,7 +44,7 @@ export function ProductCartItem({ item, onUpdateQuantity, onRemove }: ProductCar
   return (
     <div className="flex gap-3 border border-border p-3 rounded-lg">
       <div className="relative h-24 w-24 shrink-0 overflow-hidden rounded-lg bg-white">
-        <Image src={item.image} alt={item.name} fill className="object-cover" sizes="96px" />
+        <Image src={item.image} alt={item.name} width={96} height={96} className="object-cover" />
       </div>
 
       <div className="flex flex-1 min-w-0 gap-2">
