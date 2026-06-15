@@ -76,6 +76,8 @@ export interface BannerProps {
   type?: string;
   title?: string;
   promotion?: Promotion;
+  setting?: SectionFrontSetting;
+  endpoint?: string;
 }
 
 export interface BannerArrowsProps {
@@ -121,23 +123,48 @@ export interface CardGridProps {
 export interface ContentSectionProps {
   title: string;
   type: string;
+  setting?: SectionFrontSetting;
+  endpoint?: string;
 }
 
 export interface ContentItemProps {
   item: HomeCategory;
+  isCircle?: boolean;
 }
 
 export interface ProductSliderProps {
   title?: string;
   items: ProductItem[];
+  columnsCount?: number;
+  badgeText?: string;
+  showTimer?: boolean;
+  timerEndAt?: string;
+}
+
+export interface SectionFrontSetting {
+  autoplay?: boolean;
+  slider_speed?: number;
+  columns_count?: number;
+  shape?: string;
+  show_timer?: boolean;
+  timer_end_at?: string;
+  theme?: "dark" | "light";
+  badge_text?: string;
+  layout?: "grid" | "list";
+}
+
+export interface SectionSetting {
+  front: SectionFrontSetting;
+  back?: Record<string, unknown>;
 }
 
 export interface HomePageSection {
   id: number;
   type: string;
   title: string;
-  endpoint?: string; // Optional now that 'type' is the main driver
+  endpoint?: string;
   order: number;
+  setting?: SectionSetting;
 }
 
 export interface HomeContentPage {
@@ -164,6 +191,8 @@ export interface HeroBanner {
 
 export interface HeroSwiperProps {
   type: string;
+  setting?: SectionFrontSetting;
+  endpoint?: string;
 }
 
 export interface PromotionImage {

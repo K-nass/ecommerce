@@ -8,21 +8,14 @@ import type { CategoryFilters } from "../types";
 
 interface ProductsSidebarProps {
   filters: CategoryFilters;
+  filterLabels: Record<string, string>;
   seeMoreText: string;
   seeLessText: string;
 }
 
-const FILTER_LABELS: Record<keyof CategoryFilters, string> = {
-  brand: "Brand",
-  category: "Category",
-  height: "Height",
-  width: "Width",
-  length: "Length",
-  weight: "Weight",
-};
-
 export default function ProductsSidebar({
   filters,
+  filterLabels,
   seeMoreText,
   seeLessText,
 }: ProductsSidebarProps) {
@@ -60,7 +53,7 @@ export default function ProductsSidebar({
     <aside className="w-80 shrink-0 border border-border-subtle">
       <div className="max-h-[calc(100vh-200px)] overflow-y-auto space-y-1 p-5">
         {entries.map(([key, values]) => {
-          const label = FILTER_LABELS[key as keyof CategoryFilters];
+          const label = filterLabels[key];
           const items = values!;
           const isLong = items.length > 6;
 

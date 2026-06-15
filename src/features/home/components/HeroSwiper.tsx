@@ -11,7 +11,7 @@ import "swiper/css";
 
 import { BannerArrows, BannerPagination } from "./banner";
 import { homePageService } from "../services/homePageService";
-import type { HeroBanner, HeroSwiperProps } from "../types";
+import type { HeroBanner, HeroSwiperProps, SectionFrontSetting } from "../types";
 
 const AUTO_PLAY_MS = 4500;
 
@@ -52,7 +52,7 @@ function HeroBannerImage({
   );
 }
 
-export default function HeroSwiper({ type }: HeroSwiperProps) {
+export default function HeroSwiper({ type, setting, endpoint }: HeroSwiperProps) {
   const locale = useLocale();
   const isRtl = locale === "ar";
   const [banners, setBanners] = useState<HeroBanner[]>([]);
@@ -64,7 +64,8 @@ export default function HeroSwiper({ type }: HeroSwiperProps) {
     let isMounted = true;
 
     async function loadBanners() {
-      const items = await homePageService.getHeroBanners();
+      if (!endpoint) return;
+      const items = await homePageService.fetchSectionData<HeroBanner[]>(endpoint);
 
       if (isMounted) {
         setBanners(items);
@@ -76,7 +77,7 @@ export default function HeroSwiper({ type }: HeroSwiperProps) {
     return () => {
       isMounted = false;
     };
-  }, [type]);
+  }, [type, endpoint]);
 
   const goTo = (index: number) => {
     if (!swiper) return;
@@ -107,9 +108,9 @@ export default function HeroSwiper({ type }: HeroSwiperProps) {
           keyboard={{ enabled: true }}
           a11y={{ enabled: true }}
           autoplay={
-            total > 1
+            total > 1 && setting?.autoplay !== false
               ? {
-                  delay: AUTO_PLAY_MS,
+                  delay: setting?.slider_speed ?? AUTO_PLAY_MS,
                   disableOnInteraction: false,
                   pauseOnMouseEnter: true,
                 }

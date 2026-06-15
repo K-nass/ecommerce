@@ -7,11 +7,21 @@ import type {
   SubCategory,
 } from "../types";
 
+interface RawFilter {
+  display: string;
+  key: string;
+  data: string[];
+}
+
 export async function getCategoryPageData(
   slug: string,
   locale: string,
   searchParams?: Record<string, string | string[] | undefined>,
-): Promise<{ products: CategoryProduct[]; filters: CategoryFilters }> {
+): Promise<{
+  products: CategoryProduct[];
+  filters: CategoryFilters;
+  filterLabels: Record<string, string>;
+}> {
   const params = new URLSearchParams();
   params.append("category", slug);
 
@@ -35,8 +45,23 @@ export async function getCategoryPageData(
       },
     },
   );
+
+  const rawFilters = response.data.filters as unknown as RawFilter[];
+  const filters: CategoryFilters = {};
+  const filterLabels: Record<string, string> = {};
+
+  if (Array.isArray(rawFilters)) {
+    for (const f of rawFilters) {
+      if (f.key && Array.isArray(f.data)) {
+        (filters as Record<string, string[]>)[f.key] = f.data;
+        filterLabels[f.key] = f.display;
+      }
+    }
+  }
+
   return {
     products: response.data.data,
-    filters: response.data.filters,
+    filters,
+    filterLabels,
   };
 }

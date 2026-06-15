@@ -28,7 +28,7 @@ export default async function Page({
     notFound();
   }
 
-  const { products, filters } = await getCategoryPageData(slug, locale, resolvedSearchParams);
+  const { products, filters, filterLabels } = await getCategoryPageData(slug, locale, resolvedSearchParams);
 
   const parentCategory = categoryPath.length > 1 
     ? categoryPath[categoryPath.length - 2] 
@@ -55,6 +55,7 @@ export default async function Page({
         <div className="max-[991px]:hidden block">
           <ProductsSidebar
             filters={filters}
+            filterLabels={filterLabels}
             seeMoreText={tf("seeMore")}
             seeLessText={tf("seeLess")}
           />

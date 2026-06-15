@@ -1,8 +1,9 @@
 import { getImageProps } from "next/image";
 import { Link } from "@/i18n/navigation";
+import { cn } from "@/shared/utils/cn";
 import type { ContentItemProps } from "../../types";
 
-export default function ContentItem({ item }: ContentItemProps) {
+export default function ContentItem({ item, isCircle }: ContentItemProps) {
   const commonImageProps = {
     alt: item.name,
     className: "object-contain",
@@ -27,7 +28,12 @@ export default function ContentItem({ item }: ContentItemProps) {
       href={`/category/${item.slug}`}
       className="flex flex-col items-center justify-between rounded-lg transition-all duration-200 overflow-hidden gap-2"
     >
-      <div className="relative w-full flex items-center justify-center bg-slate-50">
+      <div
+        className={cn(
+          "relative w-full flex items-center justify-center bg-slate-50",
+          isCircle && "rounded-full aspect-square",
+        )}
+      >
         <picture className="flex items-center justify-center">
           <source media="(min-width: 640px)" srcSet={desktopSrcSet} />
           <img {...mobileImageProps} alt={item.name} />

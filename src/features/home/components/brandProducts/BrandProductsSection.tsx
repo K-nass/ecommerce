@@ -2,20 +2,27 @@ import SectionTitle from "@/components/ui/SectionTitle";
 import Banner from "../banner/Banner";
 import ProductSlider from "../../productSlider/ProductSlider";
 import { homePageService } from "../../services/homePageService";
-import type { ProductItem } from "../../types";
+import { toProductItem } from "../../utils";
+import type { SectionFrontSetting, ApiBrandWithProducts } from "../../types";
 
 interface BrandProductsSectionProps {
   type: string;
   title?: string;
+  setting?: SectionFrontSetting;
+  endpoint?: string;
 }
 
 export default async function BrandProductsSection({
   type,
   title,
+  setting,
+  endpoint,
 }: BrandProductsSectionProps) {
+  if (!endpoint) return null;
+
   let brands;
   try {
-    brands = await homePageService.getBrandsWithProducts();
+    brands = await homePageService.fetchSectionData<ApiBrandWithProducts[]>(endpoint);
   } catch (error) {
     console.error("[BrandProductsSection] Failed to fetch brands:", error);
     return null;
@@ -33,7 +40,7 @@ export default async function BrandProductsSection({
           <div key={brand.id} className="flex flex-col gap-y-4">
             <Banner promotion={brand} />
             {brand.products && brand.products.length > 0 && (
-              <ProductSlider title={brand.name} items={brand.products as any} />
+              <ProductSlider title={brand.name} items={brand.products.map(toProductItem)} columnsCount={setting?.columns_count} />
             )}
           </div>
         ))}

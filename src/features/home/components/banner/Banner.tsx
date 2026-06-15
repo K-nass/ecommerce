@@ -2,19 +2,19 @@ import { getImageProps } from "next/image";
 
 import SectionTitle from "@/components/ui/SectionTitle";
 import { homePageService } from "../../services/homePageService";
-import type { BannerProps } from "../../types";
+import type { BannerProps, Promotion } from "../../types";
 
-export default async function Banner({ type, title, promotion: initialPromotion }: BannerProps) {
+export default async function Banner({ type, title, promotion: initialPromotion, setting, endpoint }: BannerProps) {
   let promotion = initialPromotion;
 
-  if (!promotion) {
-    const promotions = await homePageService.getPromotions();
+  if (!promotion && endpoint) {
+    const promotions = await homePageService.fetchSectionData<Promotion[]>(endpoint);
     if (promotions.length > 0) {
       promotion = promotions[0];
     }
   }
 
-  if (!promotion) {
+  if (!promotion || !promotion.image?.desktop || !promotion.image?.mobile) {
     return null;
   }
   const commonImageProps = {
