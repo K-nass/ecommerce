@@ -34,9 +34,10 @@ export default async function RootLayout({
         <NextIntlClientProvider>
           <Header params={params} />
           <CartSyncProvider>
-            <div className="container mx-auto px-4 flex flex-col">{children}</div>
+            <div className="container mx-auto px-4 flex flex-col min-h-screen">
+              {children}
+            </div>
           </CartSyncProvider>
-          <div className="container mx-auto px-4 flex flex-col min-h-screen">{children}</div>
           <Footer params={params} />
           <AuthModal />
         </NextIntlClientProvider>

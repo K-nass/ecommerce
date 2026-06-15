@@ -6,12 +6,16 @@ interface ExpandableListProps {
   items: string[];
   seeMoreText: string;
   seeLessText: string;
+  checkedItems: string[];
+  onToggle: (value: string) => void;
 }
 
 export default function ExpandableList({
   items,
   seeMoreText,
   seeLessText,
+  checkedItems,
+  onToggle,
 }: ExpandableListProps) {
   const [expanded, setExpanded] = useState(false);
   const maxVisible = 6;
@@ -21,15 +25,23 @@ export default function ExpandableList({
 
   return (
     <>
-      {visibleItems.map((value) => (
-        <label
-          key={value}
-          className="flex items-center gap-2 text-sm cursor-pointer"
-        >
-          <input type="checkbox" className="accent-primary" />
-          {value}
-        </label>
-      ))}
+      {visibleItems.map((value) => {
+        const isChecked = checkedItems.includes(value);
+        return (
+          <label
+            key={value}
+            className="flex items-center gap-2 text-sm cursor-pointer"
+          >
+            <input
+              type="checkbox"
+              className="accent-primary"
+              checked={isChecked}
+              onChange={() => onToggle(value)}
+            />
+            {value}
+          </label>
+        );
+      })}
       {hasMore && (
         <button
           onClick={() => setExpanded(!expanded)}

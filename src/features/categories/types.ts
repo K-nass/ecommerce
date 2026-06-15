@@ -12,6 +12,13 @@ export interface CategoryMenuItem {
   children: CategoryMenuItem[];
 }
 
+export interface SubCategory {
+  id: number;
+  name: string;
+  slug: string;
+  image: CategoryImage;
+}
+
 export interface CategoryProductImage {
   thumbnail: string;
   original: Record<string, string>;
