@@ -10,6 +10,8 @@ import { calcSubtotal, calcTotalQuantity, isFreeShipping, canCheckout } from "..
 interface CartSectionProps {
   deliveryType: DeliveryType;
   items: GuestCartItem[];
+  /** Set of product IDs whose cart item currently has an in-flight API request. */
+  pendingItemIds?: Set<number>;
   onUpdateQuantity: (productId: number, quantity: number) => void;
   onRemove: (productId: number) => void;
 }
@@ -17,6 +19,7 @@ interface CartSectionProps {
 export function CartSection({
   deliveryType,
   items,
+  pendingItemIds,
   onUpdateQuantity,
   onRemove,
 }: CartSectionProps) {
@@ -138,6 +141,7 @@ export function CartSection({
           <ProductCartItem
             key={item.product_id + deliveryType}
             item={item}
+            isPending={pendingItemIds?.has(item.product_id) ?? false}
             onUpdateQuantity={onUpdateQuantity}
             onRemove={onRemove}
           />

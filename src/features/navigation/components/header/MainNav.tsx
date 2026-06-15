@@ -11,6 +11,7 @@ import { useAuthStore } from "@/features/auth/store/useAuthStore";
 import { UserMenu } from "@/features/auth/components/UserMenu";
 import { useScrollState } from "@/features/navigation/hooks/useScrollState";
 import { useGuestCartStore } from "@/features/cart/store/useGuestCartStore";
+import { useServerCartStore } from "@/features/cart/store/useServerCartStore";
 import { usePathname, useRouter } from "@/i18n/navigation";
 import { useLocale } from "next-intl";
 import { cn } from "@/shared/utils/cn";
@@ -26,7 +27,9 @@ export default function MainNav() {
   const openAuthModal = useAuthModalStore((s) => s.open);
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
   const isScrolled = useScrollState();
-  const cartCount = useGuestCartStore((s) => s.getTotalItems());
+  const guestCartCount = useGuestCartStore((s) => s.getTotalItems());
+  const serverCartCount = useServerCartStore((s) => s.totalQuantity);
+  const cartCount = isAuthenticated ? serverCartCount : guestCartCount;
   const pathname = usePathname();
   const router = useRouter();
   const locale = useLocale();

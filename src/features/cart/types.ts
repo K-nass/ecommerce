@@ -1,4 +1,4 @@
-﻿export interface CartItemProduct {
+export interface CartItemProduct {
   id: number;
   name: string;
   slug: string;
@@ -28,32 +28,12 @@ export interface CartItem {
   total: number;
 }
 
-export interface CartResponse {
-  id: number;
-  user_id: number;
-  items: CartItem[];
-  total_items: number;
-  total_quantity: number;
-  total_price: number;
-  created_at: string;
-  updated_at: string;
-  current_page: number;
-  from: number | null;
-  to: number | null;
-  last_page: number;
-  path: string;
-  per_page: number;
-  total: number;
-  next_page_url: string | null;
-  prev_page_url: string | null;
-  last_page_url: string;
-  first_page_url: string;
-}
-
 export type DeliveryType = "scheduled" | "fast";
 
 export interface GuestCartItem {
   product_id: number;
+  product_variant_id?: number | null;
+  cartItemId?: number;
   quantity: number;
   name: string;
   image: string;
@@ -71,4 +51,44 @@ export interface AddBulkPayload {
     product_id: number;
     quantity: number;
   }>;
+}
+
+// --- API response types matching the actual /cart endpoint ---
+
+export interface CartApiItem {
+  id: number;
+  product_id: number;
+  product_variant_id: number | null;
+  quantity: number;
+  reserved_quantity: number;
+  price: string;
+  total_price: string;
+  attributes: string | null;
+}
+
+export interface CartApiCart {
+  id: number;
+  user_id: number;
+  status: string;
+  reserved_at: string;
+  expires_at: string;
+  total_items: number;
+  total_quantity: number;
+  total_price: number;
+  items: CartApiItem[];
+}
+
+export interface CartListResponse {
+  data: CartApiCart[];
+  current_page: number;
+  from: number | null;
+  to: number | null;
+  last_page: number;
+  path: string;
+  per_page: number;
+  total: number;
+  next_page_url: string | null;
+  prev_page_url: string | null;
+  last_page_url: string;
+  first_page_url: string;
 }

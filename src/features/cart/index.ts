@@ -1,2 +1,3 @@
 export { CartPage } from "./components/CartPage";
-export type { CartItemProduct, CartItem, CartResponse, GuestCartItem, AddBulkPayload } from "./types";
+export { useCartActions } from "./hooks/useCartActions";
+export type { CartItemProduct, CartItem, GuestCartItem, AddBulkPayload, CartApiItem, CartApiCart, CartListResponse } from "./types";

@@ -1,12 +1,14 @@
 "use client";
 import Image from "next/image";
-import { Minus, Plus, Trash2 } from "lucide-react";
+import { Minus, Plus, Trash2, Loader2 } from "lucide-react";
 import type { GuestCartItem } from "../types";
 import { getDisplayPrice, getOriginalPrice } from "@/shared/utils/price";
 import type { PriceInfo } from "@/shared/utils/price";
 
 interface ProductCartItemProps {
   item: GuestCartItem;
+  /** Disables all controls and shows a loading spinner while an API call is in-flight. */
+  isPending?: boolean;
   onUpdateQuantity: (productId: number, quantity: number) => void;
   onRemove: (productId: number) => void;
 }
@@ -22,7 +24,12 @@ function toPriceInfo(item: GuestCartItem): PriceInfo {
   };
 }
 
-export function ProductCartItem({ item, onUpdateQuantity, onRemove }: ProductCartItemProps) {
+export function ProductCartItem({
+  item,
+  isPending = false,
+  onUpdateQuantity,
+  onRemove,
+}: ProductCartItemProps) {
   const priceInfo = toPriceInfo(item);
   const displayPrice = getDisplayPrice(priceInfo);
   const originalPrice = getOriginalPrice(priceInfo);
@@ -88,33 +95,42 @@ export function ProductCartItem({ item, onUpdateQuantity, onRemove }: ProductCar
         </div>
 
         <div className="flex flex-col items-end justify-center gap-2 shrink-0">
-          <div className="flex items-center gap-1 rounded-lg border border-border">
-            <button
-              onClick={() => onRemove(item.product_id)}
-              className="flex h-7 w-7 items-center justify-center text-text-secondary hover:text-red-500 transition-colors"
-              aria-label="Remove"
-            >
-              <Trash2 className="h-3 w-3" />
-            </button>
-            <div className="h-4 w-px bg-border" />
-            <button
-              onClick={() => onUpdateQuantity(item.product_id, item.quantity - 1)}
-              disabled={item.quantity <= 1}
-              className="flex h-7 w-7 items-center justify-center text-text-secondary hover:text-primary disabled:opacity-30 transition-colors"
-            >
-              <Minus className="h-3 w-3" />
-            </button>
-            <span className="flex h-7 w-9 items-center justify-center text-sm font-medium tabular-nums">
-              {item.quantity}
-            </span>
-            <button
-              onClick={() => onUpdateQuantity(item.product_id, item.quantity + 1)}
-              disabled={item.quantity >= item.stock_quantity}
-              className="flex h-7 w-7 items-center justify-center text-text-secondary hover:text-primary disabled:opacity-30 transition-colors"
-            >
-              <Plus className="h-3 w-3" />
-            </button>
-          </div>
+          {isPending ? (
+            <div className="flex h-7 w-[calc(4*28px+2px)] items-center justify-center">
+              <Loader2 className="h-4 w-4 animate-spin text-primary" />
+            </div>
+          ) : (
+            <div className="flex items-center gap-1 rounded-lg border border-border">
+              <button
+                onClick={() => onRemove(item.product_id)}
+                disabled={isPending}
+                className="flex h-7 w-7 items-center justify-center text-text-secondary hover:text-red-500 transition-colors disabled:opacity-30"
+                aria-label="Remove item"
+              >
+                <Trash2 className="h-3 w-3" />
+              </button>
+              <div className="h-4 w-px bg-border" />
+              <button
+                onClick={() => onUpdateQuantity(item.product_id, item.quantity - 1)}
+                disabled={isPending || item.quantity <= 1}
+                className="flex h-7 w-7 items-center justify-center text-text-secondary hover:text-primary disabled:opacity-30 transition-colors"
+                aria-label="Decrease quantity"
+              >
+                <Minus className="h-3 w-3" />
+              </button>
+              <span className="flex h-7 w-9 items-center justify-center text-sm font-medium tabular-nums">
+                {item.quantity}
+              </span>
+              <button
+                onClick={() => onUpdateQuantity(item.product_id, item.quantity + 1)}
+                disabled={isPending || item.quantity >= item.stock_quantity}
+                className="flex h-7 w-7 items-center justify-center text-text-secondary hover:text-primary disabled:opacity-30 transition-colors"
+                aria-label="Increase quantity"
+              >
+                <Plus className="h-3 w-3" />
+              </button>
+            </div>
+          )}
           <span className="text-xs font-semibold tabular-nums text-text-secondary">
             {lineTotal.toFixed(2)} EGP
           </span>

@@ -1,20 +1,26 @@
 import { apiFetch } from "@/shared/lib/api";
 import type { ApiResponse } from "@/shared/types";
-import type { CartResponse, CartItem, AddBulkPayload } from "../types";
+import type {
+  CartListResponse,
+  CartApiCart,
+  CartItem,
+  AddBulkPayload,
+} from "../types";
 
 export const cartService = {
-  getCart: async (): Promise<CartResponse> => {
-    const response = await apiFetch<ApiResponse<CartResponse>>("/cart");
-    return response.data;
+  getCart: async (): Promise<CartApiCart | null> => {
+    const response = await apiFetch<CartListResponse>("/cart");
+    return response.data?.[0] ?? null;
   },
 
   addItem: async (payload: {
     product_id: number;
     quantity: number;
+    product_variant_id?: number | null;
   }): Promise<CartItem> => {
-    const response = await apiFetch<ApiResponse<CartItem>>("/cart/add", {
+    const response = await apiFetch<ApiResponse<CartItem>>("/cart", {
       method: "POST",
-      body: JSON.stringify(payload),
+      body: JSON.stringify({ item: payload }),
     });
     return response.data;
   },
@@ -31,8 +37,8 @@ export const cartService = {
   },
 
   removeItem: async (itemId: number): Promise<void> => {
-    await apiFetch<ApiResponse<{ message: string }>>("/cart/remove", {
-      method: "POST",
+    await apiFetch<ApiResponse<{ message: string }>>("/cart/delete-items", {
+      method: "DELETE",
       body: JSON.stringify({ item_id: itemId }),
     });
   },

@@ -6,10 +6,14 @@ import type { GuestCartItem, AddBulkPayload } from "../types";
 
 type GuestCartState = {
   items: GuestCartItem[];
+  isSyncing: boolean;
+  syncError: string | null;
   addItem: (item: GuestCartItem) => void;
   removeItem: (productId: number) => void;
   updateQuantity: (productId: number, quantity: number) => void;
   clearCart: () => void;
+  setSyncing: (syncing: boolean) => void;
+  setSyncError: (error: string | null) => void;
   getSyncPayload: () => AddBulkPayload;
   getTotalItems: () => number;
   getTotalPrice: () => number;
@@ -19,6 +23,8 @@ export const useGuestCartStore = create<GuestCartState>()(
   persist(
     (set, get) => ({
       items: [],
+      isSyncing: false,
+      syncError: null,
 
       addItem: (item) => {
         set((state) => {
@@ -57,6 +63,11 @@ export const useGuestCartStore = create<GuestCartState>()(
       },
 
       clearCart: () => set({ items: [] }),
+
+      setSyncing: (syncing) =>
+        set(syncing ? { isSyncing: true, syncError: null } : { isSyncing: false }),
+
+      setSyncError: (error) => set({ syncError: error, isSyncing: false }),
 
       getSyncPayload: () => ({
         items: get().items.map((i) => ({
