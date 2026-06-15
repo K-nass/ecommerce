@@ -28,6 +28,38 @@ export const homePageService = {
     return homePage.sections;
   },
 
+  fetchSectionData: async <T>(endpoint: string): Promise<T> => {
+    const response = await apiFetch<ApiResponse<T>>(`/${endpoint}`);
+
+    return response.data;
+  },
+
+  getProducts: async (queryParams: string): Promise<ApiProduct[]> => {
+    const response = await apiFetch<ApiResponse<ApiProduct[]>>(
+      `/general/products?${queryParams}`,
+    );
+
+    if (Array.isArray(response.data)) {
+      return response.data;
+    }
+
+    if (response.data && typeof response.data === "object" && "data" in response.data) {
+      return (response.data as Record<string, unknown>).data as ApiProduct[];
+    }
+
+    return response.data;
+  },
+
+  getProductsBySectionType: async (type: string): Promise<ApiProduct[]> => {
+    const response = await apiFetch<ApiResponse<ApiProduct[]>>(
+      `/general/products/section?type=${type}`,
+    );
+
+    return response.data;
+  },
+
+  // --- Legacy methods kept for backward compatibility ---
+
   getHeroBanners: async (): Promise<HeroBanner[]> => {
     const response = await apiFetch<ApiResponse<HeroBanner[]>>("/general/banners");
 
@@ -42,21 +74,6 @@ export const homePageService = {
 
   getCategories: async (): Promise<HomeCategory[]> => {
     const response = await apiFetch<ApiResponse<HomeCategory[]>>("/general/categories");
-
-    return response.data;
-  },
-
-  // Temporarily disabled
-  // getProducts: async (endpoint: string): Promise<ApiProduct[] | null> => {
-  //   const response = await apiFetch<ApiResponse<ApiProduct[]>>(endpoint);
-  //
-  //   return response.data || [];
-  // },
-
-  getProductsBySectionType: async (type: string): Promise<ApiProduct[]> => {
-    const response = await apiFetch<ApiResponse<ApiProduct[]>>(
-      `/general/products/section?type=${type}`
-    );
 
     return response.data;
   },
@@ -78,23 +95,4 @@ export const homePageService = {
 
     return response.data;
   },
-
-  // Currently not used in the home page
-  // getParentCategoryProducts: async (endpoint: string): Promise<ApiProduct[]> => {
-  //   const response = await apiFetch<ApiResponse<ApiProduct[]>>(endpoint);
-
-  //   return response.data;
-  // },
-
-  // getNewArrivalsProducts: async (endpoint: string): Promise<ApiProduct[]> => {
-  //   const response = await apiFetch<ApiResponse<ApiProduct[]>>(endpoint);
-
-  //   return response.data;
-  // },
-
-  // getAllDiscountProduct:async (endpoint: string): Promise<ApiProduct[]> => {
-  //   const response = await apiFetch<ApiResponse<ApiProduct[]>>(endpoint);
-
-  //   return response.data;
-  // },
 };
