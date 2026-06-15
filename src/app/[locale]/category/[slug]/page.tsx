@@ -2,6 +2,7 @@ import Breadcrumb from "@/components/ui/Breadcrumb";
 import CategoryProducts from "@/features/categories/components/CategoryProducts";
 import CategorySlider from "@/features/categories/components/CategorySlider";
 import ProductsSidebar from "@/features/categories/components/ProductsSidebar";
+import MobileCategorySidebar from "@/features/categories/components/MobileCategorySidebar";
 import { categoryMenuService } from "@/features/categories/services/categoryMenuService";
 import { getCategoryPageData } from "@/features/categories/services/categoryProductsService";
 import { findCategoryPath } from "@/features/categories/utils/categoryBreadcrumbs";
@@ -45,22 +46,41 @@ export default async function Page({
   ];
 
   return (
-    <div>
-      <Breadcrumb items={breadcrumbItems} />
-      <div className="flex gap-5">
-      <ProductsSidebar
-          filters={filters}
-          seeMoreText={tf("seeMore")}
-          seeLessText={tf("seeLess")}
-        />
-      <div className="flex-1">
-      <CategorySlider
-        subCategories={sliderCategories}
-        currentSlug={slug}
-        parentSlug={sliderParentSlug}
-      />
-        <CategoryProducts products={products} />
+    <div className="w-full">
+      <div className="max-[991px]:hidden">
+        <Breadcrumb items={breadcrumbItems} />
       </div>
+      <div className="flex gap-5 max-[991px]:gap-0 items-stretch">
+        {/* Desktop Sidebar */}
+        <div className="max-[991px]:hidden block">
+          <ProductsSidebar
+            filters={filters}
+            seeMoreText={tf("seeMore")}
+            seeLessText={tf("seeLess")}
+          />
+        </div>
+
+        {/* Mobile Sidebar */}
+        <div className="hidden max-[991px]:flex shrink-0 -ms-4 self-stretch">
+          <MobileCategorySidebar
+            subCategories={sliderCategories}
+            currentSlug={slug}
+            parentSlug={sliderParentSlug}
+          />
+        </div>
+
+        <div className="flex-1 max-[991px]:p-3">
+          {/* Desktop Slider */}
+          <div className="max-[991px]:hidden block">
+            <CategorySlider
+              subCategories={sliderCategories}
+              currentSlug={slug}
+              parentSlug={sliderParentSlug}
+            />
+          </div>
+          
+          <CategoryProducts products={products} />
+        </div>
       </div>
     </div>
   );
