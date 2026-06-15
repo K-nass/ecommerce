@@ -139,7 +139,7 @@ export function CartSection({
       <div className="space-y-4">
         {items.map((item) => (
           <ProductCartItem
-            key={item.product_id + deliveryType}
+            key={item.cartItemId ?? `${item.product_id}-${item.deliveryType}`}
             item={item}
             isPending={pendingItemIds?.has(item.product_id) ?? false}
             onUpdateQuantity={onUpdateQuantity}

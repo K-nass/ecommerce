@@ -44,6 +44,8 @@ export interface GuestCartItem {
   in_stock: number;
   stock_quantity: number;
   deliveryType: DeliveryType;
+  attributes?: CartItemAttribute[];
+  total_price?: number;
 }
 
 export interface AddBulkPayload {
@@ -55,15 +57,25 @@ export interface AddBulkPayload {
 
 // --- API response types matching the actual /cart endpoint ---
 
+export interface CartItemAttribute {
+  attribute: string;
+  value: string;
+}
+
+export interface CartApiProduct {
+  id: number;
+  name: string;
+  slug: string;
+  thumbnail: string;
+}
+
 export interface CartApiItem {
   id: number;
-  product_id: number;
-  product_variant_id: number | null;
   quantity: number;
-  reserved_quantity: number;
   price: string;
   total_price: string;
-  attributes: string | null;
+  attributes: CartItemAttribute[] | null;
+  product: CartApiProduct;
 }
 
 export interface CartApiCart {

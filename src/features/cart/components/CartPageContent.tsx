@@ -7,12 +7,10 @@ import { useAuthStore } from "@/features/auth/store/useAuthStore";
 import { useGuestCartStore } from "../store/useGuestCartStore";
 import { useServerCartStore } from "../store/useServerCartStore";
 import { cartService } from "../services/cartService";
-import { productService } from "@/features/products/services/productService";
 import { CartSection } from "./CartSection";
 import { CartSummary } from "./CartSummary";
 import ProductSlider from "@/features/home/productSlider/ProductSlider";
 import { calcSubtotal, calcTotalQuantity } from "../utils";
-import type { ProductDetail } from "@/features/products/types";
 import type { GuestCartItem } from "../types";
 
 // ---------------------------------------------------------------------------
@@ -119,7 +117,7 @@ export function CartPageContent() {
   const syncError = useGuestCartStore((s) => s.syncError);
   const setServerTotalQuantity = useServerCartStore((s) => s.setTotalQuantity);
 
-  // Initialise source synchronously from store — prevents guest spinner flash
+  // Initialise source synchronously from store ط·آ£ط¢آ¢ط£آ¢أ¢â‚¬ع‘ط¢آ¬ط£آ¢أ¢â€ڑآ¬أ¢â‚¬إ’ prevents guest spinner flash
   // and correctly shows "syncing" if the hook is mid-sync when the page opens.
   const [state, dispatch] = useReducer(
     cartReducer,
@@ -132,8 +130,8 @@ export function CartPageContent() {
     }),
   );
 
-  // AbortController for the active getCart / getProduct fetch chain.
-  // We do NOT use a ref that persists across remounts for "did load" tracking —
+  // AbortController for the active getCart fetch chain.
+  // We do NOT use a ref that persists across remounts for "did load" tracking ط·آ£ط¢آ¢ط£آ¢أ¢â‚¬ع‘ط¢آ¬ط£آ¢أ¢â€ڑآ¬أ¢â‚¬إ’
   // that pattern caused the infinite spinner when navigating away and back,
   // because useRef values survive Strict-Mode remounts and navigation remounts
   // while useReducer state resets. Instead we rely on the fact that React
@@ -142,7 +140,7 @@ export function CartPageContent() {
   const abortRef = useRef<AbortController | null>(null);
 
   // -------------------------------------------------------------------------
-  // Core load: fetch server cart + enrich with product details
+  // Core load: fetch server cart (product details are embedded in response)
   // -------------------------------------------------------------------------
   const loadServerCart = useCallback(async () => {
     // Cancel any prior in-flight fetch for this component instance.
@@ -157,43 +155,26 @@ export function CartPageContent() {
 
       if (controller.signal.aborted) return;
 
-      if (cart && cart.items.length > 0) {
-        const productIds = [...new Set(cart.items.map((i) => i.product_id))];
-        const productResults = await Promise.allSettled(
-          productIds.map((id) => productService.getProduct(id)),
-        );
+      const items: GuestCartItem[] = (cart?.items ?? [])
+        .filter((item) => item.product?.id != null)
+        .map((item) => ({
+        product_id: item.product.id,
+        cartItemId: item.id,
+        quantity: item.quantity,
+        name: item.product.name ?? `Product #${item.product.id}`,
+        image: item.product.thumbnail ?? '',
+        price: Number(item.price),
+        current_price: Number(item.price),
+        slug: item.product.slug ?? '',
+        sku: '',
+        in_stock: 1,
+        stock_quantity: 9999,
+        deliveryType: "scheduled",
+        attributes: item.attributes ?? [],
+        total_price: Number(item.total_price),
+      }));
 
-        if (controller.signal.aborted) return;
-
-        const productMap = new Map<number, ProductDetail>();
-        productResults.forEach((result, idx) => {
-          if (result.status === "fulfilled") {
-            productMap.set(productIds[idx], result.value);
-          }
-        });
-
-        const items: GuestCartItem[] = cart.items.map((item) => {
-          const product = productMap.get(item.product_id);
-          return {
-            product_id: item.product_id,
-            cartItemId: item.id,
-            quantity: item.quantity,
-            name: product?.name ?? `Product #${item.product_id}`,
-            image: product?.images?.thumbnail ?? "",
-            price: Number(item.price),
-            current_price: product?.current_price ?? Number(item.price),
-            slug: product?.slug ?? "",
-            sku: product?.sku ?? "",
-            in_stock: product?.in_stock ?? 0,
-            stock_quantity: product?.quantity ?? 0,
-            deliveryType: "scheduled",
-          };
-        });
-
-        dispatch({ type: "SET_SERVER", items });
-      } else {
-        dispatch({ type: "SET_SERVER", items: [] });
-      }
+      dispatch({ type: "SET_SERVER", items });
     } catch (err) {
       if (controller.signal.aborted) return;
       const msg = err instanceof Error ? err.message : "Failed to load cart";
@@ -205,7 +186,7 @@ export function CartPageContent() {
   // Auth / sync state machine effect
   //
   // Key design: NO didLoadRef. React effects always fire on component mount,
-  // so navigate-away → navigate-back naturally re-triggers this effect and
+  // so navigate-away ط·آ£ط¢آ¢ط£آ¢أ¢â€ڑآ¬ط¢آ ط£آ¢أ¢â€ڑآ¬أ¢â€‍آ¢ navigate-back naturally re-triggers this effect and
   // re-loads the cart. loadServerCart() cancels any duplicate in-flight request
   // via abortRef, so calling it multiple times is safe.
   // -------------------------------------------------------------------------
@@ -242,11 +223,11 @@ export function CartPageContent() {
   }, [state.source, state.serverItems, setServerTotalQuantity]);
 
   // -------------------------------------------------------------------------
-  // Handlers — optimistic update with snapshot rollback on error
+  // Handlers ط·آ£ط¢آ¢ط£آ¢أ¢â‚¬ع‘ط¢آ¬ط£آ¢أ¢â€ڑآ¬أ¢â‚¬إ’ optimistic update with snapshot rollback on error
   // -------------------------------------------------------------------------
   const handleUpdateQuantity = useCallback(
     async (productId: number, quantity: number) => {
-      // Guest path — mutate store only.
+      // Guest path ط·آ£ط¢آ¢ط£آ¢أ¢â‚¬ع‘ط¢آ¬ط£آ¢أ¢â€ڑآ¬أ¢â‚¬إ’ mutate store only.
       if (state.source !== "server") {
         if (quantity <= 0) guestRemoveItem(productId);
         else guestUpdateQuantity(productId, quantity);
@@ -359,7 +340,7 @@ export function CartPageContent() {
       <div className="flex flex-col items-center justify-center py-24 text-center">
         <Loader2 className="h-8 w-8 animate-spin text-primary" />
         <p className="mt-4 text-sm font-medium text-gray-500">
-          Syncing your cart…
+          Syncing your cartط·آ£ط¢آ¢ط£آ¢أ¢â‚¬ع‘ط¢آ¬ط·آ¢ط¢آ¦
         </p>
       </div>
     );

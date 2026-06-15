@@ -1,13 +1,13 @@
 "use client";
 import Image from "next/image";
 import { Minus, Plus, Trash2, Loader2 } from "lucide-react";
+import Link from "next/link";
 import type { GuestCartItem } from "../types";
 import { getDisplayPrice, getOriginalPrice } from "@/shared/utils/price";
 import type { PriceInfo } from "@/shared/utils/price";
 
 interface ProductCartItemProps {
   item: GuestCartItem;
-  /** Disables all controls and shows a loading spinner while an API call is in-flight. */
   isPending?: boolean;
   onUpdateQuantity: (productId: number, quantity: number) => void;
   onRemove: (productId: number) => void;
@@ -34,7 +34,7 @@ export function ProductCartItem({
   const displayPrice = getDisplayPrice(priceInfo);
   const originalPrice = getOriginalPrice(priceInfo);
   const hasDiscount = displayPrice < originalPrice;
-  const lineTotal = displayPrice * item.quantity;
+  const lineTotal = item.total_price ?? (displayPrice * item.quantity);
 
   const priceStr = displayPrice.toFixed(2);
   const intPart = priceStr.split(".")[0];
@@ -57,14 +57,18 @@ export function ProductCartItem({
       <div className="flex flex-1 min-w-0 gap-2">
         <div className="flex flex-col justify-between flex-1 min-w-0">
           <div>
-            <h4 className="truncate text-sm font-semibold">{item.name}</h4>
-            {item.sku && (
-              <p className="mt-0.5 text-[11px] text-text-secondary">SKU: {item.sku}</p>
+            <Link href={`/products/${item.slug}`} className="truncate text-sm font-semibold text-text-primary hover:text-primary transition-colors">
+              {item.name}
+            </Link>
+            {item.attributes != null && item.attributes.length > 0 && (
+              <div className="flex flex-wrap gap-1 mt-1">
+                {item.attributes.map((attr, idx) => (
+                  <span key={idx} className="inline-flex items-center gap-1 rounded-md bg-gray-100 px-1.5 py-0.5 text-[10px] font-medium text-gray-600">
+                    {attr.attribute}: {attr.value}
+                  </span>
+                ))}
+              </div>
             )}
-            <p className="text-[11px] text-text-secondary">
-              {item.in_stock ? "In Stock" : "Out of Stock"}
-              {item.stock_quantity != null && ` (${item.stock_quantity})`}
-            </p>
           </div>
 
           <div className="flex items-center gap-2 mt-2">
@@ -123,7 +127,7 @@ export function ProductCartItem({
               </span>
               <button
                 onClick={() => onUpdateQuantity(item.product_id, item.quantity + 1)}
-                disabled={isPending || item.quantity >= item.stock_quantity}
+                disabled={isPending}
                 className="flex h-7 w-7 items-center justify-center text-text-secondary hover:text-primary disabled:opacity-30 transition-colors"
                 aria-label="Increase quantity"
               >
