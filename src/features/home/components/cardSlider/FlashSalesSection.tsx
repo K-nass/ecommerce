@@ -26,7 +26,10 @@ export default async function FlashSalesSection({
       items = coupons.map((coupon) => ({
         id: coupon.id,
         title: coupon.name,
-        image: coupon.image,
+        image: {
+          desktop: coupon.image,
+          mobile: coupon.image,
+        },
         borderColor: coupon.borderColor,
       }));
     } else if (type === "promotions" || type === "brands") {
