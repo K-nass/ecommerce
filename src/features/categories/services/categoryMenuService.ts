@@ -6,7 +6,8 @@ import type { CategoryMenuItem } from "../types";
 export const categoryMenuService = {
   getMenu: async (lang: string): Promise<CategoryMenuItem[]> => {
     const response = await apiFetch<ApiResponse<CategoryMenuItem[]>>(
-      `/general/navbar?lang=${lang}`,
+      "/general/navbar",
+      { lang },
     );
     return response.data;
   },

@@ -1,7 +1,7 @@
 "use client";
 
 import { ChevronDown, ShoppingCart } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useSyncExternalStore } from "react";
 import { useTranslations } from "next-intl";
 import Logo from "@/components/ui/Logo";
 import { SearchInput } from "./SearchInput";
@@ -18,8 +18,11 @@ import { cn } from "@/shared/utils/cn";
 import { Link } from "@/i18n/navigation";
 
 export default function MainNav() {
-  const [mounted, setMounted] = useState(false);
-  useEffect(() => { setMounted(true); }, []);
+  const mounted = useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false,
+  );
   const t = useTranslations("header.mainNav");
   const tCommon = useTranslations("header.common");
   const tSearch = useTranslations("header.search");
@@ -35,7 +38,6 @@ export default function MainNav() {
   const locale = useLocale();
 
   const otherLocale = locale === "en" ? "ar" : "en";
-  const flag = "🇪🇬";
   const localeLabel = locale === "en" ? "EN" : "AR";
 
   const switchLocale = () => {
@@ -54,9 +56,6 @@ export default function MainNav() {
             isScrolled && "opacity-0 invisible w-0 overflow-hidden",
           )}
         >
-          <span className="hidden whitespace-nowrap md:inline">Maadi - Cairo</span>
-          <span className="sr-only">Maadi - Cairo</span>
-          <ChevronDown className="h-4 w-4 text-text-secondary" />
         </button>
       </div>
 
@@ -82,7 +81,6 @@ export default function MainNav() {
             isScrolled && "opacity-0 invisible w-0 overflow-hidden",
           )}
         >
-          <span>{flag} {localeLabel}</span>
         </button>
 
         <div className={cn(

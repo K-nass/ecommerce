@@ -1,3 +1,4 @@
+import { getLocale } from "next-intl/server";
 import CardSlider from "./CardSlider";
 import CardGrid from "../cardGrid/CardGrid";
 import { homePageService } from "../../services/homePageService";
@@ -17,12 +18,13 @@ export default async function FlashSalesSection({
   endpoint,
 }: FlashSalesSectionProps) {
   if (!endpoint) return null;
+  const locale = await getLocale();
 
   let items: CardSlideItem[] = [];
 
   try {
     if (type === "coupons") {
-      const coupons = await homePageService.fetchSectionData<ApiCoupon[]>(endpoint);
+      const coupons = await homePageService.fetchSectionData<ApiCoupon[]>(endpoint, locale);
       items = coupons.map((coupon) => ({
         id: coupon.id,
         title: coupon.name,
@@ -30,7 +32,7 @@ export default async function FlashSalesSection({
         borderColor: coupon.borderColor,
       }));
     } else if (type === "promotions" || type === "brands") {
-      const itemsData = await homePageService.fetchSectionData<Promotion[]>(endpoint);
+      const itemsData = await homePageService.fetchSectionData<Promotion[]>(endpoint, locale);
       items = itemsData.map((item) => ({
         id: item.id,
         title: item.name,
@@ -38,7 +40,7 @@ export default async function FlashSalesSection({
       }));
     } else {
       // flash-sales
-      const flashSales = await homePageService.fetchSectionData<ApiFlashSale[]>(endpoint);
+      const flashSales = await homePageService.fetchSectionData<ApiFlashSale[]>(endpoint, locale);
       items = flashSales.map((fs) => ({
         id: fs.id,
         title: fs.name,

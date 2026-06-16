@@ -14,7 +14,8 @@ export const footerService = {
   getFooter: async (lang: string): Promise<FooterData> => {
     // Backend dev: uncomment when /footer endpoint is ready
     // const response = await apiFetch<ApiResponse<FooterData>>(
-    //   `/footer?lang=${lang}`
+    //   "/footer",
+    //   { lang },
     // );
     // return response.data;
 

@@ -17,7 +17,7 @@ export async function ProductDetailsPage({ slug, locale }: ProductDetailsPagePro
 
   let product;
   try {
-    product = await productService.getProductBySlug(slug);
+    product = await productService.getProductBySlug(slug, locale);
   } catch (err) {
     if (err instanceof ApiError && err.status === 404) {
       notFound();

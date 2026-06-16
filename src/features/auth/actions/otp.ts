@@ -1,5 +1,6 @@
 "use server";
 
+import { getLocale } from "next-intl/server";
 import { authService } from "../services/authService";
 import { ApiError } from "@/shared/lib/api";
 import type { ActionState } from "./types";
@@ -8,6 +9,7 @@ export async function otpAction(
   prevState: ActionState | null,
   formData: FormData,
 ): Promise<ActionState> {
+  const locale = await getLocale();
   const email = (formData.get("email") as string) || "";
   const phone = (formData.get("phone") as string) || "";
   const code = (formData.get("code") as string) || "";
@@ -27,7 +29,7 @@ export async function otpAction(
       ? { email: email.trim(), code }
       : { phone_number: phone.trim(), code, ...(otpId ? { otp_id: otpId } : {}) };
 
-    const response = await authService.otpLogin(payload);
+    const response = await authService.otpLogin(payload, locale);
 
     if (!response.success) {
       return {

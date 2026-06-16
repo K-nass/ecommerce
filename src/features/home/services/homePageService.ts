@@ -4,16 +4,16 @@ import type { ApiResponse } from "@/shared/types";
 import type { HomeContentPage } from "../types";
 
 export const homePageService = {
-  getHomePage: async (): Promise<HomeContentPage> => {
+  getHomePage: async (lang?: string): Promise<HomeContentPage> => {
     const response = await apiFetch<ApiResponse<HomeContentPage>>(
       "/general/content-pages/home",
-      { next: { revalidate: 60 } },
+      { next: { revalidate: 60 }, lang },
     );
     return response.data;
   },
 
-  fetchSectionData: async <T>(endpoint: string): Promise<T> => {
-    const response = await apiFetch<ApiResponse<T>>(endpoint);
+  fetchSectionData: async <T>(endpoint: string, lang?: string): Promise<T> => {
+    const response = await apiFetch<ApiResponse<T>>(endpoint, { lang });
     return response.data;
   },
 };

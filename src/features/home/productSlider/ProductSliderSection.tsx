@@ -1,3 +1,4 @@
+import { getLocale } from "next-intl/server";
 import ProductSlider from "./ProductSlider";
 import { homePageService } from "../services/homePageService";
 import { toProductItem } from "../utils";
@@ -16,10 +17,11 @@ export default async function ProductSliderSection({
   endpoint,
 }: ProductSliderSectionProps) {
   if (!endpoint) return null;
+  const locale = await getLocale();
 
   let response: ApiProduct[] | { data: ApiProduct[] } | null = null;
   try {
-    response = await homePageService.fetchSectionData<ApiProduct[] | { data: ApiProduct[] }>(endpoint);
+    response = await homePageService.fetchSectionData<ApiProduct[] | { data: ApiProduct[] }>(endpoint, locale);
   } catch (error) {
     console.error("[ProductSliderSection] Failed to fetch products:", error);
     return null;
