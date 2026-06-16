@@ -1,14 +1,16 @@
 import { getImageProps } from "next/image";
+import { getLocale } from "next-intl/server";
 
 import SectionTitle from "@/components/ui/SectionTitle";
 import { homePageService } from "../../services/homePageService";
 import type { BannerProps, Promotion } from "../../types";
 
 export default async function Banner({ type, title, promotion: initialPromotion, setting, endpoint }: BannerProps) {
+  const locale = await getLocale();
   let promotion = initialPromotion;
 
   if (!promotion && endpoint) {
-    const promotions = await homePageService.fetchSectionData<Promotion[]>(endpoint);
+    const promotions = await homePageService.fetchSectionData<Promotion[]>(endpoint, locale);
     if (promotions.length > 0) {
       promotion = promotions[0];
     }

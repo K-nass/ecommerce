@@ -1,5 +1,6 @@
 "use server";
 
+import { getLocale } from "next-intl/server";
 import { validateLoginForm } from "../utils/validation/Login";
 import { authService } from "../services/authService";
 import { ApiError } from "@/shared/lib/api";
@@ -9,6 +10,7 @@ export async function loginAction(
   prevState: ActionState | null,
   formData: FormData,
 ): Promise<ActionState> {
+  const locale = await getLocale();
   const method = (formData.get("method") as "email" | "phone") || "email";
   const email = (formData.get("email") as string) || "";
   const phone = (formData.get("phone") as string) || "";
@@ -30,7 +32,7 @@ export async function loginAction(
       : { phone_number: phone.trim(), password };
 
   try {
-    const response = await authService.login(payload);
+    const response = await authService.login(payload, locale);
     return { success: true, message: response.message || "Login successful.", data: response.data };
   } catch (error) {
     if (error instanceof ApiError) {

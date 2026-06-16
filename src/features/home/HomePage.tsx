@@ -1,4 +1,5 @@
 import { Suspense } from "react";
+import { getLocale } from "next-intl/server";
 import FlashSalesSection from "./components/cardSlider/FlashSalesSection";
 import ContentSection from "./components/contentSection/ContentSection";
 import ProductSliderSection from "./productSlider/ProductSliderSection";
@@ -45,9 +46,10 @@ async function SectionRenderer({ section }: { section: HomePageSection }) {
 }
 
 export async function HomePage() {
+  const locale = await getLocale();
   let sections: HomePageSection[] = [];
   try {
-    const page = await homePageService.getHomePage();
+    const page = await homePageService.getHomePage(locale);
     sections = page.sections;
   } catch (error) {
     console.error("[HomePage] Failed to fetch sections:", error);

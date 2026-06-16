@@ -1,5 +1,6 @@
 "use client";
 import { useCallback, useMemo, useState } from "react";
+import { useLocale } from "next-intl";
 import { useAuthStore } from "@/features/auth/store/useAuthStore";
 import { useGuestCartStore } from "../store/useGuestCartStore";
 import { useServerCartStore } from "../store/useServerCartStore";
@@ -18,6 +19,7 @@ import type { GuestCartItem } from "../types";
  * `isPending` is true while an API call is in-flight (disables controls).
  */
 export function useCartActions(productId: number) {
+  const locale = useLocale();
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
 
   // ── Guest store (only used when not authenticated) ──────────────────────
@@ -62,7 +64,7 @@ export function useCartActions(productId: number) {
           product_id: productId,
           quantity: item.quantity,
           product_variant_id: item.product_variant_id ?? null,
-        });
+        }, locale);
       } catch {
         // Rollback on failure.
         setAuthQuantity((q) => Math.max(0, q - item.quantity));
@@ -71,7 +73,7 @@ export function useCartActions(productId: number) {
         setIsPending(false);
       }
     },
-    [isAuthenticated, productId, guestAddItem, adjustQuantity],
+    [isAuthenticated, productId, guestAddItem, adjustQuantity, locale],
   );
 
   // ── increment ────────────────────────────────────────────────────────────
@@ -86,14 +88,14 @@ export function useCartActions(productId: number) {
     setIsPending(true);
 
     try {
-      await cartService.addItem({ product_id: productId, quantity: 1 });
+      await cartService.addItem({ product_id: productId, quantity: 1 }, locale);
     } catch {
       setAuthQuantity((q) => Math.max(0, q - 1));
       adjustQuantity(-1);
     } finally {
       setIsPending(false);
     }
-  }, [isAuthenticated, productId, guestCartItem, guestUpdateQuantity, adjustQuantity]);
+  }, [isAuthenticated, productId, guestCartItem, guestUpdateQuantity, adjustQuantity, locale]);
 
   // ── decrement ────────────────────────────────────────────────────────────
   const decrement = useCallback(
@@ -115,9 +117,9 @@ export function useCartActions(productId: number) {
       setIsPending(true);
       try {
         if (newQty === 0) {
-          await cartService.removeItem(cartItemId);
+          await cartService.removeItem(cartItemId, locale);
         } else {
-          await cartService.updateItem({ item_id: cartItemId, quantity: newQty });
+          await cartService.updateItem({ item_id: cartItemId, quantity: newQty }, locale);
         }
       } catch {
         setAuthQuantity((q) => q + 1);
@@ -130,6 +132,7 @@ export function useCartActions(productId: number) {
       isAuthenticated,
       productId,
       authQuantity,
+      locale,
       guestCartItem,
       guestRemoveItem,
       guestUpdateQuantity,

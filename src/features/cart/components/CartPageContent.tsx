@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useRef, useReducer, useCallback } from "react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import Link from "next/link";
 import { ShoppingBag, Loader2, AlertTriangle, RefreshCw } from "lucide-react";
 import { useAuthStore } from "@/features/auth/store/useAuthStore";
@@ -110,6 +110,7 @@ function deriveInitialSource(
 // ---------------------------------------------------------------------------
 export function CartPageContent() {
   const t = useTranslations("cartPage");
+  const locale = useLocale();
 
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
   const guestItems = useGuestCartStore((s) => s.items);
@@ -153,14 +154,14 @@ export function CartPageContent() {
     dispatch({ type: "SET_LOADING" });
 
     try {
-      const cart = await cartService.getCart();
+      const cart = await cartService.getCart(locale);
 
       if (controller.signal.aborted) return;
 
       if (cart && cart.items.length > 0) {
         const productIds = [...new Set(cart.items.map((i) => i.product_id))];
         const productResults = await Promise.allSettled(
-          productIds.map((id) => productService.getProduct(id)),
+          productIds.map((id) => productService.getProduct(id, locale)),
         );
 
         if (controller.signal.aborted) return;
@@ -199,7 +200,7 @@ export function CartPageContent() {
       const msg = err instanceof Error ? err.message : "Failed to load cart";
       dispatch({ type: "SET_ERROR", error: msg });
     }
-  }, []);
+  }, [locale]);
 
   // -------------------------------------------------------------------------
   // Auth / sync state machine effect
@@ -263,10 +264,10 @@ export function CartPageContent() {
       try {
         if (quantity <= 0) {
           dispatch({ type: "REMOVE_ITEM", productId });
-          await cartService.removeItem(item.cartItemId);
+          await cartService.removeItem(item.cartItemId, locale);
         } else {
           dispatch({ type: "UPDATE_ITEM", productId, quantity });
-          await cartService.updateItem({ item_id: item.cartItemId, quantity });
+          await cartService.updateItem({ item_id: item.cartItemId, quantity }, locale);
         }
       } catch {
         dispatch({ type: "SET_ITEM_ROLLBACK", items: snapshot });
@@ -278,6 +279,7 @@ export function CartPageContent() {
       state.source,
       state.serverItems,
       state.pendingItemIds,
+      locale,
       guestRemoveItem,
       guestUpdateQuantity,
     ],
@@ -305,8 +307,8 @@ export function CartPageContent() {
     }
 
     setSyncing(true);
-    cartService
-      .addBulkToCart(getSyncPayload())
+      cartService
+      .addBulkToCart(getSyncPayload(), locale)
       .then(() => {
         clearCart();
         setSyncing(false);
@@ -318,7 +320,7 @@ export function CartPageContent() {
             : "Failed to sync your cart. Please try again.";
         setSyncError(message);
       });
-  }, [loadServerCart]);
+  }, [loadServerCart, locale]);
 
   // -------------------------------------------------------------------------
   // Derived display data

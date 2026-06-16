@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useRef } from "react";
+import { useLocale } from "next-intl";
 import { useAuthStore } from "@/features/auth/store/useAuthStore";
 import { useGuestCartStore } from "../store/useGuestCartStore";
 import { cartService } from "../services/cartService";
@@ -13,6 +14,7 @@ import { cartService } from "../services/cartService";
  * reaching into the store itself.
  */
 export function useSyncCartOnLogin() {
+  const locale = useLocale();
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
   const prevAuthRef = useRef<boolean>(isAuthenticated);
   const syncInFlightRef = useRef(false);
@@ -39,7 +41,7 @@ export function useSyncCartOnLogin() {
     setSyncing(true);
 
     cartService
-      .addBulkToCart(getSyncPayload())
+      .addBulkToCart(getSyncPayload(), locale)
       .then(() => {
         clearCart();
         // setSyncing(false) is handled by setSyncing's own logic;
@@ -55,7 +57,7 @@ export function useSyncCartOnLogin() {
       .finally(() => {
         syncInFlightRef.current = false;
       });
-  }, [isAuthenticated]);
+  }, [isAuthenticated, locale]);
 
   return { isSyncing, syncError } as const;
 }

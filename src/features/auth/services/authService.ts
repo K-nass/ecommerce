@@ -42,103 +42,124 @@ type AuthResponse = ApiResponse<AuthLoginData>;
 type MessageResponse = ApiResponse<Record<string, unknown>>;
 
 export const authService = {
-  login: async (payload: LoginPayload): Promise<AuthResponse> => {
+  login: async (payload: LoginPayload, lang?: string): Promise<AuthResponse> => {
     return apiFetch<AuthResponse>("/token", {
       method: "POST",
       body: JSON.stringify(payload),
+      lang,
     });
   },
 
   sendOtpCode: async (
     payload: SendOtpCodePayload,
+    lang?: string,
   ): Promise<MessageResponse> => {
     return apiFetch<MessageResponse>("/send-otp-code", {
       method: "POST",
       body: JSON.stringify(payload),
+      lang,
     });
   },
 
   register: async (
     payload: RegisterPayload,
+    lang?: string,
   ): Promise<ApiResponse<AuthLoginData | Record<string, unknown>>> => {
     return apiFetch<ApiResponse<AuthLoginData | Record<string, unknown>>>("/register", {
       method: "POST",
       body: toRegisterBody(payload),
+      lang,
     });
   },
 
   otpLogin: async (
     payload: OtpLoginPayload,
+    lang?: string,
   ): Promise<AuthResponse> => {
     return apiFetch<AuthResponse>("/otp-login", {
       method: "POST",
       body: JSON.stringify(payload),
+      lang,
     });
   },
 
   requestForgetPassword: async (
     payload: ForgetPasswordPayload,
+    lang?: string,
   ): Promise<MessageResponse> => {
     return apiFetch<MessageResponse>("/forget-password", {
       method: "POST",
       body: JSON.stringify(payload),
+      lang,
     });
   },
 
   forgetPassword: async (
     payload: VerifyPasswordPayload,
+    lang?: string,
   ): Promise<MessageResponse> => {
     return apiFetch<MessageResponse>("/verify-forget-password-token", {
       method: "POST",
       body: JSON.stringify(payload),
+      lang,
     });
   },
 
   verifyForgetPasswordToken: async (
     payload: VerifyPasswordPayload,
+    lang?: string,
   ): Promise<MessageResponse> => {
-    return authService.forgetPassword(payload);
+    return authService.forgetPassword(payload, lang);
   },
 
   verifyPassword: async (
     payload: VerifyPasswordPayload,
+    lang?: string,
   ): Promise<MessageResponse> => {
     return apiFetch<MessageResponse>("/verify-password", {
       method: "POST",
       body: JSON.stringify(payload),
+      lang,
     });
   },
 
   resetPassword: async (
     payload: ResetPasswordPayload,
+    lang?: string,
   ): Promise<MessageResponse> => {
     return apiFetch<MessageResponse>("/reset-password", {
       method: "POST",
       body: JSON.stringify(payload),
+      lang,
     });
   },
 
   changePassword: async (
     payload: ChangePasswordPayload,
+    lang?: string,
   ): Promise<MessageResponse> => {
     return apiFetch<MessageResponse>("/change-password", {
       method: "POST",
       body: JSON.stringify(payload),
+      lang,
     });
   },
 
   socialLogin: async (
     payload: SocialLoginPayload,
+    lang?: string,
   ): Promise<ApiResponse<AuthLoginData | Record<string, unknown>>> => {
     return apiFetch<ApiResponse<AuthLoginData | Record<string, unknown>>>("/social-login", {
       method: "POST",
       body: JSON.stringify(payload),
+      lang,
     });
   },
 
-  logout: async (): Promise<MessageResponse> => {
+  logout: async (lang?: string): Promise<MessageResponse> => {
     return apiFetch<MessageResponse>("/logout", {
       method: "POST",
+      lang,
     });
   },
 };

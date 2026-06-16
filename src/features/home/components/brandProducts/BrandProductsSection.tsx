@@ -1,3 +1,4 @@
+import { getLocale } from "next-intl/server";
 import SectionTitle from "@/components/ui/SectionTitle";
 import Banner from "../banner/Banner";
 import ProductSlider from "../../productSlider/ProductSlider";
@@ -19,10 +20,11 @@ export default async function BrandProductsSection({
   endpoint,
 }: BrandProductsSectionProps) {
   if (!endpoint) return null;
+  const locale = await getLocale();
 
   let brands;
   try {
-    brands = await homePageService.fetchSectionData<ApiBrandWithProducts[]>(endpoint);
+    brands = await homePageService.fetchSectionData<ApiBrandWithProducts[]>(endpoint, locale);
   } catch (error) {
     console.error("[BrandProductsSection] Failed to fetch brands:", error);
     return null;

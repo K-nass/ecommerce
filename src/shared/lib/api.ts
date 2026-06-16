@@ -51,9 +51,14 @@ function extractApiErrors(body: Record<string, unknown>): Record<string, string[
   return undefined;
 }
 
+type ApiFetchOptions = RequestInit & {
+  next?: { revalidate?: false | 0 | number; tags?: string[] };
+  lang?: string;
+};
+
 export async function apiFetch<T>(
   endpoint: string,
-  options: RequestInit & { next?: { revalidate?: false | 0 | number; tags?: string[] } } = {},
+  options: ApiFetchOptions = {},
 ): Promise<T> {
   if (!BASE_URL) {
     throw new Error("Missing NEXT_PUBLIC_API_URL environment variable.");
@@ -73,6 +78,10 @@ export async function apiFetch<T>(
 
   if (authToken && !headers.has("Authorization")) {
     headers.set("Authorization", `Bearer ${authToken}`);
+  }
+
+  if (options.lang && !headers.has("lang")) {
+    headers.set("lang", options.lang);
   }
 
   const enableLogs = process.env.NEXT_PUBLIC_XHR_LOGS === "true";

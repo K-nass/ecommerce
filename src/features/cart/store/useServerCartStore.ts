@@ -6,7 +6,7 @@ type ServerCartState = {
   totalQuantity: number;
   setTotalQuantity: (quantity: number) => void;
   adjustQuantity: (delta: number) => void;
-  fetchCartCount: () => Promise<void>;
+  fetchCartCount: (lang?: string) => Promise<void>;
 };
 
 export const useServerCartStore = create<ServerCartState>((set, get) => ({
@@ -14,9 +14,9 @@ export const useServerCartStore = create<ServerCartState>((set, get) => ({
   setTotalQuantity: (quantity) => set({ totalQuantity: quantity }),
   adjustQuantity: (delta) =>
     set({ totalQuantity: Math.max(0, get().totalQuantity + delta) }),
-  fetchCartCount: async () => {
+  fetchCartCount: async (lang?: string) => {
     try {
-      const cart = await cartService.getCart();
+      const cart = await cartService.getCart(lang);
       set({ totalQuantity: cart?.total_quantity ?? 0 });
     } catch {
       // Silently ignore — the badge is best-effort

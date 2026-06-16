@@ -1,13 +1,15 @@
+import { getLocale } from "next-intl/server";
 import { homePageService } from "../services/homePageService";
 import HeroSwiperClient from "./HeroSwiperClient";
 import type { HeroBanner, HeroSwiperProps } from "../types";
 
 export default async function HeroSwiper({ endpoint }: HeroSwiperProps) {
   if (!endpoint) return null;
+  const locale = await getLocale();
 
   let banners: HeroBanner[] = [];
   try {
-    banners = await homePageService.fetchSectionData<HeroBanner[]>(endpoint);
+    banners = await homePageService.fetchSectionData<HeroBanner[]>(endpoint, locale);
   } catch (error) {
     console.error("[HeroSwiper] Failed to fetch banners:", error);
     return null;
