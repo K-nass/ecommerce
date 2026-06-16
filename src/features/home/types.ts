@@ -220,7 +220,10 @@ export interface ApiCoupon {
   id: number;
   code: string;
   name: string;
-  image: string;
+  image: {
+    desktop: string;
+    mobile: string;
+  };
   borderColor: string;
   borderless: boolean;
   discount: string;
