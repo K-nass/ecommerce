@@ -7,4 +7,9 @@ export const productService = {
     const response = await apiFetch<ApiResponse<ProductDetail>>(`/general/products/${id}`);
     return response.data;
   },
+
+  getProductBySlug: async (slug: string): Promise<ProductDetail> => {
+    const response = await apiFetch<ApiResponse<ProductDetail>>(`/general/products/${encodeURIComponent(slug)}`);
+    return response.data;
+  },
 };

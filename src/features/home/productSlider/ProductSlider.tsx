@@ -22,6 +22,7 @@ export default function ProductSlider({
   const isRtl = locale === "ar";
   const [swiper, setSwiper] = useState<SwiperType | null>(null);
   const [isLocked, setIsLocked] = useState(true);
+  const cols = columnsCount ?? 5;
 
   const onPrevious = () => swiper?.slidePrev();
   const onNext = () => swiper?.slideNext();
@@ -40,7 +41,7 @@ export default function ProductSlider({
         dir={isRtl ? "rtl" : "ltr"}
         modules={[Navigation, Pagination]}
         spaceBetween={12}
-        slidesPerView={columnsCount ? Math.min(columnsCount, 1.5) : "auto"}
+        slidesPerView={Math.min(cols, 1.5)}
         onSwiper={(s) => {
           setSwiper(s);
           setIsLocked(s.isLocked);
@@ -49,11 +50,11 @@ export default function ProductSlider({
         onUnlock={() => setIsLocked(false)}
         loop={safeItems.length >= 6}
         watchOverflow={true}
-        breakpoints={columnsCount ? {
-          480: { slidesPerView: Math.min(columnsCount, 2.5) },
-          768: { slidesPerView: Math.min(columnsCount, 3.5) },
-          1024: { slidesPerView: columnsCount },
-        } : undefined}
+        breakpoints={{
+          480: { slidesPerView: Math.min(cols, 2.5) },
+          768: { slidesPerView: Math.min(cols, 3.5) },
+          1024: { slidesPerView: cols },
+        }}
         className="w-full"
       >
         {safeItems.map((product) => (

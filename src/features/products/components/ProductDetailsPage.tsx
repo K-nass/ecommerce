@@ -1,17 +1,25 @@
+import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import Breadcrumb from "@/components/ui/Breadcrumb";
+import { productService } from "@/features/products/services/productService";
+import { getDisplayPrice, getOriginalPrice } from "../utils";
 import { ProductPageContent } from "./ProductPageContent";
 import ProductSlider from "@/features/home/productSlider/ProductSlider";
-import type { ProductDetail } from "../types";
-import { getDisplayPrice, getOriginalPrice } from "../utils";
 
 interface ProductDetailsPageProps {
-  product: ProductDetail;
+  slug: string;
   locale: string;
 }
 
-export async function ProductDetailsPage({ product, locale }: ProductDetailsPageProps) {
+export async function ProductDetailsPage({ slug, locale }: ProductDetailsPageProps) {
   const t = await getTranslations({ locale, namespace: "product" });
+
+  let product;
+  try {
+    product = await productService.getProductBySlug(slug);
+  } catch {
+    notFound();
+  }
 
   const mappedRelated = product.related_products.map((rp) => ({
     id: rp.id,
@@ -19,6 +27,7 @@ export async function ProductDetailsPage({ product, locale }: ProductDetailsPage
     title: rp.name,
     price: getDisplayPrice(rp),
     originalPrice: getOriginalPrice(rp),
+    slug: rp.slug ?? `${rp.name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "")}-${rp.id}`,
   }));
 
   return (

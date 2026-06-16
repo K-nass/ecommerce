@@ -1,12 +1,5 @@
 ﻿import type { PriceInfo } from "./types";
 
-export function extractIdFromSlug(slug: string): number | null {
-  const parts = slug.split("-");
-  const last = parts[parts.length - 1];
-  const id = Number(last);
-  return Number.isNaN(id) ? null : id;
-}
-
 export function getDisplayPrice(product: PriceInfo): number {
   if (product.has_flash_sale && product.price_after_flash_sale != null) {
     return product.price_after_flash_sale;

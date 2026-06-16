@@ -61,7 +61,7 @@ export function ProductReviews({ reviews }: ProductReviewsProps) {
             <div className="flex items-start justify-between">
               <div className="flex items-center gap-3">
                 <div className="flex size-10 items-center justify-center rounded-full bg-primary/10">
-                  {review.user.image ? (
+                  {review.user?.image ? (
                     <Image
                       src={review.user.image}
                       alt={review.user.name}
@@ -75,7 +75,7 @@ export function ProductReviews({ reviews }: ProductReviewsProps) {
                 </div>
                 <div>
                   <p className="text-sm font-semibold text-text-primary">
-                    {review.user.name}
+                    {review.user?.name ?? t("anonymous")}
                   </p>
                   <StarRating rating={review.rating} />
                 </div>

@@ -44,6 +44,7 @@ export interface HomeCategory {
 export interface ApiProduct {
   id: number;
   name: string;
+  slug?: string;
   price: number;
   current_price: number;
   price_after_discount: number;
