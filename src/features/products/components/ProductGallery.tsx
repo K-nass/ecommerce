@@ -122,7 +122,6 @@ export function ProductGallery({ images, thumbnail, productName, compact }: Prod
               fill
               sizes="90vw"
               className="object-contain p-4"
-              priority
             />
           </div>
 

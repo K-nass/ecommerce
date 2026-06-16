@@ -19,8 +19,8 @@ export default function Logo({
       <Image
         src={src}
         alt={alt}
-        width={128}
-        height={128}
+        width={120}
+        height={52}
         priority={priority}
         className={className}
       />

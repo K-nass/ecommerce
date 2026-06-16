@@ -12,6 +12,7 @@ export default function ContentItem({ item, isCircle }: ContentItemProps) {
   const commonImageProps = {
     alt: item.name,
     className: "object-contain",
+    sizes: "135px",
   };
   const {
     props: { srcSet: desktopSrcSet },
