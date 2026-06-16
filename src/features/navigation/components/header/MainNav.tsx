@@ -47,7 +47,7 @@ export default function MainNav() {
   return (
     <div className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 md:gap-6">
       <div className="flex items-center gap-2 md:gap-3 shrink-0">
-        <Logo src="/headerLogo.png" alt="Carrefour" priority />
+        <Logo src="/meem-logo.png" alt="Carrefour" priority />
 
         <button
           type="button"

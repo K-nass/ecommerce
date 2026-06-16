@@ -1,4 +1,5 @@
 import "../globals.css";
+import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { NextIntlClientProvider } from "next-intl";
 import { routing } from "@/i18n/routing";
@@ -19,6 +20,20 @@ const montserrat = Montserrat({
   subsets: ["latin"],
   variable: "--font-montserrat",
 });
+
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
+  const { locale } = await params;
+
+  return {
+    title: {
+      default: locale === "ar" ? "ميم ماركت" : "Meem Market",
+      template: "%s",
+    },
+    icons: {
+      icon: "/meem-icon.jpeg",
+    },
+  };
+}
 
 export default async function RootLayout({
   children,

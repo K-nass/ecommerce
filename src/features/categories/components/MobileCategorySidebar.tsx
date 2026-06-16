@@ -75,13 +75,15 @@ export default function MobileCategorySidebar({
                 )}
               >
                 <div className="relative rounded-full overflow-hidden w-full h-full flex items-end justify-center">
-                  <Image
-                    src={subcat.image.mobile || subcat.image.desktop || ""}
-                    alt={subcat.name}
-                    width={48}
-                    height={48}
-                    className="object-contain"
-                  />
+                  {subcat.image?.mobile || subcat.image?.desktop ? (
+                    <Image
+                      src={subcat.image.mobile || subcat.image.desktop}
+                      alt={subcat.name}
+                      width={48}
+                      height={48}
+                      className="object-contain"
+                    />
+                  ) : null}
                 </div>
               </div>
               <span
