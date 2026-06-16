@@ -123,5 +123,22 @@
     "returnsDesc": "إرجاع مجاني خلال 14 يوم",
     "relatedProducts": "منتجات ذات صلة",
     "anonymous": "مجهول"
+  },
+
+  "error": {
+    "genericTitle": "حدث خطأ ما",
+    "retry": "حاول مرة أخرى",
+    "goHome": "العودة للرئيسية",
+    "startShopping": "تسوق الآن",
+    "browseProducts": "تصفح المنتجات",
+    "signIn": "تسجيل الدخول",
+    "sessionExpired": "انتهت الجلسة",
+    "sessionExpiredDesc": "يرجى تسجيل الدخول للمتابعة.",
+    "productErrorTitle": "المنتج غير متاح",
+    "productErrorDesc": "تعذر تحميل هذا المنتج. قد يكون قد تم إزالته أو غير متاح مؤقتًا.",
+    "categoryErrorTitle": "القسم غير متاح",
+    "categoryErrorDesc": "تعذر تحميل هذا القسم. يرجى المحاولة مرة أخرى.",
+    "cartErrorTitle": "السلة غير متاحة",
+    "authErrorTitle": "خدمة المصادقة غير متاحة"
   }
 }

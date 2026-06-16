@@ -43,6 +43,7 @@ export async function getCategoryPageData(
       headers: {
         "lang": locale,
       },
+      next: { revalidate: 60 },
     },
   );
 

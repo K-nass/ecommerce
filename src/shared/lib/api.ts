@@ -1,11 +1,13 @@
 import { AUTH_TOKEN_STORAGE_KEY } from "@/shared/constants/storageKeys";
 
 export class ApiError extends Error {
+  status: number;
   fields: Record<string, string[]>;
 
-  constructor(message: string, fields: Record<string, string[]> = {}) {
+  constructor(message: string, status: number = 500, fields: Record<string, string[]> = {}) {
     super(message);
     this.name = "ApiError";
+    this.status = status;
     this.fields = fields;
   }
 }
@@ -51,7 +53,7 @@ function extractApiErrors(body: Record<string, unknown>): Record<string, string[
 
 export async function apiFetch<T>(
   endpoint: string,
-  options: RequestInit = {},
+  options: RequestInit & { next?: { revalidate?: false | 0 | number; tags?: string[] } } = {},
 ): Promise<T> {
   if (!BASE_URL) {
     throw new Error("Missing NEXT_PUBLIC_API_URL environment variable.");
@@ -121,7 +123,7 @@ export async function apiFetch<T>(
 
     const apiErrors = extractApiErrors(parsedBody);
     if (apiErrors) {
-      throw new ApiError(errorMessage, apiErrors);
+      throw new ApiError(errorMessage, response.status, apiErrors);
     }
 
     if (!apiMessage) {
@@ -138,5 +140,5 @@ export async function apiFetch<T>(
     });
   }
 
-  throw new ApiError(errorMessage);
+  throw new ApiError(errorMessage, response.status);
 }

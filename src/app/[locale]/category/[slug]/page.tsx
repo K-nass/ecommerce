@@ -18,8 +18,8 @@ export default async function Page({
 }) {
   const { locale, slug } = await params;
   const resolvedSearchParams = await searchParams;
-  const t = await getTranslations("header.breadcrumb");
-  const tf = await getTranslations("header.filters");
+  const t = await getTranslations({ locale, namespace: "header.breadcrumb" });
+  const tf = await getTranslations({ locale, namespace: "header.filters" });
   const categories = await categoryMenuService.getMenu(locale);
 
   const categoryPath = findCategoryPath(categories, decodeURIComponent(slug));

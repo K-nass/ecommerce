@@ -124,5 +124,22 @@
     "returnsDesc": "14-day hassle-free returns",
     "relatedProducts": "Related Products",
     "anonymous": "Anonymous"
+  },
+
+  "error": {
+    "genericTitle": "Something went wrong",
+    "retry": "Try again",
+    "goHome": "Go home",
+    "startShopping": "Start shopping",
+    "browseProducts": "Browse products",
+    "signIn": "Sign in",
+    "sessionExpired": "Session expired",
+    "sessionExpiredDesc": "Please sign in to continue.",
+    "productErrorTitle": "Product unavailable",
+    "productErrorDesc": "This product could not be loaded. It may have been removed or is temporarily unavailable.",
+    "categoryErrorTitle": "Category unavailable",
+    "categoryErrorDesc": "This category could not be loaded. Please try again.",
+    "cartErrorTitle": "Cart unavailable",
+    "authErrorTitle": "Authentication service unavailable"
   }
 }

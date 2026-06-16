@@ -9,7 +9,10 @@ export const productService = {
   },
 
   getProductBySlug: async (slug: string): Promise<ProductDetail> => {
-    const response = await apiFetch<ApiResponse<ProductDetail>>(`/general/products/${encodeURIComponent(slug)}`);
+    const response = await apiFetch<ApiResponse<ProductDetail>>(
+      `/general/products/${encodeURIComponent(slug)}`,
+      { next: { revalidate: 60 } },
+    );
     return response.data;
   },
 };

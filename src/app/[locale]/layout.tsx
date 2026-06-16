@@ -2,6 +2,7 @@ import "../globals.css";
 import type { ReactNode } from "react";
 import { NextIntlClientProvider } from "next-intl";
 import { routing } from "@/i18n/routing";
+import { setRequestLocale } from "next-intl/server"; 
 import Header from "@/features/navigation/components/header/Header";
 import Footer from "@/features/navigation/components/footer/Footer";
 import { AuthModal } from "@/features/auth/components/AuthModal";
@@ -27,7 +28,11 @@ export default async function RootLayout({
   params: Promise<{ locale: string }>;
 }>) {
   const { locale } = await params;
+  
+  setRequestLocale(locale);
+  
   const dir = locale === "ar" ? "rtl" : "ltr";
+  
   return (
     <html lang={locale} dir={dir}>
       <body className={cn("flex flex-col", montserrat.variable)}>
