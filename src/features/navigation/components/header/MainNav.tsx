@@ -38,7 +38,7 @@ export default function MainNav() {
   const locale = useLocale();
 
   const otherLocale = locale === "en" ? "ar" : "en";
-  const localeLabel = locale === "en" ? "EN" : "AR";
+  const localeLabel = locale === "en" ? "AR" : "EN";
 
   const switchLocale = () => {
     router.replace(pathname, { locale: otherLocale });
@@ -81,6 +81,7 @@ export default function MainNav() {
             isScrolled && "opacity-0 invisible w-0 overflow-hidden",
           )}
         >
+          <span>{localeLabel}</span>
         </button>
 
         <div className={cn(
