@@ -33,7 +33,7 @@ export default async function Footer({ params }: FooterProps) {
         {/* ── Mobile Accordion ── */}
         <div className="lg:hidden">
           <div className="border-b border-white pb-4">
-              <Logo src="/footerLogo.png" alt="Kareem Shop" />
+              <Logo src="/Meem-logox-white.png" alt="Kareem Shop" />
             <p className="mt-4 text-xs leading-normal font-normal text-white">{data.contactInfo.stayInTouchText}</p>
             <div className="mt-2 flex">
               {data.socialLinks.map((s) => (
@@ -72,7 +72,7 @@ export default async function Footer({ params }: FooterProps) {
         <div className="hidden lg:block">
           <div className="grid grid-cols-5 gap-4">
             <div>
-              <Logo src="/footerLogo.png" alt="Kareem Shop" />
+              <Logo src="/Meem-logox-white.png" alt="Kareem Shop" />
               <p className="mt-4 text-xs leading-normal font-normal text-white">{data.contactInfo.stayInTouchText}</p>
               <div className="mt-2 flex">
                 {data.socialLinks.map((s) => (

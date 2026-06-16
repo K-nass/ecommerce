@@ -105,13 +105,15 @@ export default function CategorySlider({
                   )}
                 >
                   <div className="relative rounded-full overflow-hidden">
-                    <Image
-                      src={subcat.image.desktop || subcat.image.mobile || ""}
-                      alt={subcat.name}
-                      width={60}
-                      height={60}
-                      className="object-contain"
-                    />
+                    {subcat.image?.desktop || subcat.image?.mobile ? (
+                      <Image
+                        src={subcat.image.desktop || subcat.image.mobile}
+                        alt={subcat.name}
+                        width={60}
+                        height={60}
+                        className="object-contain"
+                      />
+                    ) : null}
                   </div>
                 </div>
                 <span
