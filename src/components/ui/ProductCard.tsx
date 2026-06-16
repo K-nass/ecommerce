@@ -84,7 +84,6 @@ export default function ProductCard({
             className="object-contain"
             src={image}
             fill
-            sizes="(max-width: 768px) 50vw, 12.5vw"
             alt={title}
           />
         </Link>

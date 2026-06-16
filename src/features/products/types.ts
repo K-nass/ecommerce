@@ -27,7 +27,7 @@ export interface ProductReview {
   id: number;
   rating: number;
   comment: string;
-  user: ProductReviewUser;
+  user: ProductReviewUser | null;
   images: string[];
 }
 
@@ -39,6 +39,7 @@ export interface ProductImages {
 export interface RelatedProduct {
   id: number;
   name: string;
+  slug?: string;
   price: number;
   current_price: number;
   price_after_discount: number | null;

@@ -4,6 +4,11 @@ import { cn } from "@/shared/utils/cn";
 import type { ContentItemProps } from "../../types";
 
 export default function ContentItem({ item, isCircle }: ContentItemProps) {
+  const desktopSrc = item.image.desktop;
+  const mobileSrc = item.image.mobile || desktopSrc;
+
+  const hasImage = Boolean(desktopSrc || mobileSrc);
+
   const commonImageProps = {
     alt: item.name,
     className: "object-contain",
@@ -12,13 +17,13 @@ export default function ContentItem({ item, isCircle }: ContentItemProps) {
     props: { srcSet: desktopSrcSet },
   } = getImageProps({
     ...commonImageProps,
-    src: item.image.desktop || "",
+    src: desktopSrc || mobileSrc,
     width: 135,
     height: 135,
   });
   const { props: mobileImageProps } = getImageProps({
     ...commonImageProps,
-    src: item.image.mobile || item.image.desktop || "",
+    src: mobileSrc,
     width: 135,
     height: 135,
   });
@@ -34,10 +39,12 @@ export default function ContentItem({ item, isCircle }: ContentItemProps) {
           isCircle && "rounded-full aspect-square",
         )}
       >
-        <picture className="flex items-center justify-center">
-          <source media="(min-width: 640px)" srcSet={desktopSrcSet} />
-          <img {...mobileImageProps} alt={item.name} />
-        </picture>
+        {hasImage && (
+          <picture className="flex items-center justify-center">
+            <source media="(min-width: 640px)" srcSet={desktopSrcSet} />
+            <img {...mobileImageProps} alt={item.name} />
+          </picture>
+        )}
       </div>
       <div className="w-full text-center flex-1 flex items-center justify-center">
         <p className="text-md font-bold line-clamp-2 leading-tight text-primary">
