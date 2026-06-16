@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import Breadcrumb from "@/components/ui/Breadcrumb";
 import { productService } from "@/features/products/services/productService";
+import { ApiError } from "@/shared/lib/api";
 import { getDisplayPrice, getOriginalPrice } from "../utils";
 import { ProductPageContent } from "./ProductPageContent";
 import ProductSlider from "@/features/home/productSlider/ProductSlider";
@@ -17,8 +18,11 @@ export async function ProductDetailsPage({ slug, locale }: ProductDetailsPagePro
   let product;
   try {
     product = await productService.getProductBySlug(slug);
-  } catch {
-    notFound();
+  } catch (err) {
+    if (err instanceof ApiError && err.status === 404) {
+      notFound();
+    }
+    throw err;
   }
 
   const mappedRelated = product.related_products.map((rp) => ({

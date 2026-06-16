@@ -6,7 +6,8 @@ import type { HomeContentPage } from "../types";
 export const homePageService = {
   getHomePage: async (): Promise<HomeContentPage> => {
     const response = await apiFetch<ApiResponse<HomeContentPage>>(
-      "/general/content-pages/home"
+      "/general/content-pages/home",
+      { next: { revalidate: 60 } },
     );
     return response.data;
   },
