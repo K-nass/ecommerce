@@ -10,7 +10,14 @@ export default async function ContentSection({
   endpoint,
 }: ContentSectionProps) {
   if (!endpoint) return null;
-  const categories = await homePageService.fetchSectionData<HomeCategory[]>(endpoint);
+
+  let categories: HomeCategory[] = [];
+  try {
+    categories = await homePageService.fetchSectionData<HomeCategory[]>(endpoint);
+  } catch (error) {
+    console.error("[ContentSection] Failed to fetch categories:", error);
+    return null;
+  }
 
   if (!categories || categories.length === 0) {
     return null;

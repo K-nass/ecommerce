@@ -8,22 +8,27 @@ interface ProductSliderSectionProps {
   type: string;
   setting?: SectionFrontSetting;
   endpoint?: string;
-  queryParams?: string;
 }
 
 export default async function ProductSliderSection({
   title,
-  type,
   setting,
-  queryParams,
+  endpoint,
 }: ProductSliderSectionProps) {
-  let products: ApiProduct[];
+  if (!endpoint) return null;
 
-  if (queryParams) {
-    products = await homePageService.getProducts(queryParams);
-  } else {
-    products = await homePageService.getProductsBySectionType(type);
+  let response: ApiProduct[] | { data: ApiProduct[] } | null = null;
+  try {
+    response = await homePageService.fetchSectionData<ApiProduct[] | { data: ApiProduct[] }>(endpoint);
+  } catch (error) {
+    console.error("[ProductSliderSection] Failed to fetch products:", error);
+    return null;
   }
+
+  // The products endpoint returns a paginated object { data: [...] }, not a flat array.
+  const products = response && !Array.isArray(response) && 'data' in response 
+    ? response.data 
+    : response;
 
   if (!Array.isArray(products) || products.length === 0) {
     return null;
