@@ -2,6 +2,7 @@
 
 import { useState, useCallback } from "react";
 import Image from "next/image";
+import { Link } from "@/i18n/navigation";
 import { Trash2, Plus, Minus } from "lucide-react";
 import { cn } from "@/shared/utils/cn";
 import { useCartActions } from "@/features/cart/hooks/useCartActions";
@@ -71,20 +72,22 @@ export default function ProductCard({
     : ".00";
 
   return (
-    <div className="max-w-42.5">
-      <div className="relative  w-fit p-2 border-2 border-border-subtle rounded-2xl">
+    <div className="w-full">
+      <div className="relative w-full aspect-square p-2 border-2 border-border-subtle rounded-2xl">
         {discountPercent && discountPercent > 0 ? (
           <div className="absolute top-0 left-0 bg-discount text-white font-bold text-xs px-2.5 py-1 z-10 rounded-br-[16px] rounded-tl-[14px]">
             {discountPercent}% OFF
           </div>
         ) : null}
-        <Image
-          className="object-contain"
-          src={image}
-          width={150}
-          height={150}
-          alt={title}
-        />
+        <Link href={`/products/${slug}`} className="block w-full h-full relative">
+          <Image
+            className="object-contain"
+            src={image}
+            fill
+            sizes="(max-width: 768px) 50vw, 12.5vw"
+            alt={title}
+          />
+        </Link>
 
         {quantity === 0 ? (
           <button
@@ -130,9 +133,11 @@ export default function ProductCard({
         )}
       </div>
       <div>
-        <p className="text-sm leading-4 font-medium line-clamp-2 text-left md:text-md">
-          {title}
-        </p>
+        <Link href={`/products/${slug}`}>
+          <p className="text-sm leading-4 font-medium line-clamp-2 text-left md:text-md hover:text-primary transition-colors cursor-pointer">
+            {title}
+          </p>
+        </Link>
       </div>
       <div className="flex items-center gap-1">
         <div className="flex mt-1">
