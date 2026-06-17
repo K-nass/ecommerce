@@ -7,8 +7,13 @@ import type {
   SubCategory,
 } from "../types";
 
+interface RawFilterDisplay {
+  ar: string;
+  en: string;
+}
+
 interface RawFilter {
-  display: string;
+  display: string | RawFilterDisplay;
   key: string;
   data: string[];
 }
@@ -55,7 +60,10 @@ export async function getCategoryPageData(
     for (const f of rawFilters) {
       if (f.key && Array.isArray(f.data)) {
         (filters as Record<string, string[]>)[f.key] = f.data;
-        filterLabels[f.key] = f.display;
+        filterLabels[f.key] =
+          typeof f.display === "string"
+            ? f.display
+            : f.display.en ?? f.display.ar ?? f.key;
       }
     }
   }

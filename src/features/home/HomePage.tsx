@@ -47,13 +47,8 @@ async function SectionRenderer({ section }: { section: HomePageSection }) {
 
 export async function HomePage() {
   const locale = await getLocale();
-  let sections: HomePageSection[] = [];
-  try {
-    const page = await homePageService.getHomePage(locale);
-    sections = page.sections;
-  } catch (error) {
-    console.error("[HomePage] Failed to fetch sections:", error);
-  }
+  const page = await homePageService.getHomePage(locale);
+  const sections = page.sections;
 
   return (
     <main className="flex flex-col gap-y-5">
