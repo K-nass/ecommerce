@@ -4,7 +4,7 @@ import Banner from "../banner/Banner";
 import ProductSlider from "../../productSlider/ProductSlider";
 import { homePageService } from "../../services/homePageService";
 import { toProductItem } from "../../utils";
-import type { SectionFrontSetting, ApiBrandWithProducts } from "../../types";
+import type { SectionFrontSetting, ApiBrandWithProducts, ApiProduct } from "../../types";
 
 interface BrandProductsSectionProps {
   type: string;
@@ -22,17 +22,34 @@ export default async function BrandProductsSection({
   if (!endpoint) return null;
   const locale = await getLocale();
 
-  let brands;
+  let brands: ApiBrandWithProducts[];
   try {
-    brands = await homePageService.fetchSectionData<ApiBrandWithProducts[]>(endpoint, locale);
+    if (type === "banners") {
+      const banner = await homePageService.fetchSectionData<{
+        id: number;
+        title: string;
+        slug: string;
+        image: { desktop: string; mobile: string };
+        status: boolean;
+        products: ApiProduct[];
+      }>(endpoint, locale);
+      brands = [{
+        id: banner.id,
+        name: banner.title,
+        slug: banner.slug,
+        image: banner.image,
+        status: banner.status,
+        products: banner.products ?? [],
+      }];
+    } else {
+      brands = await homePageService.fetchSectionData<ApiBrandWithProducts[]>(endpoint, locale);
+    }
   } catch (error) {
     console.error("[BrandProductsSection] Failed to fetch brands:", error);
     return null;
   }
 
-  if (!brands || brands.length === 0) {
-    return null;
-  }
+  if (!brands || brands.length === 0) return null;
 
   return (
     <div className="flex flex-col gap-y-8 pb-4">

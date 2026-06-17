@@ -10,14 +10,17 @@ import ContentSectionSkeleton from "./components/skeletons/ContentSectionSkeleto
 import ProductSliderSkeleton from "./components/skeletons/ProductSliderSkeleton";
 import { homePageService } from "./services/homePageService";
 import type { HomePageSection } from "./types";
+import BrandProductsSection from "./components/brandProducts/BrandProductsSection";
+import BrandProductsSectionSkeleton from "./components/skeletons/BrandProductsSectionSkeleton";
 
 const sectionRegistry = {
-  banners: { Component: HeroSwiper, Fallback: HeroSwiperSkeleton },
+  sliders: { Component: HeroSwiper, Fallback: HeroSwiperSkeleton },
   promotions: { Component: FlashSalesSection, Fallback: FlashSalesSkeleton },
   "flash-sales": { Component: FlashSalesSection, Fallback: FlashSalesSkeleton },
   coupons: { Component: FlashSalesSection, Fallback: FlashSalesSkeleton },
   categories: { Component: ContentSection, Fallback: ContentSectionSkeleton },
   products: { Component: ProductSliderSection, Fallback: ProductSliderSkeleton },
+  banners: { Component: BrandProductsSection, Fallback: BrandProductsSectionSkeleton },
 } as const;
 
 type SectionType = keyof typeof sectionRegistry;
