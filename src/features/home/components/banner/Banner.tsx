@@ -1,5 +1,6 @@
 import { getImageProps } from "next/image";
 import { getLocale } from "next-intl/server";
+import { Link } from "@/i18n/navigation";
 
 import SectionTitle from "@/components/ui/SectionTitle";
 import { homePageService } from "../../services/homePageService";
@@ -43,10 +44,19 @@ export default async function Banner({ type, title, promotion: initialPromotion,
     <section className="flex flex-col gap-y-3">
       {title ? <SectionTitle title={title} /> : null}
       <article className="relative h-42.5 w-full overflow-hidden rounded-sm bg-surface sm:h-57.5 lg:h-75">
-        <picture className="block h-full w-full">
-          <source media="(min-width: 640px)" srcSet={desktopSrcSet} />
-          <img {...mobileImageProps} alt={promotion.name} />
-        </picture>
+        {promotion.slug ? (
+          <Link href={`/category/${promotion.slug}`} className="block h-full w-full">
+            <picture className="block h-full w-full">
+              <source media="(min-width: 640px)" srcSet={desktopSrcSet} />
+              <img {...mobileImageProps} alt={promotion.name} />
+            </picture>
+          </Link>
+        ) : (
+          <picture className="block h-full w-full">
+            <source media="(min-width: 640px)" srcSet={desktopSrcSet} />
+            <img {...mobileImageProps} alt={promotion.name} />
+          </picture>
+        )}
       </article>
     </section>
   );

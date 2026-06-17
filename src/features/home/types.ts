@@ -15,6 +15,7 @@ export interface CardSlideItem {
   };
   title: string;
   borderColor?: string;
+  href?: string;
 }
 
 export interface ApiFlashSale {
@@ -204,6 +205,7 @@ export interface PromotionImage {
 export interface Promotion {
   id: number;
   name: string;
+  slug?: string;
   status: boolean;
   image: PromotionImage;
 }

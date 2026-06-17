@@ -22,13 +22,14 @@ export async function getCategoryPageData(
   slug: string,
   locale: string,
   searchParams?: Record<string, string | string[] | undefined>,
+  filterKey?: "category" | "banner" | "promotion",
 ): Promise<{
   products: CategoryProduct[];
   filters: CategoryFilters;
   filterLabels: Record<string, string>;
 }> {
   const params = new URLSearchParams();
-  params.append("category", slug);
+  params.append(filterKey ?? "category", slug);
 
   if (searchParams) {
     Object.entries(searchParams).forEach(([key, value]) => {

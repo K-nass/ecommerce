@@ -1,3 +1,4 @@
+import { Link } from "@/i18n/navigation";
 import { cn } from "@/shared/utils/cn";
 import { getImageProps } from "next/image";
 import type { CardSlideItem } from "../../types";
@@ -30,13 +31,20 @@ export default function Slide({
     props: { srcSet: desktopSrcSet },
   } = getImageProps({
     ...commonImageProps,
-    src: slide.image.desktop || "",
+    src: slide.image?.desktop || "",
   });
 
   const { props: mobileImageProps } = getImageProps({
     ...commonImageProps,
-    src: slide.image.mobile || slide.image.desktop || "",
+    src: slide.image?.mobile || slide.image?.desktop || "",
   });
+
+  const picture = (
+    <picture className="block h-full w-full">
+      <source media="(min-width: 640px)" srcSet={desktopSrcSet} />
+      <img {...mobileImageProps} alt={slide.title} />
+    </picture>
+  );
 
   return (
     <div
@@ -47,10 +55,13 @@ export default function Slide({
         hasBorder && (slide.borderColor || "border-primary-dark"),
       )}
     >
-      <picture className="block h-full w-full">
-        <source media="(min-width: 640px)" srcSet={desktopSrcSet} />
-        <img {...mobileImageProps} alt={slide.title} />
-      </picture>
+      {slide.href ? (
+        <Link href={slide.href} className="block h-full w-full">
+          {picture}
+        </Link>
+      ) : (
+        picture
+      )}
     </div>
   );
 }

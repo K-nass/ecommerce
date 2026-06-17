@@ -32,18 +32,21 @@ export default async function FlashSalesSection({
         borderColor: coupon.borderColor,
       }));
     } else if (type === "promotions") {
-      const promo = await homePageService.fetchSectionData<Promotion>(endpoint, locale);
-      items = [{
-        id: promo.id,
-        title: promo.name,
-        image: promo.image,
-      }];
+      const promo = await homePageService.fetchSectionData<Promotion | Promotion[]>(endpoint, locale);
+      const promoList = Array.isArray(promo) ? promo : [promo];
+      items = promoList.map((p) => ({
+        id: p.id,
+        title: p.name,
+        image: p.image,
+        href: p.slug ? `/category/${p.slug}` : undefined,
+      }));
     } else if (type === "brands") {
       const itemsData = await homePageService.fetchSectionData<Promotion[]>(endpoint, locale);
       items = itemsData.map((item) => ({
         id: item.id,
         title: item.name,
         image: item.image,
+        href: item.slug ? `/category/${item.slug}` : undefined,
       }));
     } else {
       // flash-sales

@@ -22,20 +22,54 @@ export default async function Page({
   const tf = await getTranslations({ locale, namespace: "header.filters" });
   const categories = await categoryMenuService.getMenu(locale);
 
-  const categoryPath = findCategoryPath(categories, decodeURIComponent(slug));
+  const decodedSlug = decodeURIComponent(slug);
+  const categoryPath = findCategoryPath(categories, decodedSlug);
 
+  // banner/promotion page — slug is not a category
   if (!categoryPath) {
-    notFound();
+    // Try banner first, then promotion
+    let result = await getCategoryPageData(decodedSlug, locale, resolvedSearchParams, "banner");
+    if (result.products.length === 0) {
+      result = await getCategoryPageData(decodedSlug, locale, resolvedSearchParams, "promotion");
+    }
+    if (result.products.length === 0) {
+      notFound();
+    }
+    const { products, filters, filterLabels } = result;
+
+    return (
+      <div className="w-full">
+        <Breadcrumb
+          items={[
+            { label: t("home"), href: "/" },
+            { label: decodedSlug },
+          ]}
+        />
+        <div className="flex gap-5 max-[991px]:gap-0 items-stretch">
+          <div className="max-[991px]:hidden block">
+            <ProductsSidebar
+              filters={filters}
+              filterLabels={filterLabels}
+              seeMoreText={tf("seeMore")}
+              seeLessText={tf("seeLess")}
+            />
+          </div>
+          <div className="flex-1 max-[991px]:p-3">
+            <CategoryProducts products={products} />
+          </div>
+        </div>
+      </div>
+    );
   }
 
-  const { products, filters, filterLabels } = await getCategoryPageData(slug, locale, resolvedSearchParams);
+  const { products, filters, filterLabels } = await getCategoryPageData(decodedSlug, locale, resolvedSearchParams);
 
   const parentCategory = categoryPath.length > 1 
     ? categoryPath[categoryPath.length - 2] 
     : categoryPath[0];
     
   const sliderCategories = parentCategory?.children || [];
-  const sliderParentSlug = parentCategory?.slug || slug;
+  const sliderParentSlug = parentCategory?.slug || decodedSlug;
 
   const breadcrumbItems = [
     { label: t("home"), href: "/" },
@@ -65,7 +99,7 @@ export default async function Page({
         <div className="hidden max-[991px]:flex shrink-0 -ms-4 self-stretch">
           <MobileCategorySidebar
             subCategories={sliderCategories}
-            currentSlug={slug}
+            currentSlug={decodedSlug}
             parentSlug={sliderParentSlug}
           />
         </div>
@@ -75,7 +109,7 @@ export default async function Page({
           <div className="max-[991px]:hidden block">
             <CategorySlider
               subCategories={sliderCategories}
-              currentSlug={slug}
+              currentSlug={decodedSlug}
               parentSlug={sliderParentSlug}
             />
           </div>
