@@ -31,7 +31,14 @@ export default async function FlashSalesSection({
         image: coupon.image,
         borderColor: coupon.borderColor,
       }));
-    } else if (type === "promotions" || type === "brands") {
+    } else if (type === "promotions") {
+      const promo = await homePageService.fetchSectionData<Promotion>(endpoint, locale);
+      items = [{
+        id: promo.id,
+        title: promo.name,
+        image: promo.image,
+      }];
+    } else if (type === "brands") {
       const itemsData = await homePageService.fetchSectionData<Promotion[]>(endpoint, locale);
       items = itemsData.map((item) => ({
         id: item.id,

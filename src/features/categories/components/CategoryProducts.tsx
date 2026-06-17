@@ -35,6 +35,7 @@ export default function CategoryProducts({
             price={product.current_price}
             originalPrice={product.price}
             discountPercent={discountPercent}
+            slug={product.slug}
           />
         );
       })}
