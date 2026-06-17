@@ -61,8 +61,8 @@ export function CartSection({
   const milestonePos = (minimumOrderAmount / freeShippingThreshold) * 100;
   const milestones = [
     { label: "Start", sub: null, pos: 0, Icon: Star },
-    { label: minimumOrderAmount + " EGP", sub: "Minimum", pos: milestonePos, Icon: ShoppingCart },
-    { label: freeShippingThreshold + " EGP", sub: "Free Shipping", pos: 100, Icon: DeliveryIcon },
+    { label: minimumOrderAmount + " K.D", sub: "Minimum", pos: milestonePos, Icon: ShoppingCart },
+    { label: freeShippingThreshold + " K.D", sub: "Free Shipping", pos: 100, Icon: DeliveryIcon },
   ];
 
   return (

@@ -47,7 +47,7 @@ export function CartSummary({
                   {l.label} <span className="text-xs text-text-secondary">({l.qty} {t("cartItems", { count: l.qty })})</span>
                 </span>
               </div>
-              <span className="text-sm font-semibold tabular-nums text-text-primary">{l.sub.toFixed(2)} EGP</span>
+              <span className="text-sm font-semibold tabular-nums text-text-primary">{l.sub.toFixed(2)} K.D</span>
             </div>
           ) : null,
         )}
@@ -56,7 +56,7 @@ export function CartSummary({
       <div className="border-t border-border pt-3 space-y-1">
         <div className="flex items-center justify-between">
           <span className="text-xs font-medium uppercase tracking-wider text-text-secondary">Total</span>
-          <span className="text-lg font-bold tabular-nums text-text-primary">{total.toFixed(2)} EGP</span>
+          <span className="text-lg font-bold tabular-nums text-text-primary">{total.toFixed(2)} K.D</span>
         </div>
         <p className="text-[11px] text-text-secondary text-right">
           ({totalItems} {t("cartItems", { count: totalItems })})

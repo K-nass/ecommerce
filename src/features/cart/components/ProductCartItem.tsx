@@ -75,7 +75,7 @@ export function ProductCartItem({
                 </span>
                 <div className="flex flex-col">
                   <span className="text-[10px] leading-3 font-medium text-gray-500 line-through">{origDec}</span>
-                  <span className="text-[8px] leading-3 font-medium text-gray-500 line-through">EGP</span>
+                  <span className="text-[8px] leading-3 font-medium text-gray-500 line-through">K.D</span>
                 </div>
               </div>
             )}
@@ -83,7 +83,7 @@ export function ProductCartItem({
               <span className="text-base leading-5 font-bold">{intPart}</span>
               <div className="flex flex-col">
                 <span className="text-sm font-bold leading-3">{decPart}</span>
-                <span className="text-[10px] font-medium leading-3">EGP</span>
+                <span className="text-[10px] font-medium leading-3">K.D</span>
               </div>
             </div>
             {hasDiscount && (
@@ -132,7 +132,7 @@ export function ProductCartItem({
             </div>
           )}
           <span className="text-xs font-semibold tabular-nums text-text-secondary">
-            {lineTotal.toFixed(2)} EGP
+            {lineTotal.toFixed(2)} K.D
           </span>
         </div>
       </div>
