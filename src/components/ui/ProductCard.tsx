@@ -28,7 +28,7 @@ export default function ProductCard({
   title,
   price,
   originalPrice,
-  currency = "EGP",
+  currency = "K.D",
   discountPercent,
   productId,
   slug = "",
