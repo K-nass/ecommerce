@@ -77,6 +77,7 @@ export interface ProductItem {
 export interface BannerProps {
   type?: string;
   title?: string;
+  locale: string;
   promotion?: Promotion;
   setting?: SectionFrontSetting;
   endpoint?: string;
@@ -125,6 +126,7 @@ export interface CardGridProps {
 export interface ContentSectionProps {
   title: string;
   type: string;
+  locale: string;
   setting?: SectionFrontSetting;
   endpoint?: string;
 }
@@ -193,6 +195,7 @@ export interface HeroBanner {
 
 export interface HeroSwiperProps {
   type: string;
+  locale: string;
   setting?: SectionFrontSetting;
   endpoint?: string;
 }

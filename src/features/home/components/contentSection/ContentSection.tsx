@@ -1,4 +1,3 @@
-import { getLocale } from "next-intl/server";
 import SectionTitle from "@/components/ui/SectionTitle";
 import { homePageService } from "../../services/homePageService";
 import ContentItem from "./ContentItem";
@@ -7,11 +6,11 @@ import type { ContentSectionProps, HomeCategory } from "../../types";
 export default async function ContentSection({
   title,
   type,
+  locale,
   setting,
   endpoint,
 }: ContentSectionProps) {
   if (!endpoint) return null;
-  const locale = await getLocale();
 
   let categories: HomeCategory[] = [];
   try {

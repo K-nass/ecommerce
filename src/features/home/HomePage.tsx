@@ -1,6 +1,5 @@
 import { Suspense } from "react";
 import dynamic from "next/dynamic";
-import { getLocale } from "next-intl/server";
 import { homePageService } from "./services/homePageService";
 import type { HomePageSection } from "./types";
 import HeroSwiperSkeleton from "./components/skeletons/HeroSwiperSkeleton";
@@ -33,41 +32,45 @@ const BrandProductsSection = dynamic(
   { loading: () => <BrandProductsSectionSkeleton /> }
 );
 
-const sectionComponentMap: Record<string, React.ComponentType<any>> = {
-  sliders: HeroSwiper,
-  promotions: FlashSalesSection,
-  "flash-sales": FlashSalesSection,
-  coupons: FlashSalesSection,
-  categories: ContentSection,
-  products: ProductSliderSection,
-  banners: BrandProductsSection,
-};
 
-async function SectionRenderer({ section }: { section: HomePageSection }) {
-  const Component = sectionComponentMap[section.type];
-  if (!Component) {
-    console.warn(`[HomePage] Unknown section type: ${section.type}`);
-    return null;
+
+async function SectionRenderer({
+  section,
+  locale,
+}: {
+  section: HomePageSection;
+  locale: string;
+}) {
+  const { type, title, endpoint } = section;
+  const setting = section.setting?.front;
+
+  switch (type) {
+    case "sliders":
+      return <HeroSwiper type={type} locale={locale} setting={setting} endpoint={endpoint} />;
+    case "promotions":
+    case "flash-sales":
+    case "coupons":
+      return <FlashSalesSection type={type} title={title} locale={locale} setting={setting} endpoint={endpoint} />;
+    case "categories":
+      return <ContentSection type={type} title={title} locale={locale} setting={setting} endpoint={endpoint} />;
+    case "products":
+      return <ProductSliderSection type={type} title={title} locale={locale} setting={setting} endpoint={endpoint} />;
+    case "banners":
+      return <BrandProductsSection type={type} title={title} locale={locale} setting={setting} endpoint={endpoint} />;
+    default:
+      console.warn(`[HomePage] Unknown section type: ${type}`);
+      return null;
   }
-  return (
-    <Component
-      type={section.type}
-      title={section.title}
-      setting={section.setting?.front}
-      endpoint={section.endpoint}
-    />
-  );
 }
 
-export async function HomePage() {
-  const locale = await getLocale();
+export async function HomePage({ locale }: { locale: string }) {
   const page = await homePageService.getHomePage(locale);
 
   return (
     <main className="flex flex-col gap-y-5">
       {page.sections.map((section) => (
         <Suspense key={section.id} fallback={null}>
-          <SectionRenderer section={section} />
+          <SectionRenderer section={section} locale={locale} />
         </Suspense>
       ))}
     </main>
