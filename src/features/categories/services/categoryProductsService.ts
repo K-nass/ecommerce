@@ -1,3 +1,4 @@
+import { cache } from "react";
 import { apiFetch } from "@/shared/lib/api";
 import type { ApiResponse } from "@/shared/types";
 import type {
@@ -75,3 +76,5 @@ export async function getCategoryPageData(
     filterLabels,
   };
 }
+
+export const getCachedCategoryPageData = cache(getCategoryPageData);
