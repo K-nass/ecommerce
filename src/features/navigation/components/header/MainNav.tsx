@@ -89,7 +89,7 @@ export default function MainNav() {
               onClick={() => openAuthModal()}
               className="inline-flex items-center text-sm font-semibold text-text-primary gap-1 transition hover:text-primary whitespace-nowrap"
             >
-              <Image src="/icons/user.svg" width={25} height={25} alt="user icon" priority />
+              <Image src="/icons/user.svg" width={25} height={25} alt="user icon" />
               <span className="hidden md:inline">{authLabel}</span>
               <span className="sr-only">{authLabel}</span>
             </button>

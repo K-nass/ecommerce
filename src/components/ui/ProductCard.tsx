@@ -21,6 +21,7 @@ interface ProductCardProps {
   sku?: string;
   inStock?: number;
   stockQuantity?: number;
+  priority?: boolean;
 }
 
 export default function ProductCard({
@@ -36,6 +37,7 @@ export default function ProductCard({
   inStock = 10,
   stockQuantity = 10,
   deliveryType = "scheduled",
+  priority: priorityProp,
 }: ProductCardProps) {
   const { quantity, isPending, addItem, increment, decrement } = useCartActions(productId);
   const [animating, setAnimating] = useState(false);
@@ -86,6 +88,7 @@ export default function ProductCard({
             fill
             sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
             alt={title}
+            priority={priorityProp}
           />
         </Link>
 

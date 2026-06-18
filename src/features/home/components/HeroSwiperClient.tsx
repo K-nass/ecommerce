@@ -40,12 +40,14 @@ function HeroBannerImage({
     src: banner.image.desktop,
     width: 1440,
     height: 300,
+    ...(isFirst ? { priority: true } : {}),
   });
   const { props: mobileImageProps } = getImageProps({
     ...commonImageProps,
     src: banner.image.mobile,
     width: 640,
     height: 170,
+    ...(isFirst ? { priority: true } : {}),
   });
 
   return (

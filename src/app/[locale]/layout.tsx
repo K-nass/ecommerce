@@ -51,6 +51,7 @@ export default async function RootLayout({
   return (
       <html lang={locale} dir={dir} className="overflow-x-hidden">
       <body className={cn("flex flex-col overflow-x-hidden", montserrat.variable)}>
+        <link rel="preconnect" href={process.env.NEXT_PUBLIC_API_URL} />
         <NextIntlClientProvider>
           <Header params={params} />
           <CartSyncProvider>

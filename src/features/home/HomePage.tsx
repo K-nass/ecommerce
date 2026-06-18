@@ -63,13 +63,23 @@ async function SectionRenderer({
   }
 }
 
+const sectionSkeletonMap: Record<string, React.ReactNode> = {
+  sliders: <HeroSwiperSkeleton />,
+  promotions: <FlashSalesSkeleton />,
+  "flash-sales": <FlashSalesSkeleton />,
+  coupons: <FlashSalesSkeleton />,
+  categories: <ContentSectionSkeleton />,
+  products: <ProductSliderSkeleton />,
+  banners: <BrandProductsSectionSkeleton />,
+};
+
 export async function HomePage({ locale }: { locale: string }) {
   const page = await homePageService.getHomePage(locale);
 
   return (
     <main className="flex flex-col gap-y-5">
       {page.sections.map((section) => (
-        <Suspense key={section.id} fallback={null}>
+        <Suspense key={section.id} fallback={sectionSkeletonMap[section.type] ?? null}>
           <SectionRenderer section={section} locale={locale} />
         </Suspense>
       ))}

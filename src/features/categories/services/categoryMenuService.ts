@@ -7,7 +7,7 @@ export const categoryMenuService = {
   getMenu: async (lang: string): Promise<CategoryMenuItem[]> => {
     const response = await apiFetch<ApiResponse<CategoryMenuItem[]>>(
       "/general/navbar",
-      { lang },
+      { lang, next: { revalidate: 300 } },
     );
     return response.data;
   },
