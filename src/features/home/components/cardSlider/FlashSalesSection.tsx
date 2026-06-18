@@ -1,4 +1,3 @@
-import { getLocale } from "next-intl/server";
 import CardSlider from "./CardSlider";
 import CardGrid from "../cardGrid/CardGrid";
 import { homePageService } from "../../services/homePageService";
@@ -7,6 +6,7 @@ import type { SectionFrontSetting, ApiFlashSale, ApiCoupon, Promotion, CardSlide
 interface FlashSalesSectionProps {
   title: string;
   type: string;
+  locale: string;
   setting?: SectionFrontSetting;
   endpoint?: string;
 }
@@ -14,11 +14,11 @@ interface FlashSalesSectionProps {
 export default async function FlashSalesSection({
   title,
   type,
+  locale,
   setting,
   endpoint,
 }: FlashSalesSectionProps) {
   if (!endpoint) return null;
-  const locale = await getLocale();
 
   let items: CardSlideItem[] = [];
 

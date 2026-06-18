@@ -1,4 +1,3 @@
-import { getLocale } from "next-intl/server";
 import SectionTitle from "@/components/ui/SectionTitle";
 import Banner from "../banner/Banner";
 import ProductSlider from "../../productSlider/ProductSlider";
@@ -9,6 +8,7 @@ import type { SectionFrontSetting, ApiBrandWithProducts, ApiProduct } from "../.
 interface BrandProductsSectionProps {
   type: string;
   title?: string;
+  locale: string;
   setting?: SectionFrontSetting;
   endpoint?: string;
 }
@@ -16,11 +16,11 @@ interface BrandProductsSectionProps {
 export default async function BrandProductsSection({
   type,
   title,
+  locale,
   setting,
   endpoint,
 }: BrandProductsSectionProps) {
   if (!endpoint) return null;
-  const locale = await getLocale();
 
   let brands: ApiBrandWithProducts[];
   try {
@@ -57,7 +57,7 @@ export default async function BrandProductsSection({
       <div className="flex flex-col gap-y-12">
         {brands.map((brand) => (
           <div key={brand.id} className="flex flex-col gap-y-4">
-            <Banner promotion={brand} />
+            <Banner promotion={brand} locale={locale} />
             {brand.products && brand.products.length > 0 && (
               <ProductSlider title={brand.name} items={brand.products.map(toProductItem)} columnsCount={setting?.columns_count} />
             )}

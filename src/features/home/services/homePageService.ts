@@ -13,7 +13,7 @@ export const homePageService = {
   },
 
   fetchSectionData: async <T>(endpoint: string, lang?: string): Promise<T> => {
-    const response = await apiFetch<ApiResponse<T>>(endpoint, { lang });
+    const response = await apiFetch<ApiResponse<T>>(endpoint, { next: { revalidate: 60 }, lang });
     return response.data;
   },
 };

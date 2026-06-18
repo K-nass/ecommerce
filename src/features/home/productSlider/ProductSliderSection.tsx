@@ -1,4 +1,3 @@
-import { getLocale } from "next-intl/server";
 import ProductSlider from "./ProductSlider";
 import { homePageService } from "../services/homePageService";
 import { toProductItem } from "../utils";
@@ -7,17 +6,18 @@ import type { SectionFrontSetting, ApiProduct } from "../types";
 interface ProductSliderSectionProps {
   title: string;
   type: string;
+  locale: string;
   setting?: SectionFrontSetting;
   endpoint?: string;
 }
 
 export default async function ProductSliderSection({
   title,
+  locale,
   setting,
   endpoint,
 }: ProductSliderSectionProps) {
   if (!endpoint) return null;
-  const locale = await getLocale();
 
   let response: ApiProduct[] | { data: ApiProduct[] } | null = null;
   try {

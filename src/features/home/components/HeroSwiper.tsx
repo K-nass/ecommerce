@@ -1,11 +1,9 @@
-import { getLocale } from "next-intl/server";
 import { homePageService } from "../services/homePageService";
 import HeroSwiperClient from "./HeroSwiperClient";
 import type { HeroBanner, HeroSwiperProps } from "../types";
 
-export default async function HeroSwiper({ endpoint }: HeroSwiperProps) {
+export default async function HeroSwiper({ endpoint, locale }: HeroSwiperProps) {
   if (!endpoint) return null;
-  const locale = await getLocale();
 
   let banners: HeroBanner[] = [];
   try {
