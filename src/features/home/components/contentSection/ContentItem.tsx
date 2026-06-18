@@ -12,15 +12,15 @@ export default function ContentItem({ item, isCircle }: ContentItemProps) {
   const commonImageProps = {
     alt: item.name,
     className: "object-contain",
-    sizes: "135px",
+    sizes: "(max-width: 640px) 50vw, (max-width: 1024px) 25vw, 150px",
   };
   const {
     props: { srcSet: desktopSrcSet },
   } = getImageProps({
     ...commonImageProps,
     src: desktopSrc || mobileSrc,
-    width: 135,
-    height: 135,
+    width: 300,
+    height: 300,
   });
   const { props: mobileImageProps } = getImageProps({
     ...commonImageProps,

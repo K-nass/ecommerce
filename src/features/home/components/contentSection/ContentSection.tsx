@@ -29,7 +29,7 @@ export default async function ContentSection({
   return (
     <div className="w-full">
       <SectionTitle title={title} />
-      <div className="grid grid-cols-3 gap-x-4 gap-y-4 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 xl:gap-x-15">
+      <div className="grid grid-cols-3 gap-x-4 gap-y-4 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 xl:gap-x-6">
         {categories.map((category) => (
           <ContentItem key={category.id} item={category} isCircle={isCircle} />
         ))}

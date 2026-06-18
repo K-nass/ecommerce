@@ -49,14 +49,7 @@ export default function MainNav() {
       <div className="flex items-center gap-2 md:gap-3 shrink-0">
         <Logo src="/meem-logo.png" alt="Carrefour" priority />
 
-        <button
-          type="button"
-          className={cn(
-            "inline-flex items-center text-sm font-semibold text-text-primary transition-all duration-300",
-            isScrolled && "opacity-0 invisible w-0 overflow-hidden",
-          )}
-        >
-        </button>
+
       </div>
 
       <div className="flex justify-center">

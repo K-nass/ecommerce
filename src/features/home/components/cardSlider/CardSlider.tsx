@@ -34,8 +34,10 @@ export default function CardSlider({
   const shouldShowArrows = showArrows && !isLocked && items.length > 1;
 
   return (
-    <section className={cn("group relative w-full pb-4", className)}>
+      <section className={cn("group relative w-full overflow-hidden pb-4", className)}>
       {title ? <SectionTitle title={title} /> : null}
+      {/* overflow-hidden clips the partial slide without hiding external arrows */}
+      <div className="overflow-hidden">
       <Swiper
         key={locale}
         dir={isRtl ? "rtl" : "ltr"}
@@ -55,7 +57,7 @@ export default function CardSlider({
           768: { slidesPerView: 3 },
           1024: { slidesPerView: 4 },
         }}
-        className="w-full px-4 md:px-20"
+        className="w-full"
       >
         {items.map((slide, index) => (
           <SwiperSlide key={slide.id}>
@@ -70,6 +72,7 @@ export default function CardSlider({
           </SwiperSlide>
         ))}
       </Swiper>
+      </div>
       {shouldShowArrows ? (
         <BannerArrows
           onPrevious={onPrevious}

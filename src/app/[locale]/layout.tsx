@@ -49,8 +49,8 @@ export default async function RootLayout({
   const dir = locale === "ar" ? "rtl" : "ltr";
   
   return (
-    <html lang={locale} dir={dir}>
-      <body className={cn("flex flex-col", montserrat.variable)}>
+      <html lang={locale} dir={dir} className="overflow-x-hidden">
+      <body className={cn("flex flex-col overflow-x-hidden", montserrat.variable)}>
         <NextIntlClientProvider>
           <Header params={params} />
           <CartSyncProvider>

@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 import ProductCard from "@/components/ui/ProductCard";
 import SectionTitle from "@/components/ui/SectionTitle";
 import { BannerArrows } from "../components/banner";
@@ -34,8 +34,9 @@ export default function ProductSlider({
   }
 
   return (
-    <div className="group relative w-full pb-4">
+    <div className="group relative w-full overflow-hidden pb-4">
       {title && <SectionTitle title={title} />}
+      <div className="overflow-hidden">
       <Swiper
         key={locale}
         dir={isRtl ? "rtl" : "ltr"}
@@ -74,6 +75,7 @@ export default function ProductSlider({
           </SwiperSlide>
         ))}
       </Swiper>
+      </div>
 
       {!isLocked && (
         <BannerArrows

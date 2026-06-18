@@ -65,7 +65,13 @@
     },
     "filters": {
       "seeMore": "عرض المزيد",
-      "seeLess": "عرض أقل"
+      "seeLess": "عرض أقل",
+      "filters": "الفلاتر",
+      "filtersTitle": "الفلاتر",
+      "close": "إغلاق الفلاتر",
+      "clearAll": "مسح الكل",
+      "show": "عرض النتائج",
+      "searchBrand": "البحث عن ماركة"
     }
   },
   "cartPage": {
@@ -124,7 +130,6 @@
     "relatedProducts": "منتجات ذات صلة",
     "anonymous": "مجهول"
   },
-
   "error": {
     "genericTitle": "حدث خطأ ما",
     "retry": "حاول مرة أخرى",

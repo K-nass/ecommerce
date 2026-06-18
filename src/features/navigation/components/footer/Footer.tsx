@@ -29,7 +29,7 @@ export default async function Footer({ params }: FooterProps) {
 
   return (
     <footer className="bg-primary text-white">
-      <div className="px-10 py-6">
+      <div className="px-4 py-6 md:px-10">
         {/* ── Mobile Accordion ── */}
         <div className="lg:hidden">
           <div className="border-b border-white pb-4">

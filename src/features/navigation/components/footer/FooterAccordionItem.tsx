@@ -25,7 +25,7 @@ export default function FooterAccordionItem({
       >
         <span className="text-sm font-normal">{title}</span>
         <ChevronIcon
-          className={`size-4 shrink-0 text-white transition-transform duration-200 ${open ? "rotate-180" : ""}`}
+          className={`size-5 shrink-0 text-white transition-transform duration-200 ${open ? "rotate-180" : ""}`}
         />
       </button>
       {open && <div className="pb-4">{children}</div>}

@@ -5,6 +5,7 @@ import CategorySlider from "@/features/categories/components/CategorySlider";
 import ProductsSidebar from "@/features/categories/components/ProductsSidebar";
 import MobileCategorySidebar from "@/features/categories/components/MobileCategorySidebar";
 import SidebarContent from "@/features/categories/components/SidebarContent";
+import MobileSidebarContent from "@/features/categories/components/MobileSidebarContent";
 import ProductsGridContent from "@/features/categories/components/ProductsGridContent";
 import { categoryMenuService } from "@/features/categories/services/categoryMenuService";
 import { getCategoryPageData, getCachedCategoryPageData } from "@/features/categories/services/categoryProductsService";
@@ -38,6 +39,7 @@ async function BannerPromotionContent({
 
   return (
     <div className="flex gap-5 max-[991px]:gap-0 items-stretch">
+      {/* Desktop sidebar */}
       <div className="max-[991px]:hidden block">
         <ProductsSidebar
           filters={filters}
@@ -46,8 +48,18 @@ async function BannerPromotionContent({
           seeLessText={seeLessText}
         />
       </div>
-      <div className="flex-1 max-[991px]:p-3">
-        <CategoryProducts products={products} />
+      <div className="flex-1 max-[991px]:p-0">
+        {/* Mobile filter bar — sits above the grid */}
+        <div className="hidden max-[991px]:block">
+          <MobileSidebarContent
+            sidebarPromise={Promise.resolve({ filters, filterLabels })}
+            seeMoreText={seeMoreText}
+            seeLessText={seeLessText}
+          />
+        </div>
+        <div className="max-[991px]:p-3">
+          <CategoryProducts products={products} />
+        </div>
       </div>
     </div>
   );
@@ -126,7 +138,7 @@ export default async function Page({
         <Breadcrumb items={breadcrumbItems} />
       </div>
       <div className="flex gap-5 max-[991px]:gap-0 items-stretch">
-        {/* Mobile Sidebar — renders immediately */}
+        {/* Mobile Category Sidebar — renders immediately */}
         <div className="hidden max-[991px]:flex shrink-0 -ms-4 self-stretch">
           <MobileCategorySidebar
             subCategories={sliderCategories}
@@ -135,23 +147,19 @@ export default async function Page({
           />
         </div>
 
-        {/* Desktop Sidebar — streams independently */}
-        <Suspense
-          fallback={
-            <div className="max-[991px]:hidden block">
-              <ProductsSidebarSkeleton />
-            </div>
-          }
-        >
-          <SidebarContent
-            sidebarPromise={sidebarPromise}
-            seeMoreText={tf("seeMore")}
-            seeLessText={tf("seeLess")}
-          />
-        </Suspense>
+        {/* Desktop Sidebar — hidden on mobile/tablet, streams independently */}
+        <div className="max-[991px]:hidden block">
+          <Suspense fallback={<ProductsSidebarSkeleton />}>
+            <SidebarContent
+              sidebarPromise={sidebarPromise}
+              seeMoreText={tf("seeMore")}
+              seeLessText={tf("seeLess")}
+            />
+          </Suspense>
+        </div>
 
-        <div className="flex-1 max-[991px]:p-3">
-          {/* Desktop Slider — renders immediately (never disappears) */}
+        <div className="flex-1 max-[991px]:p-0">
+          {/* Desktop Slider — renders immediately */}
           <div className="max-[991px]:hidden block">
             <CategorySlider
               subCategories={sliderCategories}
@@ -160,14 +168,27 @@ export default async function Page({
             />
           </div>
 
+          {/* Mobile Filter Bar — streams, sits above the grid */}
+          <div className="hidden max-[991px]:block">
+            <Suspense fallback={null}>
+              <MobileSidebarContent
+                sidebarPromise={sidebarPromise}
+                seeMoreText={tf("seeMore")}
+                seeLessText={tf("seeLess")}
+              />
+            </Suspense>
+          </div>
+
           {/* Products grid — streams independently */}
-          <Suspense fallback={<CategoryProductsSkeleton />}>
-            <ProductsGridContent
-              slug={decodedSlug}
-              locale={locale}
-              searchParams={resolvedSearchParams}
-            />
-          </Suspense>
+          <div className="max-[991px]:p-3">
+            <Suspense fallback={<CategoryProductsSkeleton />}>
+              <ProductsGridContent
+                slug={decodedSlug}
+                locale={locale}
+                searchParams={resolvedSearchParams}
+              />
+            </Suspense>
+          </div>
         </div>
       </div>
     </div>
