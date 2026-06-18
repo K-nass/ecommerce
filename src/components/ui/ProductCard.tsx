@@ -86,7 +86,7 @@ export default function ProductCard({
             className="object-contain"
             src={image}
             fill
-            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
+            sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, 25vw"
             alt={title}
             priority={priorityProp}
           />
@@ -137,7 +137,7 @@ export default function ProductCard({
       </div>
       <div>
         <Link href={`/products/${slug}`}>
-          <p className="text-sm leading-4 font-medium line-clamp-2 text-left md:text-md hover:text-primary transition-colors cursor-pointer">
+            <p className="text-sm leading-4 font-medium line-clamp-2 text-left md:text-base hover:text-primary transition-colors cursor-pointer">
             {title}
           </p>
         </Link>

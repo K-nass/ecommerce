@@ -84,7 +84,7 @@ export default async function Page({
   // banner/promotion page — slug is not a category
   if (!categoryPath) {
     return (
-      <div className="w-full">
+      <div className="w-full pb-16">
         <Breadcrumb
           items={[
             { label: t("home"), href: "/" },
@@ -133,7 +133,7 @@ export default async function Page({
   const sidebarPromise = getCachedCategoryPageData(decodedSlug, locale, resolvedSearchParams);
 
   return (
-    <div className="w-full">
+    <div className="w-full pb-16">
       <div className="max-[991px]:hidden">
         <Breadcrumb items={breadcrumbItems} />
       </div>

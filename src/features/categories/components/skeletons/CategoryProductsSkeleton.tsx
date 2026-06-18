@@ -2,7 +2,7 @@ import Skeleton from "@/components/ui/Skeleton";
 
 export function CategoryProductsSkeleton() {
   return (
-    <div className="grid grid-cols-2 gap-4 md:grid-cols-8" aria-label="Loading products">
+    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4" aria-label="Loading products">
       {Array.from({ length: 8 }).map((_, i) => (
         <div key={i} className="w-full">
           <Skeleton className="aspect-square w-full rounded-2xl" />
