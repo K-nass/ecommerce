@@ -44,18 +44,18 @@ export default function BannerArrows({
   const previousPositionClass = isRtl
     ? isHero
       ? "right-3"
-      : "right-0 translate-x-1/2"
+      : "right-0"
     : isHero
       ? "left-3"
-      : "left-0 -translate-x-1/2";
+      : "left-0";
 
   const nextPositionClass = isRtl
     ? isHero
       ? "left-3"
-      : "left-0 -translate-x-1/2"
+      : "left-0"
     : isHero
       ? "right-3"
-      : "right-0 translate-x-1/2";
+      : "right-0";
 
   const previousDirection = isRtl ? "right" : "left";
   const nextDirection = isRtl ? "left" : "right";
@@ -66,7 +66,7 @@ export default function BannerArrows({
     : "bg-white text-slate-500 border border-slate-500";
 
   return (
-    <div className={cn("pointer-events-none absolute inset-0 z-20", className)}>
+    <div className={cn("pointer-events-none absolute inset-0 z-30 max-md:hidden", className)}>
       {/* PREVIOUS BUTTON */}
       <button
         type="button"
