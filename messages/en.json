@@ -65,10 +65,15 @@
     },
     "filters": {
       "seeMore": "See more",
-      "seeLess": "See less"
+      "seeLess": "See less",
+      "filters": "Filters",
+      "filtersTitle": "Filters",
+      "close": "Close filters",
+      "clearAll": "Clear All",
+      "show": "Show results",
+      "searchBrand": "Search Brand"
     }
   },
-
   "cartPage": {
     "title": "Cart",
     "breadcrumb": "Cart",
@@ -125,7 +130,6 @@
     "relatedProducts": "Related Products",
     "anonymous": "Anonymous"
   },
-
   "error": {
     "genericTitle": "Something went wrong",
     "retry": "Try again",

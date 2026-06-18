@@ -7,7 +7,7 @@ interface Props {
 
 export default function FooterBottomRow({ data }: Props) {
   return (
-    <div className="flex items-center justify-end gap-2">
+    <div className="flex items-center justify-end gap-2 flex-wrap">
       <a href={data.appStore.url}>
         <Image
           src={data.appStore.imageSrc}
@@ -28,7 +28,7 @@ export default function FooterBottomRow({ data }: Props) {
           unoptimized
         />
       </a>
-      <span className="ml-2 text-xs leading-normal font-normal text-white">{data.title}</span>
+      <span className="me-2 text-xs leading-normal font-normal text-white">{data.title}</span>
     </div>
   );
 }

@@ -38,6 +38,7 @@ export default function CategorySlider({
 
   return (
     <div className="relative w-full pb-6 mb-4">
+      <div className="overflow-hidden">
       <Swiper
         key={locale}
         dir={isRtl ? "rtl" : "ltr"}
@@ -131,6 +132,7 @@ export default function CategorySlider({
           );
         })}
       </Swiper>
+      </div>
 
       {/* Navigation Arrows */}
       {!isLocked && (
