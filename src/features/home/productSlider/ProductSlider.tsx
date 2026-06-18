@@ -58,7 +58,7 @@ export default function ProductSlider({
         }}
         className="w-full"
       >
-        {safeItems.map((product) => (
+        {safeItems.map((product, index) => (
           <SwiperSlide key={product.id}>
             <ProductCard
               image={product.image}
@@ -71,6 +71,7 @@ export default function ProductSlider({
               sku={product.sku}
               inStock={product.inStock}
               stockQuantity={product.stockQuantity}
+              priority={index < 2}
             />
           </SwiperSlide>
         ))}
