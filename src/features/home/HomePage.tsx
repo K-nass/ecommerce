@@ -1,48 +1,59 @@
 import { Suspense } from "react";
+import dynamic from "next/dynamic";
 import { getLocale } from "next-intl/server";
-import FlashSalesSection from "./components/cardSlider/FlashSalesSection";
-import ContentSection from "./components/contentSection/ContentSection";
-import ProductSliderSection from "./productSlider/ProductSliderSection";
-import HeroSwiper from "./components/HeroSwiper";
+import { homePageService } from "./services/homePageService";
+import type { HomePageSection } from "./types";
 import HeroSwiperSkeleton from "./components/skeletons/HeroSwiperSkeleton";
 import FlashSalesSkeleton from "./components/skeletons/FlashSalesSkeleton";
 import ContentSectionSkeleton from "./components/skeletons/ContentSectionSkeleton";
 import ProductSliderSkeleton from "./components/skeletons/ProductSliderSkeleton";
-import { homePageService } from "./services/homePageService";
-import type { HomePageSection } from "./types";
-import BrandProductsSection from "./components/brandProducts/BrandProductsSection";
 import BrandProductsSectionSkeleton from "./components/skeletons/BrandProductsSectionSkeleton";
 
-const sectionRegistry = {
-  sliders: { Component: HeroSwiper, Fallback: HeroSwiperSkeleton },
-  promotions: { Component: FlashSalesSection, Fallback: FlashSalesSkeleton },
-  "flash-sales": { Component: FlashSalesSection, Fallback: FlashSalesSkeleton },
-  coupons: { Component: FlashSalesSection, Fallback: FlashSalesSkeleton },
-  categories: { Component: ContentSection, Fallback: ContentSectionSkeleton },
-  products: { Component: ProductSliderSection, Fallback: ProductSliderSkeleton },
-  banners: { Component: BrandProductsSection, Fallback: BrandProductsSectionSkeleton },
-} as const;
+const HeroSwiper = dynamic(() => import("./components/HeroSwiper"), {
+  loading: () => <HeroSwiperSkeleton />,
+});
 
-type SectionType = keyof typeof sectionRegistry;
+const FlashSalesSection = dynamic(
+  () => import("./components/cardSlider/FlashSalesSection"),
+  { loading: () => <FlashSalesSkeleton /> }
+);
 
-function SectionFallback({ section }: { section: HomePageSection }) {
-  const entry = sectionRegistry[section.type as SectionType];
-  if (!entry) return null;
-  return <entry.Fallback setting={section.setting?.front} />;
-}
+const ContentSection = dynamic(
+  () => import("./components/contentSection/ContentSection"),
+  { loading: () => <ContentSectionSkeleton /> }
+);
+
+const ProductSliderSection = dynamic(
+  () => import("./productSlider/ProductSliderSection"),
+  { loading: () => <ProductSliderSkeleton /> }
+);
+
+const BrandProductsSection = dynamic(
+  () => import("./components/brandProducts/BrandProductsSection"),
+  { loading: () => <BrandProductsSectionSkeleton /> }
+);
+
+const sectionComponentMap: Record<string, React.ComponentType<any>> = {
+  sliders: HeroSwiper,
+  promotions: FlashSalesSection,
+  "flash-sales": FlashSalesSection,
+  coupons: FlashSalesSection,
+  categories: ContentSection,
+  products: ProductSliderSection,
+  banners: BrandProductsSection,
+};
 
 async function SectionRenderer({ section }: { section: HomePageSection }) {
-  const entry = sectionRegistry[section.type as SectionType];
-  if (!entry) {
+  const Component = sectionComponentMap[section.type];
+  if (!Component) {
     console.warn(`[HomePage] Unknown section type: ${section.type}`);
     return null;
   }
-  const setting = section.setting?.front;
   return (
-    <entry.Component
+    <Component
       type={section.type}
       title={section.title}
-      setting={setting}
+      setting={section.setting?.front}
       endpoint={section.endpoint}
     />
   );
@@ -51,12 +62,11 @@ async function SectionRenderer({ section }: { section: HomePageSection }) {
 export async function HomePage() {
   const locale = await getLocale();
   const page = await homePageService.getHomePage(locale);
-  const sections = page.sections;
 
   return (
     <main className="flex flex-col gap-y-5">
-      {sections.map((section) => (
-        <Suspense key={section.id} fallback={<SectionFallback section={section} />}>
+      {page.sections.map((section) => (
+        <Suspense key={section.id} fallback={null}>
           <SectionRenderer section={section} />
         </Suspense>
       ))}
