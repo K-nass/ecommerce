@@ -5,6 +5,8 @@ import { NextIntlClientProvider } from "next-intl";
 import { routing } from "@/i18n/routing";
 import { setRequestLocale } from "next-intl/server"; 
 import Header from "@/features/navigation/components/header/Header";
+import MobileHeader from "@/features/navigation/components/mobile/MobileHeader";
+import MobileBottomNav from "@/features/navigation/components/mobile/MobileBottomNav";
 import Footer from "@/features/navigation/components/footer/Footer";
 import { AuthModal } from "@/features/auth/components/AuthModal";
 import { CartSyncProvider } from "@/features/cart/components/CartSyncProvider";
@@ -57,13 +59,19 @@ export default async function RootLayout({
       <body className={cn("flex flex-col overflow-x-hidden", montserrat.variable)}>
         <link rel="preconnect" href={process.env.NEXT_PUBLIC_API_URL} />
         <NextIntlClientProvider>
-          <Header params={params} />
+          <div className="hidden lg:block">
+            <Header params={params} />
+          </div>
+          <div className="block lg:hidden">
+            <MobileHeader />
+          </div>
           <CartSyncProvider>
-            <div className="container mx-auto px-4 flex flex-col min-h-screen">
+            <div className="container mx-auto px-4 flex flex-col min-h-screen pb-16 lg:pb-0">
               {children}
             </div>
           </CartSyncProvider>
           <Footer params={params} />
+          <MobileBottomNav />
           <AuthModal />
         </NextIntlClientProvider>
       </body>

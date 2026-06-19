@@ -23,6 +23,7 @@ export default function Logo({
         height={52}
         priority={priority}
         className={className}
+        style={{ width: "auto", height: "auto" }}
       />
     </Link>
   );
