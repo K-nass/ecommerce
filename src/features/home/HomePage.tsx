@@ -1,41 +1,19 @@
 import { Suspense } from "react";
-import dynamic from "next/dynamic";
 import { withRetry } from "@/shared/utils/retry";
 import { homePageService } from "./services/homePageService";
 import type { HomeContentPage, HomePageSection } from "./types";
+import HeroSwiper from "./components/HeroSwiper";
+import FlashSalesSection from "./components/cardSlider/FlashSalesSection";
+import ContentSection from "./components/contentSection/ContentSection";
+import ProductSliderSection from "./productSlider/ProductSliderSection";
+import BrandProductsSection from "./components/brandProducts/BrandProductsSection";
 import HeroSwiperSkeleton from "./components/skeletons/HeroSwiperSkeleton";
 import FlashSalesSkeleton from "./components/skeletons/FlashSalesSkeleton";
 import ContentSectionSkeleton from "./components/skeletons/ContentSectionSkeleton";
 import ProductSliderSkeleton from "./components/skeletons/ProductSliderSkeleton";
 import BrandProductsSectionSkeleton from "./components/skeletons/BrandProductsSectionSkeleton";
 
-const HeroSwiper = dynamic(() => import("./components/HeroSwiper"), {
-  loading: () => <HeroSwiperSkeleton />,
-});
-
-const FlashSalesSection = dynamic(
-  () => import("./components/cardSlider/FlashSalesSection"),
-  { loading: () => <FlashSalesSkeleton /> }
-);
-
-const ContentSection = dynamic(
-  () => import("./components/contentSection/ContentSection"),
-  { loading: () => <ContentSectionSkeleton /> }
-);
-
-const ProductSliderSection = dynamic(
-  () => import("./productSlider/ProductSliderSection"),
-  { loading: () => <ProductSliderSkeleton /> }
-);
-
-const BrandProductsSection = dynamic(
-  () => import("./components/brandProducts/BrandProductsSection"),
-  { loading: () => <BrandProductsSectionSkeleton /> }
-);
-
-
-
-async function SectionRenderer({
+function SectionRenderer({
   section,
   locale,
 }: {
