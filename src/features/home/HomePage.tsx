@@ -1,7 +1,8 @@
 import { Suspense } from "react";
 import dynamic from "next/dynamic";
+import { withRetry } from "@/shared/utils/retry";
 import { homePageService } from "./services/homePageService";
-import type { HomePageSection } from "./types";
+import type { HomeContentPage, HomePageSection } from "./types";
 import HeroSwiperSkeleton from "./components/skeletons/HeroSwiperSkeleton";
 import FlashSalesSkeleton from "./components/skeletons/FlashSalesSkeleton";
 import ContentSectionSkeleton from "./components/skeletons/ContentSectionSkeleton";
@@ -74,7 +75,13 @@ const sectionSkeletonMap: Record<string, React.ReactNode> = {
 };
 
 export async function HomePage({ locale }: { locale: string }) {
-  const page = await homePageService.getHomePage(locale);
+  let page: HomeContentPage;
+  try {
+    page = await withRetry(() => homePageService.getHomePage(locale));
+  } catch {
+    console.warn("[HomePage] Failed to load page config after retries");
+    return <main className="flex flex-col gap-y-5" />;
+  }
 
   return (
     <main className="flex flex-col gap-y-5">
