@@ -5,13 +5,14 @@ import type { CategoryMenuItem } from "../types";
 
 type SubCategoryPaneProps = {
   activeCategory: CategoryMenuItem;
+  onClose?: () => void;
 };
 
 function toCategoryHref(slug: string) {
   return `/category/${encodeURIComponent(slug)}`;
 }
 
-export default function SubCategoryPane({ activeCategory }: SubCategoryPaneProps) {
+export default function SubCategoryPane({ activeCategory, onClose }: SubCategoryPaneProps) {
   return (
     <section className="overflow-y-auto">
       <div className="p-6">
@@ -20,6 +21,7 @@ export default function SubCategoryPane({ activeCategory }: SubCategoryPaneProps
             <div key={level2.id} className="min-w-0">
               <Link
                 href={toCategoryHref(level2.slug)}
+                onClick={onClose}
                 className="block text-[13px] font-semibold text-text-primary hover:text-primary-dark transition-colors"
               >
                 {level2.name}
@@ -31,6 +33,7 @@ export default function SubCategoryPane({ activeCategory }: SubCategoryPaneProps
                     <li key={level3.id}>
                       <Link
                         href={toCategoryHref(level3.slug)}
+                        onClick={onClose}
                         className="block text-[13px] text-text-secondary hover:text-primary-dark transition-colors"
                       >
                         {level3.name}

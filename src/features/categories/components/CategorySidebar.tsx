@@ -8,6 +8,7 @@ type CategorySidebarProps = {
   categories: CategoryMenuItem[];
   activeCategoryId: number | null;
   onActiveCategoryChange: (categoryId: number) => void;
+  onClose?: () => void;
 };
 
 function toCategoryHref(slug: string) {
@@ -18,6 +19,7 @@ export default function CategorySidebar({
   categories,
   activeCategoryId,
   onActiveCategoryChange,
+  onClose,
 }: CategorySidebarProps) {
   return (
     <aside className="bg-surface border-e border-gray-200 overflow-y-auto">
@@ -28,6 +30,7 @@ export default function CategorySidebar({
             <li key={category.id}>
               <Link
                 href={toCategoryHref(category.slug)}
+                onClick={onClose}
                 onMouseEnter={() => onActiveCategoryChange(category.id)}
                 onFocus={() => onActiveCategoryChange(category.id)}
                 className={cn(
