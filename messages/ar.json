@@ -63,6 +63,12 @@
     "breadcrumb": {
       "home": "الرئيسية"
     },
+    "bottomNav": {
+      "home": "الرئيسية",
+      "categories": "التصنيفات",
+      "profile": "حسابي",
+      "cart": "السلة"
+    },
     "filters": {
       "seeMore": "عرض المزيد",
       "seeLess": "عرض أقل",

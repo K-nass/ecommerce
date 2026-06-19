@@ -2,7 +2,8 @@
 
 import { Home, LayoutGrid, ShoppingCart, User } from "lucide-react";
 import { useSyncExternalStore } from "react";
-import { Link } from "@/i18n/navigation";
+import { useTranslations } from "next-intl";
+import { Link, usePathname } from "@/i18n/navigation";
 import { cn } from "@/shared/utils/cn";
 import { useAuthStore } from "@/features/auth/store/useAuthStore";
 import { useGuestCartStore } from "@/features/cart/store/useGuestCartStore";
@@ -17,10 +18,10 @@ type NavItem = {
 };
 
 const navItems: NavItem[] = [
-  { label: "Categories", icon: LayoutGrid, href: "#" },
-  { label: "Home", icon: Home, href: "/", isCenter: true },
-  { label: "Profile", icon: User, href: "/auth" },
-  { label: "Cart", icon: ShoppingCart, href: "/cart", isCart: true },
+  { label: "categories", icon: LayoutGrid, href: "#" },
+  { label: "home", icon: Home, href: "/", isCenter: true },
+  { label: "profile", icon: User, href: "/auth" },
+  { label: "cart", icon: ShoppingCart, href: "/cart", isCart: true },
 ];
 
 function CartBadge({ count }: { count: number }) {
@@ -33,6 +34,13 @@ function CartBadge({ count }: { count: number }) {
 }
 
 export default function MobileBottomNav() {
+  const t = useTranslations("header.bottomNav");
+  const pathname = usePathname();
+  const isActive = (href: string) => {
+    if (href === "#") return false;
+    if (href === "/") return pathname === "/";
+    return pathname.startsWith(href);
+  };
   const mounted = useSyncExternalStore(
     () => () => {},
     () => true,
@@ -52,12 +60,13 @@ export default function MobileBottomNav() {
             href={item.href}
             className={cn(
               "relative flex flex-col items-center gap-0.5 px-3 py-1.5",
-              item.isCenter && "text-primary",
-              !item.isCenter && "text-text-primary",
+              isActive(item.href) && "border-t-2 border-primary text-primary",
+              !isActive(item.href) && item.isCenter && "text-primary",
+              !isActive(item.href) && !item.isCenter && "text-text-primary",
             )}
           >
             <item.icon className="h-5 w-5" />
-            <span className="text-[10px] leading-tight">{item.label}</span>
+            <span className="text-[10px] leading-tight">{t(item.label)}</span>
             {item.isCart && mounted && <CartBadge count={cartCount} />}
           </Link>
         ))}
