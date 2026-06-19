@@ -26,12 +26,12 @@ export function ProductPageContent({ product }: ProductPageContentProps) {
 
   return (
     <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-[280px_minmax(0,1fr)_minmax(300px,1fr)] lg:gap-8">
-      <aside className="space-y-6">
+      <aside className="space-y-6 order-last lg:order-1">
         <ProductDeliveryInfo />
         <ProductActions product={product} selectedVariant={selectedVariant} />
       </aside>
 
-      <main className="space-y-8 border-x border-border/40 px-0 lg:px-6">
+      <main className="space-y-8 border-x border-border/40 px-0 lg:px-6 lg:order-2">
         <ProductInfo product={product} />
         <ProductVariants
           variants={product.variants}
@@ -80,7 +80,7 @@ export function ProductPageContent({ product }: ProductPageContentProps) {
         )}
       </main>
 
-      <aside className="w-full">
+      <aside className="w-full order-first lg:order-3">
         <ProductGallery
           images={images}
           thumbnail={product.images.thumbnail}

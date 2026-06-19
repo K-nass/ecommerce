@@ -18,16 +18,22 @@ export default function CategoryNavClient({
   categories,
 }: CategoryNavClientProps) {
   const [hoveredCategory, setHoveredCategory] = useState<CategoryMenuItem | null>(null);
+  const [isAllMenuOpen, setIsAllMenuOpen] = useState(false);
 
   if (!categories?.length) return null;
 
   return (
     <nav aria-label="Categories" className="w-full">
       <div className="flex h-11 items-center gap-3 rounded-md">
-        <div className="group relative shrink-0 h-full">
+        <div
+          className="relative shrink-0 h-full"
+          onMouseEnter={() => setIsAllMenuOpen(true)}
+          onMouseLeave={() => setIsAllMenuOpen(false)}
+        >
           <button
             type="button"
             aria-haspopup="menu"
+            aria-expanded={isAllMenuOpen}
             className="inline-flex h-full items-center gap-2 rounded-md px-2 py-1 text-[13px] font-semibold text-primary-dark"
           >
             <span className="inline-flex h-7 w-7 items-center justify-center">
@@ -41,7 +47,12 @@ export default function CategoryNavClient({
             <span className="whitespace-nowrap">{allCategoriesLabel}</span>
           </button>
 
-          <CategoryMenuClient categories={categories} />
+          {isAllMenuOpen && (
+            <CategoryMenuClient
+              categories={categories}
+              onClose={() => setIsAllMenuOpen(false)}
+            />
+          )}
         </div>
 
         <div
