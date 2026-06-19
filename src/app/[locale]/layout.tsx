@@ -27,8 +27,12 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   return {
     title: {
       default: locale === "ar" ? "ميم ماركت" : "Meem Market",
-      template: "%s",
+      template: "%s | Meem Market",
     },
+    description:
+      locale === "ar"
+        ? "تسوق أفضل المنتجات في ميم ماركت - إلكترونيات، أزياء، منتجات المنزل والمزيد"
+        : "Shop the best products at Meem Market - electronics, fashion, home goods and more.",
     icons: {
       icon: "/meem-icon.jpeg",
     },

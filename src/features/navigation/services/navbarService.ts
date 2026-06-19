@@ -6,7 +6,7 @@ export const navbarService = {
   getAll: async (lang: string): Promise<NavbarMenu[]> => {
     const response = await apiFetch<ApiResponse<NavbarMenu[]>>(
       "/general/navbar",
-      { lang },
+      { lang, next: { revalidate: 300 } },
     );
     return response.data;
   },
