@@ -2,8 +2,8 @@
 import Image from "next/image";
 import { Minus, Plus, Trash2, Loader2 } from "lucide-react";
 import type { GuestCartItem } from "../types";
-import { getDisplayPrice, getOriginalPrice } from "@/shared/utils/price";
-import type { PriceInfo } from "@/shared/utils/price";
+import { getDisplayPrice, getOriginalPrice } from "@/features/products";
+import type { PriceInfo } from "@/features/products/types";
 
 interface ProductCartItemProps {
   item: GuestCartItem;

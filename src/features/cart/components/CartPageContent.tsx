@@ -161,7 +161,7 @@ export function CartPageContent() {
       if (cart && cart.items.length > 0) {
         const productIds = [...new Set(cart.items.map((i) => i.product_id))];
         const productResults = await Promise.allSettled(
-          productIds.map((id) => productService.getProduct(id, locale)),
+          productIds.map((id) => productService.getProductBySlug(String(id), locale)),
         );
 
         if (controller.signal.aborted) return;

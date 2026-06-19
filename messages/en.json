@@ -74,7 +74,17 @@
       "searchBrand": "Search Brand"
     }
   },
+  "home": {
+    "metaTitle": "Home",
+    "metaDescription": "Shop the best products at Meem Market — electronics, fashion, home goods, and more."
+  },
+  "auth": {
+    "metaTitle": "Sign In & Register",
+    "metaDescription": "Create an account or sign in to Meem Market."
+  },
   "cartPage": {
+    "metaTitle": "Cart",
+    "metaDescription": "Review your cart and checkout at Meem Market.",
     "title": "Cart",
     "breadcrumb": "Cart",
     "emptyTitle": "Your cart is empty",

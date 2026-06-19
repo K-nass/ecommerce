@@ -26,9 +26,10 @@ export function useCartActions(productId: number) {
   const guestAddItem = useGuestCartStore((s) => s.addItem);
   const guestRemoveItem = useGuestCartStore((s) => s.removeItem);
   const guestUpdateQuantity = useGuestCartStore((s) => s.updateQuantity);
-  const guestCartItem = useGuestCartStore((s) =>
-    s.items.find((i) => i.product_id === productId),
-  );
+  const guestQuantity = useGuestCartStore((s) => {
+    const item = s.items.find((i) => i.product_id === productId);
+    return item?.quantity ?? 0;
+  });
 
   // ── Server store — header badge counter ─────────────────────────────────
   const adjustQuantity = useServerCartStore((s) => s.adjustQuantity);
@@ -44,7 +45,7 @@ export function useCartActions(productId: number) {
   // The quantity the card should display.
   const quantity = isAuthenticated
     ? authQuantity
-    : (guestCartItem?.quantity ?? 0);
+    : guestQuantity;
 
   // ── addItem ──────────────────────────────────────────────────────────────
   const addItem = useCallback(
@@ -79,7 +80,7 @@ export function useCartActions(productId: number) {
   // ── increment ────────────────────────────────────────────────────────────
   const increment = useCallback(async () => {
     if (!isAuthenticated) {
-      guestUpdateQuantity(productId, (guestCartItem?.quantity ?? 0) + 1);
+      guestUpdateQuantity(productId, guestQuantity + 1);
       return;
     }
 
@@ -95,13 +96,13 @@ export function useCartActions(productId: number) {
     } finally {
       setIsPending(false);
     }
-  }, [isAuthenticated, productId, guestCartItem, guestUpdateQuantity, adjustQuantity, locale]);
+  }, [isAuthenticated, productId, guestQuantity, guestUpdateQuantity, adjustQuantity, locale]);
 
   // ── decrement ────────────────────────────────────────────────────────────
   const decrement = useCallback(
     async (cartItemId?: number) => {
       if (!isAuthenticated) {
-        const current = guestCartItem?.quantity ?? 0;
+        const current = guestQuantity;
         if (current <= 1) guestRemoveItem(productId);
         else guestUpdateQuantity(productId, current - 1);
         return;
@@ -133,7 +134,7 @@ export function useCartActions(productId: number) {
       productId,
       authQuantity,
       locale,
-      guestCartItem,
+      guestQuantity,
       guestRemoveItem,
       guestUpdateQuantity,
       adjustQuantity,

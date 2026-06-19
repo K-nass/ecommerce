@@ -1,4 +1,5 @@
 import { Suspense } from "react";
+import type { Metadata } from "next";
 import Breadcrumb from "@/components/ui/Breadcrumb";
 import CategoryProducts from "@/features/categories/components/CategoryProducts";
 import CategorySlider from "@/features/categories/components/CategorySlider";
@@ -14,6 +15,23 @@ import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { ProductsSidebarSkeleton } from "@/features/categories/components/skeletons/ProductsSidebarSkeleton";
 import { CategoryProductsSkeleton } from "@/features/categories/components/skeletons/CategoryProductsSkeleton";
+
+export async function generateMetadata({ params }: { params: Promise<{ locale: string; slug: string }> }): Promise<Metadata> {
+  const { locale, slug } = await params;
+  const decodedSlug = decodeURIComponent(slug);
+  const categories = await categoryMenuService.getMenu(locale);
+  const categoryPath = findCategoryPath(categories, decodedSlug);
+  const categoryName = categoryPath?.[categoryPath.length - 1]?.name ?? decodedSlug;
+
+  return {
+    title: categoryName,
+    description: `Shop ${categoryName} at Meem Market — great prices on top brands.`,
+    openGraph: {
+      title: categoryName,
+      description: `Shop ${categoryName} at Meem Market.`,
+    },
+  };
+}
 
 async function BannerPromotionContent({
   slug,

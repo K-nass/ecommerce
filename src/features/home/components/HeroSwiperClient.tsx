@@ -1,7 +1,7 @@
 "use client";
 
 import { getImageProps } from "next/image";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useLocale } from "next-intl";
 import { A11y, Autoplay, Keyboard } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -77,11 +77,14 @@ export default function HeroSwiperClient({ banners, setting }: HeroSwiperClientP
   const onPrevious = () => swiper?.slidePrev();
   const onNext = () => swiper?.slideNext();
 
+  useEffect(() => {
+    swiper?.changeLanguageDirection(isRtl ? "rtl" : "ltr");
+  }, [isRtl, swiper]);
+
   return (
     <section className="w-full" dir={isRtl ? "rtl" : "ltr"} aria-label="Hero promotions">
       <div className="group relative h-[170px] w-full overflow-hidden rounded-[20px] sm:h-[230px] lg:h-[300px]">
         <Swiper
-          key={locale}
           modules={[Autoplay, A11y, Keyboard]}
           loop={total > 1}
           speed={700}

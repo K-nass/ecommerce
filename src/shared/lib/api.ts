@@ -54,6 +54,8 @@ function extractApiErrors(body: Record<string, unknown>): Record<string, string[
 type ApiFetchOptions = RequestInit & {
   next?: { revalidate?: false | 0 | number; tags?: string[] };
   lang?: string;
+  /** Request timeout in ms. Defaults to 15000. Set to 0 to disable. */
+  timeout?: number;
 };
 
 export async function apiFetch<T>(
@@ -88,10 +90,28 @@ export async function apiFetch<T>(
   const method = (options.method ?? "GET").toUpperCase();
   const start = Date.now();
 
+  const timeoutMs = options.timeout ?? 15000;
+  const controller = new AbortController();
+  let timeoutId: ReturnType<typeof setTimeout> | undefined;
+
+  if (timeoutMs > 0) {
+    timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+  }
+
+  const userSignal = options.signal;
+  if (userSignal) {
+    if (userSignal.aborted) {
+      controller.abort();
+    } else {
+      userSignal.addEventListener("abort", () => controller.abort());
+    }
+  }
+
   let response: Response;
   try {
     response = await fetch(url, {
       ...options,
+      signal: controller.signal,
       headers,
     });
   } catch (err: any) {
@@ -99,6 +119,8 @@ export async function apiFetch<T>(
       console.error("? " + method + " " + url + " - network error", err?.message ?? err);
     }
     throw err;
+  } finally {
+    clearTimeout(timeoutId);
   }
 
   const duration = Date.now() - start;
