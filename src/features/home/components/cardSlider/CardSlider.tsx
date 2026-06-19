@@ -13,6 +13,7 @@ import { cn } from "@/shared/utils/cn";
 
 import { BannerArrows } from "../banner";
 import Slide from "./Slide";
+import styles from "./CardSlider.module.css";
 import type { CardSliderProps } from "../../types";
 
 export default function CardSlider({
@@ -34,7 +35,7 @@ export default function CardSlider({
   const shouldShowArrows = showArrows && !isLocked && items.length > 1;
 
   return (
-      <section className={cn("group relative w-full overflow-hidden pb-4", className)}>
+      <section className={cn("group relative w-full overflow-hidden pb-4", styles.slider, className)}>
       {title ? <SectionTitle title={title} /> : null}
       {/* overflow-hidden clips the partial slide without hiding external arrows */}
       <div className="overflow-hidden">
