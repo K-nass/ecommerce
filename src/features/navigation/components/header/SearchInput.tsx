@@ -22,12 +22,15 @@ export function SearchInput({
   wrapperClassName,
   inputClassName,
   iconClassName,
+  value,
   ...inputProps
 }: SearchInputProps) {
+
   return (
     <form className={cn("relative w-full", wrapperClassName)}>
       <input
         {...inputProps}
+        value={value}
         type="search"
         placeholder=" "
         className={cn(
@@ -43,7 +46,7 @@ export function SearchInput({
         </span>
       </div>
 
-      <span className="pointer-events-none absolute inset-y-0 end-3 flex items-center">
+      <span className="absolute inset-y-0 end-3 flex items-center">
         <Search className={cn("h-5 w-5 text-text-secondary", iconClassName)} />
       </span>
     </form>
