@@ -88,6 +88,22 @@ export interface ProductDetail {
   related_products: RelatedProduct[];
 }
 
+export interface ProductSearchResult {
+  id: number;
+  name: string;
+  slug: string;
+  price: number;
+  current_price: number;
+  price_after_discount: number | null;
+  price_after_flash_sale: number | null;
+  has_discount: boolean;
+  discount_valid: boolean;
+  ratings: number;
+  image: {
+    thumbnail: string;
+  };
+}
+
 export type PriceInfo = {
   has_flash_sale: boolean;
   price_after_flash_sale: number | null;

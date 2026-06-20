@@ -1,10 +1,10 @@
 "use client";
 
-import { ChevronDown, ShoppingCart } from "lucide-react";
+import { ShoppingCart } from "lucide-react";
 import { useSyncExternalStore } from "react";
 import { useTranslations } from "next-intl";
 import Logo from "@/components/ui/Logo";
-import { SearchInput } from "./SearchInput";
+import { SearchAutocomplete } from "./SearchAutocomplete";
 import Image from "next/image";
 import { useAuthModalStore } from "@/features/auth/store/useAuthModalStore";
 import { useAuthStore } from "@/features/auth/store/useAuthStore";
@@ -53,7 +53,7 @@ export default function MainNav() {
       </div>
 
       <div className="flex justify-center">
-        <SearchInput
+        <SearchAutocomplete
           wrapperClassName={cn(
             "w-full transition-all duration-300",
             isScrolled ? "max-w-none" : "max-w-xl lg:max-w-3xl",

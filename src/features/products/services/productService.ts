@@ -1,6 +1,7 @@
 ﻿import { apiFetch } from "@/shared/lib/api";
 import type { ApiResponse } from "@/shared/types";
-import type { ProductDetail } from "../types";
+import type { PaginatedData } from "@/shared/types";
+import type { ProductDetail, ProductSearchResult } from "../types";
 
 export const productService = {
   getProductBySlug: async (slug: string, lang?: string): Promise<ProductDetail> => {
@@ -9,5 +10,13 @@ export const productService = {
       { next: { revalidate: 60 }, lang },
     );
     return response.data;
+  },
+
+  searchProducts: async (query: string, lang?: string): Promise<ProductSearchResult[]> => {
+    const response = await apiFetch<ApiResponse<PaginatedData<ProductSearchResult>>>(
+      `/general/products?search=${encodeURIComponent(query)}&per_page=5`,
+      { lang },
+    );
+    return response.data.data;
   },
 };
