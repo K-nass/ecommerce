@@ -43,21 +43,10 @@ export default function ProductCard({
   const [animating, setAnimating] = useState(false);
 
   const handleAdd = useCallback(async () => {
-    await addItem({
-      quantity: 1,
-      name: title,
-      image,
-      price,
-      current_price: price,
-      slug,
-      sku,
-      in_stock: inStock,
-      stock_quantity: stockQuantity,
-      deliveryType,
-    });
+    await addItem({ quantity: 1, deliveryType });
     setAnimating(true);
     setTimeout(() => setAnimating(false), 300);
-  }, [addItem, title, image, price, slug, sku, inStock, stockQuantity, deliveryType]);
+  }, [addItem, deliveryType]);
 
   const handleIncrement = useCallback(async () => {
     await increment();

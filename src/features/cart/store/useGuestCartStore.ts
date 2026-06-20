@@ -16,7 +16,6 @@ type GuestCartState = {
   setSyncError: (error: string | null) => void;
   getSyncPayload: () => AddBulkPayload;
   getTotalItems: () => number;
-  getTotalPrice: () => number;
 };
 
 export const useGuestCartStore = create<GuestCartState>()(
@@ -79,23 +78,11 @@ export const useGuestCartStore = create<GuestCartState>()(
       getTotalItems: () => {
         return get().items.reduce((sum, i) => sum + i.quantity, 0);
       },
-
-      getTotalPrice: () => {
-        return get().items.reduce(
-          (sum, i) => sum + i.current_price * i.quantity,
-          0,
-        );
-      },
     }),
     {
       name: CART_STORAGE_KEY,
       storage: createJSONStorage(() => localStorage),
-      partialize: (state) => ({
-        items: state.items.map((i) => ({
-          ...i,
-          quantity: i.quantity,
-        })),
-      }),
+      partialize: (state) => ({ items: state.items }),
     },
   ),
 );

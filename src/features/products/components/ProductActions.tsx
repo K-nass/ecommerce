@@ -1,10 +1,11 @@
 ﻿"use client";
 
 import { useState } from "react";
-import { useTranslations } from "next-intl";
-import { Minus, Plus, ShoppingCart } from "lucide-react";
+import { useTranslations, useLocale } from "next-intl";
+import { Minus, Plus, ShoppingCart, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/shared/utils/cn";
+import { useCartActions } from "@/features/cart/hooks/useCartActions";
 import type { ProductDetail, ProductVariant } from "../types";
 import { getStockStatus, getDisplayPrice } from "../utils";
 
@@ -23,7 +24,15 @@ export function ProductActions({ product, selectedVariant }: ProductActionsProps
   const maxQuantity = Math.min(stock.remaining, 99);
   const [quantity, setQuantity] = useState(1);
 
-  function handleAddToCart() {
+  const locale = useLocale();
+  const { addItem, isPending } = useCartActions(product.id);
+
+  async function handleAddToCart() {
+    await addItem({
+      quantity,
+      deliveryType: "scheduled",
+      product_variant_id: variant?.id ?? null,
+    });
     toast.success(t("addedToCart", { name: product.name, count: quantity }));
   }
 
@@ -71,15 +80,19 @@ export function ProductActions({ product, selectedVariant }: ProductActionsProps
       <button
         type="button"
         onClick={handleAddToCart}
-        disabled={!stock.inStock}
+        disabled={!stock.inStock || isPending}
         className={cn(
           "flex w-full items-center justify-center gap-3 rounded-xl px-6 py-3 text-sm font-semibold transition",
-          stock.inStock
+          stock.inStock && !isPending
             ? "bg-primary text-white hover:bg-primary-dark"
             : "cursor-not-allowed bg-gray-300 text-gray-500",
         )}
       >
-        <ShoppingCart className="size-5" />
+        {isPending ? (
+          <Loader2 className="size-5 animate-spin" />
+        ) : (
+          <ShoppingCart className="size-5" />
+        )}
         {stock.inStock ? t("addToCart") : t("outOfStock")}
       </button>
 

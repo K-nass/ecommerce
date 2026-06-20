@@ -1,19 +1,19 @@
 "use client";
 import Image from "next/image";
 import { Minus, Plus, Trash2, Loader2 } from "lucide-react";
-import type { GuestCartItem } from "../types";
+import type { HydratedCartItem } from "../types";
 import { getDisplayPrice, getOriginalPrice } from "@/features/products";
 import type { PriceInfo } from "@/features/products/types";
 
 interface ProductCartItemProps {
-  item: GuestCartItem;
+  item: HydratedCartItem;
   /** Disables all controls and shows a loading spinner while an API call is in-flight. */
   isPending?: boolean;
   onUpdateQuantity: (productId: number, quantity: number) => void;
   onRemove: (productId: number) => void;
 }
 
-function toPriceInfo(item: GuestCartItem): PriceInfo {
+function toPriceInfo(item: HydratedCartItem): PriceInfo {
   return {
     has_flash_sale: false,
     price_after_flash_sale: null,
