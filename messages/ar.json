@@ -146,6 +146,12 @@
     "relatedProducts": "منتجات ذات صلة",
     "anonymous": "مجهول"
   },
+  "categories": {
+    "metaTitle": "التصنيفات",
+    "metaDescription": "تصفح جميع فئات المنتجات في ميم ماركت",
+    "title": "التصنيفات",
+    "viewAll": "عرض الكل"
+  },
   "error": {
     "genericTitle": "حدث خطأ ما",
     "retry": "حاول مرة أخرى",
