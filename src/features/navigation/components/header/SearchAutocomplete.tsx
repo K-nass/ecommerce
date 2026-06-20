@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useCallback } from "react";
+import { useRouter } from "@/i18n/navigation";
 import { SearchInput } from "./SearchInput";
 import { SearchAutocompleteDropdown } from "./SearchAutocompleteDropdown";
 import { useSearchAutocomplete } from "../../hooks/useSearchAutocomplete";
@@ -19,6 +20,7 @@ export function SearchAutocomplete({
   prefixText,
   highlightText,
 }: SearchAutocompleteProps) {
+  const router = useRouter();
   const {
     query,
     setQuery,
@@ -54,6 +56,18 @@ export function SearchAutocomplete({
     [setQuery],
   );
 
+  const handleSubmit = useCallback(
+    (e: React.FormEvent<HTMLFormElement>) => {
+      e.preventDefault();
+      const trimmed = query.trim();
+      if (trimmed.length >= 2) {
+        router.push(`/search?q=${encodeURIComponent(trimmed)}`);
+        close();
+      }
+    },
+    [query, router, close],
+  );
+
   return (
     <div className={cn("relative", wrapperClassName)}>
       <SearchInput
@@ -61,6 +75,7 @@ export function SearchAutocomplete({
         onChange={handleChange}
         onBlur={handleBlur}
         onFocus={handleFocus}
+        onSubmit={handleSubmit}
         prefixText={prefixText}
         highlightText={highlightText}
         inputClassName={inputClassName}

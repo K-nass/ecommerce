@@ -36,8 +36,8 @@ export function SearchAutocompleteDropdown({
 
   if (!isOpen) return null;
 
-  const handleSelect = (slug: string) => {
-    router.push(`/products/${slug}`);
+  const handleSelect = (name: string) => {
+    router.push(`/search?q=${encodeURIComponent(name)}`);
     onClose();
   };
 
@@ -63,7 +63,7 @@ export function SearchAutocompleteDropdown({
           <button
             key={product.id}
             type="button"
-            onClick={() => handleSelect(product.slug)}
+            onClick={() => handleSelect(product.name)}
             className="flex w-full items-center gap-3 px-4 py-3 text-left transition hover:bg-gray-50"
           >
             <Search className="h-4 w-4 shrink-0 text-gray-400" />

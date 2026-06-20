@@ -7,13 +7,14 @@ import { cn } from "@/shared/utils/cn";
 
 export type SearchInputProps = Omit<
   React.InputHTMLAttributes<HTMLInputElement>,
-  "type" | "placeholder"
+  "type" | "placeholder" | "onSubmit"
 > & {
   prefixText: string;
   highlightText: string;
   wrapperClassName?: string;
   inputClassName?: string;
   iconClassName?: string;
+  onSubmit?: React.FormEventHandler<HTMLFormElement>;
 };
 
 export function SearchInput({
@@ -23,11 +24,12 @@ export function SearchInput({
   inputClassName,
   iconClassName,
   value,
+  onSubmit,
   ...inputProps
 }: SearchInputProps) {
 
   return (
-    <form className={cn("relative w-full", wrapperClassName)}>
+    <form onSubmit={onSubmit} className={cn("relative w-full", wrapperClassName)}>
       <input
         {...inputProps}
         value={value}
