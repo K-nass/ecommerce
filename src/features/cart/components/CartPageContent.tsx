@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef, useReducer, useCallback } from "react";
+import { useEffect, useRef, useReducer, useCallback, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import Link from "next/link";
 import { ShoppingBag, Loader2, AlertTriangle, RefreshCw } from "lucide-react";
@@ -13,7 +13,8 @@ import { CartSummary } from "./CartSummary";
 import ProductSlider from "@/features/home/productSlider/ProductSlider";
 import { calcSubtotal, calcTotalQuantity } from "../utils";
 import type { ProductDetail } from "@/features/products/types";
-import type { GuestCartItem } from "../types";
+import type { HydratedCartItem } from "../types";
+import { CartPageContentSkeleton } from "./skeletons/CartPageContentSkeleton";
 
 // ---------------------------------------------------------------------------
 // State machine
@@ -22,7 +23,7 @@ type CartSource = "guest" | "loading" | "syncing" | "server" | "error";
 
 type CartState = {
   source: CartSource;
-  serverItems: GuestCartItem[];
+  serverItems: HydratedCartItem[];
   error: string | null;
   /** Product IDs whose cart item currently has an in-flight API request. */
   pendingItemIds: Set<number>;
@@ -32,11 +33,11 @@ type CartAction =
   | { type: "SET_GUEST" }
   | { type: "SET_SYNCING" }
   | { type: "SET_LOADING" }
-  | { type: "SET_SERVER"; items: GuestCartItem[] }
+  | { type: "SET_SERVER"; items: HydratedCartItem[] }
   | { type: "SET_ERROR"; error: string }
   | { type: "UPDATE_ITEM"; productId: number; quantity: number }
   | { type: "REMOVE_ITEM"; productId: number }
-  | { type: "SET_ITEM_ROLLBACK"; items: GuestCartItem[] }
+  | { type: "SET_ITEM_ROLLBACK"; items: HydratedCartItem[] }
   | { type: "ITEM_PENDING"; productId: number }
   | { type: "ITEM_DONE"; productId: number };
 
@@ -173,7 +174,7 @@ export function CartPageContent() {
           }
         });
 
-        const items: GuestCartItem[] = cart.items.map((item) => {
+        const items: HydratedCartItem[] = cart.items.map((item) => {
           const product = productMap.get(item.product_id);
           return {
             product_id: item.product_id,
@@ -243,14 +244,111 @@ export function CartPageContent() {
   }, [state.source, state.serverItems, setServerTotalQuantity]);
 
   // -------------------------------------------------------------------------
+  // Guest cart hydration (fetch product details for stored IDs)
+  // -------------------------------------------------------------------------
+  const [hydratedGuestItems, setHydratedGuestItems] = useState<HydratedCartItem[]>([]);
+  const [isHydrating, setIsHydrating] = useState(
+    !isAuthenticated && guestItems.length > 0,
+  );
+  const productCacheRef = useRef<Map<number, ProductDetail>>(new Map());
+  const fetchIdRef = useRef(0);
+
+  useEffect(() => {
+    if (isAuthenticated) return;
+
+    const ids = guestItems.map((i) => i.product_id);
+    const uncached = ids.filter((id) => !productCacheRef.current.has(id));
+
+    if (ids.length === 0) {
+      setHydratedGuestItems([]);
+      setIsHydrating(false);
+      return;
+    }
+
+    if (uncached.length === 0) {
+      setHydratedGuestItems(
+        guestItems.map((g) => {
+          const p = productCacheRef.current.get(g.product_id)!;
+          return {
+            ...g,
+            name: p.name,
+            image: p.images.thumbnail,
+            price: p.current_price,
+            current_price: p.current_price,
+            slug: p.slug,
+            sku: p.sku,
+            in_stock: p.in_stock,
+            stock_quantity: p.quantity,
+          };
+        }),
+      );
+      setIsHydrating(false);
+      return;
+    }
+
+    const fid = ++fetchIdRef.current;
+    setIsHydrating(true);
+
+    Promise.allSettled(
+      uncached.map((id) => productService.getProductBySlug(String(id), locale)),
+    ).then((results) => {
+      if (fid !== fetchIdRef.current) return;
+
+      results.forEach((r, i) => {
+        if (r.status === "fulfilled") {
+          productCacheRef.current.set(uncached[i], r.value);
+        }
+      });
+
+      setHydratedGuestItems(
+        guestItems.map((g) => {
+          const p = productCacheRef.current.get(g.product_id);
+          if (!p) {
+            return {
+              ...g,
+              name: `Product #${g.product_id}`,
+              image: "",
+              price: 0,
+              current_price: 0,
+              slug: "",
+              sku: "",
+              in_stock: 0,
+              stock_quantity: 0,
+            };
+          }
+          return {
+            ...g,
+            name: p.name,
+            image: p.images.thumbnail,
+            price: p.current_price,
+            current_price: p.current_price,
+            slug: p.slug,
+            sku: p.sku,
+            in_stock: p.in_stock,
+            stock_quantity: p.quantity,
+          };
+        }),
+      );
+      setIsHydrating(false);
+    });
+  }, [isAuthenticated, guestItems, locale]);
+
+  // -------------------------------------------------------------------------
   // Handlers — optimistic update with snapshot rollback on error
   // -------------------------------------------------------------------------
   const handleUpdateQuantity = useCallback(
     async (productId: number, quantity: number) => {
-      // Guest path — mutate store only.
+      // Guest path — mutate store + local hydrated state.
       if (state.source !== "server") {
-        if (quantity <= 0) guestRemoveItem(productId);
-        else guestUpdateQuantity(productId, quantity);
+        if (quantity <= 0) {
+          guestRemoveItem(productId);
+          setHydratedGuestItems((prev) => prev.filter((i) => i.product_id !== productId));
+        } else {
+          guestUpdateQuantity(productId, quantity);
+          setHydratedGuestItems((prev) =>
+            prev.map((i) => (i.product_id === productId ? { ...i, quantity } : i)),
+          );
+        }
         return;
       }
 
@@ -326,7 +424,7 @@ export function CartPageContent() {
   // Derived display data
   // -------------------------------------------------------------------------
   const displayItems =
-    state.source === "server" ? state.serverItems : guestItems;
+    state.source === "server" ? state.serverItems : hydratedGuestItems;
 
   const scheduledItems = displayItems.filter(
     (i) => i.deliveryType === "scheduled",
@@ -365,6 +463,10 @@ export function CartPageContent() {
         </p>
       </div>
     );
+  }
+
+  if (isHydrating) {
+    return <CartPageContentSkeleton />;
   }
 
   if (state.source === "error") {

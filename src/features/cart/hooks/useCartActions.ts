@@ -5,7 +5,7 @@ import { useAuthStore } from "@/features/auth/store/useAuthStore";
 import { useGuestCartStore } from "../store/useGuestCartStore";
 import { useServerCartStore } from "../store/useServerCartStore";
 import { cartService } from "../services/cartService";
-import type { GuestCartItem } from "../types";
+import type { DeliveryType } from "../types";
 
 /**
  * Unified cart-mutation hook.
@@ -49,9 +49,9 @@ export function useCartActions(productId: number) {
 
   // ── addItem ──────────────────────────────────────────────────────────────
   const addItem = useCallback(
-    async (item: Omit<GuestCartItem, "product_id">) => {
+    async (item: { quantity: number; product_variant_id?: number | null; deliveryType?: DeliveryType }) => {
       if (!isAuthenticated) {
-        guestAddItem({ ...item, product_id: productId });
+        guestAddItem({ product_id: productId, quantity: item.quantity, product_variant_id: item.product_variant_id ?? null, deliveryType: item.deliveryType ?? "scheduled" });
         return;
       }
 

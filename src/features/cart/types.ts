@@ -33,8 +33,12 @@ export type DeliveryType = "scheduled" | "fast";
 export interface GuestCartItem {
   product_id: number;
   product_variant_id?: number | null;
-  cartItemId?: number;
   quantity: number;
+  deliveryType: DeliveryType;
+}
+
+export interface HydratedCartItem extends GuestCartItem {
+  cartItemId?: number;
   name: string;
   image: string;
   price: number;
@@ -43,7 +47,6 @@ export interface GuestCartItem {
   sku: string;
   in_stock: number;
   stock_quantity: number;
-  deliveryType: DeliveryType;
 }
 
 export interface AddBulkPayload {

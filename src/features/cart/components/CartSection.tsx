@@ -3,13 +3,13 @@
 import { useTranslations } from "next-intl";
 import { Truck, Zap, Gift, Star, ShoppingCart, Bike, Car } from "lucide-react";
 import { cn } from "@/shared/utils/cn";
-import type { DeliveryType, GuestCartItem } from "../types";
+import type { DeliveryType, HydratedCartItem } from "../types";
 import { ProductCartItem } from "./ProductCartItem";
 import { calcSubtotal, calcTotalQuantity, isFreeShipping, canCheckout } from "../utils";
 
 interface CartSectionProps {
   deliveryType: DeliveryType;
-  items: GuestCartItem[];
+  items: HydratedCartItem[];
   /** Set of product IDs whose cart item currently has an in-flight API request. */
   pendingItemIds?: Set<number>;
   onUpdateQuantity: (productId: number, quantity: number) => void;
