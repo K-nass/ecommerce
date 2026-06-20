@@ -4,9 +4,9 @@ import type { ApiResponse } from "@/shared/types";
 import type { CategoryMenuItem } from "../types";
 
 export const categoryMenuService = {
-  getMenu: async (lang: string): Promise<CategoryMenuItem[]> => {
+  getMenu: async (lang: string, level: number = 3): Promise<CategoryMenuItem[]> => {
     const response = await apiFetch<ApiResponse<CategoryMenuItem[]>>(
-      "/general/navbar",
+      `/general/categories-with-children?level=${level}`,
       { lang, next: { revalidate: 300 } },
     );
     return response.data;

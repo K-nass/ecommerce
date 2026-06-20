@@ -1,3 +1,4 @@
+export { CategoriesPage } from "./CategoriesPage";
 export { default as CategoryProducts } from "./components/CategoryProducts";
 export { default as ProductsSidebar } from "./components/ProductsSidebar";
 export { default as CategoryMenu } from "./components/CategoryMenu";

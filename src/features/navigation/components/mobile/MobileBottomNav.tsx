@@ -18,7 +18,7 @@ type NavItem = {
 };
 
 const navItems: NavItem[] = [
-  { label: "categories", icon: LayoutGrid, href: "#" },
+  { label: "categories", icon: LayoutGrid, href: "/categories" },
   { label: "home", icon: Home, href: "/", isCenter: true },
   { label: "profile", icon: User, href: "/auth" },
   { label: "cart", icon: ShoppingCart, href: "/cart", isCart: true },
@@ -37,7 +37,6 @@ export default function MobileBottomNav() {
   const t = useTranslations("header.bottomNav");
   const pathname = usePathname();
   const isActive = (href: string) => {
-    if (href === "#") return false;
     if (href === "/") return pathname === "/";
     return pathname.startsWith(href);
   };

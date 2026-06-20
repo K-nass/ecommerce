@@ -146,6 +146,12 @@
     "relatedProducts": "Related Products",
     "anonymous": "Anonymous"
   },
+  "categories": {
+    "metaTitle": "Categories",
+    "metaDescription": "Browse all product categories at Meem Market.",
+    "title": "Categories",
+    "viewAll": "View All"
+  },
   "error": {
     "genericTitle": "Something went wrong",
     "retry": "Try again",
