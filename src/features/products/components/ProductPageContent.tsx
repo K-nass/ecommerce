@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useTranslations } from "next-intl";
 import { ProductDeliveryInfo } from "./ProductDeliveryInfo";
 import { ProductGallery } from "./ProductGallery";
@@ -17,12 +17,23 @@ interface ProductPageContentProps {
 
 export function ProductPageContent({ product }: ProductPageContentProps) {
   const t = useTranslations("product");
-  const [selectedVariantId, setSelectedVariantId] = useState<number | null>(product.variants.length > 0 ? product.variants[0].id : null);
+  const [selectedAttributes, setSelectedAttributes] = useState<Record<string, string>>(() => {
+    if (product.variants.length === 0) return {};
+    const first = product.variants[0];
+    const attrs: Record<string, string> = {};
+    for (const a of first.attributes) {
+      attrs[a.attribute_name] = a.value;
+    }
+    return attrs;
+  });
   const images = getSortedImages(product);
 
-  const selectedVariant = selectedVariantId
-    ? product.variants.find((v) => v.id === selectedVariantId) ?? null
-    : null;
+  const selectedVariant = useMemo(() => {
+    if (Object.keys(selectedAttributes).length === 0) return null;
+    return product.variants.find((v) =>
+      v.attributes.every((a) => selectedAttributes[a.attribute_name] === a.value),
+    ) ?? null;
+  }, [product.variants, selectedAttributes]);
 
   return (
     <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-[280px_minmax(0,1fr)_minmax(300px,1fr)] lg:gap-8">
@@ -35,8 +46,10 @@ export function ProductPageContent({ product }: ProductPageContentProps) {
         <ProductInfo product={product} />
         <ProductVariants
           variants={product.variants}
-          selectedVariantId={selectedVariantId}
-          onSelectVariant={setSelectedVariantId}
+          selectedAttributes={selectedAttributes}
+          onSelectAttribute={(name, value) =>
+            setSelectedAttributes((prev) => ({ ...prev, [name]: value }))
+          }
         />
 
         <section>
