@@ -120,7 +120,7 @@ export function useCartActions(productId: number) {
         if (newQty === 0) {
           await cartService.removeItem(cartItemId, locale);
         } else {
-          await cartService.updateItem({ item_id: cartItemId, quantity: newQty }, locale);
+          await cartService.updateItem({ item: { product_id: productId, quantity: newQty, product_variant_id: undefined } }, locale);
         }
       } catch {
         setAuthQuantity((q) => q + 1);

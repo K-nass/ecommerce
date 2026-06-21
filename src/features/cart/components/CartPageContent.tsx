@@ -162,6 +162,7 @@ export function CartPageContent() {
       if (cart && cart.items.length > 0) {
         const items: HydratedCartItem[] = cart.items.map((item) => ({
           product_id: item.product.id,
+          product_variant_id: item.product_variant_id ?? null,
           cartItemId: item.id,
           quantity: item.quantity,
           name: item.product.name,
@@ -344,7 +345,7 @@ export function CartPageContent() {
           await cartService.removeItem(item.cartItemId, locale);
         } else {
           dispatch({ type: "UPDATE_ITEM", productId, quantity });
-          await cartService.updateItem({ item_id: item.cartItemId, quantity }, locale);
+          await cartService.updateItem({ item: { product_id: productId, quantity, product_variant_id: item.product_variant_id ?? null } }, locale);
         }
       } catch {
         dispatch({ type: "SET_ITEM_ROLLBACK", items: snapshot });

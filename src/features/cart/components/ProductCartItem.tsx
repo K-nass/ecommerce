@@ -1,5 +1,6 @@
 "use client";
 import Image from "next/image";
+import Link from "next/link";
 import { Minus, Plus, Trash2, Loader2 } from "lucide-react";
 import type { HydratedCartItem } from "../types";
 import { getDisplayPrice, getOriginalPrice } from "@/features/products";
@@ -50,14 +51,18 @@ export function ProductCartItem({
 
   return (
     <div className="flex gap-3 border border-border p-3 rounded-lg">
-      <div className="relative h-24 w-24 shrink-0 overflow-hidden rounded-lg bg-white">
-        <Image src={item.image} alt={item.name} width={96} height={96} className="object-cover" />
-      </div>
+      <Link href={`/products/${item.slug}`} className="block shrink-0">
+        <div className="relative h-24 w-24 overflow-hidden rounded-lg bg-white">
+          <Image src={item.image} alt={item.name} width={96} height={96} className="object-cover" />
+        </div>
+      </Link>
 
       <div className="flex flex-1 min-w-0 gap-2">
         <div className="flex flex-col justify-between flex-1 min-w-0">
           <div>
-            <h4 className="truncate text-sm font-semibold">{item.name}</h4>
+            <Link href={`/products/${item.slug}`}>
+              <h4 className="truncate text-sm font-semibold hover:text-primary transition-colors">{item.name}</h4>
+            </Link>
             {item.sku && (
               <p className="mt-0.5 text-[11px] text-text-secondary">SKU: {item.sku}</p>
             )}

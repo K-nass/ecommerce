@@ -30,13 +30,16 @@ export const cartService = {
 
   updateItem: async (
     payload: {
-      item_id: number;
-      quantity: number;
+      item: {
+        product_id: number;
+        quantity: number;
+        product_variant_id?: number | null;
+      };
     },
     lang?: string,
-  ): Promise<CartItem> => {
-    const response = await apiFetch<ApiResponse<CartItem>>("/cart/update", {
-      method: "POST",
+  ): Promise<CartApiCart> => {
+    const response = await apiFetch<ApiResponse<CartApiCart>>("/cart/update-item", {
+      method: "PUT",
       body: JSON.stringify(payload),
       lang,
     });
