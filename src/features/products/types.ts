@@ -104,6 +104,28 @@ export interface ProductSearchResult {
   };
 }
 
+export interface ProductListItem {
+  id: number;
+  name: string;
+  slug: string;
+  price: number;
+  current_price: number;
+  price_after_discount: number | null;
+  price_after_flash_sale: number | null;
+  has_discount: boolean;
+  has_flash_sale?: boolean;
+  discount_type: string | null;
+  discount_amount: number | null;
+  quantity: number;
+  discount_valid: boolean;
+  sku?: string;
+  in_stock?: number;
+  image: {
+    thumbnail: string;
+    original: Record<string, string>;
+  };
+}
+
 export type PriceInfo = {
   has_flash_sale: boolean;
   price_after_flash_sale: number | null;

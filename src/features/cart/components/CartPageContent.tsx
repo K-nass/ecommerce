@@ -12,7 +12,7 @@ import { CartSection } from "./CartSection";
 import { CartSummary } from "./CartSummary";
 import ProductSlider from "@/features/home/productSlider/ProductSlider";
 import { calcSubtotal, calcTotalQuantity } from "../utils";
-import type { ProductDetail } from "@/features/products/types";
+import type { ProductListItem } from "@/features/products/types";
 import type { HydratedCartItem } from "../types";
 import { CartPageContentSkeleton } from "./skeletons/CartPageContentSkeleton";
 
@@ -160,37 +160,20 @@ export function CartPageContent() {
       if (controller.signal.aborted) return;
 
       if (cart && cart.items.length > 0) {
-        const productIds = [...new Set(cart.items.map((i) => i.product_id))];
-        const productResults = await Promise.allSettled(
-          productIds.map((id) => productService.getProductBySlug(String(id), locale)),
-        );
-
-        if (controller.signal.aborted) return;
-
-        const productMap = new Map<number, ProductDetail>();
-        productResults.forEach((result, idx) => {
-          if (result.status === "fulfilled") {
-            productMap.set(productIds[idx], result.value);
-          }
-        });
-
-        const items: HydratedCartItem[] = cart.items.map((item) => {
-          const product = productMap.get(item.product_id);
-          return {
-            product_id: item.product_id,
-            cartItemId: item.id,
-            quantity: item.quantity,
-            name: product?.name ?? `Product #${item.product_id}`,
-            image: product?.images?.thumbnail ?? "",
-            price: Number(item.price),
-            current_price: product?.current_price ?? Number(item.price),
-            slug: product?.slug ?? "",
-            sku: product?.sku ?? "",
-            in_stock: product?.in_stock ?? 0,
-            stock_quantity: product?.quantity ?? 0,
-            deliveryType: "scheduled",
-          };
-        });
+        const items: HydratedCartItem[] = cart.items.map((item) => ({
+          product_id: item.product.id,
+          cartItemId: item.id,
+          quantity: item.quantity,
+          name: item.product.name,
+          image: item.product.thumbnail,
+          price: Number(item.price),
+          current_price: Number(item.price),
+          slug: item.product.slug,
+          sku: "",
+          in_stock: 1,
+          stock_quantity: 999,
+          deliveryType: "scheduled",
+        }));
 
         dispatch({ type: "SET_SERVER", items });
       } else {
@@ -250,7 +233,7 @@ export function CartPageContent() {
   const [isHydrating, setIsHydrating] = useState(
     !isAuthenticated && guestItems.length > 0,
   );
-  const productCacheRef = useRef<Map<number, ProductDetail>>(new Map());
+  const productCacheRef = useRef<Map<number, ProductListItem>>(new Map());
   const fetchIdRef = useRef(0);
 
   useEffect(() => {
@@ -272,12 +255,12 @@ export function CartPageContent() {
           return {
             ...g,
             name: p.name,
-            image: p.images.thumbnail,
+            image: p.image.thumbnail,
             price: p.current_price,
             current_price: p.current_price,
             slug: p.slug,
-            sku: p.sku,
-            in_stock: p.in_stock,
+            sku: p.sku ?? "",
+            in_stock: p.quantity > 0 ? 1 : 0,
             stock_quantity: p.quantity,
           };
         }),
@@ -289,15 +272,11 @@ export function CartPageContent() {
     const fid = ++fetchIdRef.current;
     setIsHydrating(true);
 
-    Promise.allSettled(
-      uncached.map((id) => productService.getProductBySlug(String(id), locale)),
-    ).then((results) => {
+    productService.getProductsByIds(uncached, locale).then((products) => {
       if (fid !== fetchIdRef.current) return;
 
-      results.forEach((r, i) => {
-        if (r.status === "fulfilled") {
-          productCacheRef.current.set(uncached[i], r.value);
-        }
+      products.forEach((p) => {
+        productCacheRef.current.set(p.id, p);
       });
 
       setHydratedGuestItems(
@@ -319,12 +298,12 @@ export function CartPageContent() {
           return {
             ...g,
             name: p.name,
-            image: p.images.thumbnail,
+            image: p.image.thumbnail,
             price: p.current_price,
             current_price: p.current_price,
             slug: p.slug,
-            sku: p.sku,
-            in_stock: p.in_stock,
+            sku: p.sku ?? "",
+            in_stock: p.quantity > 0 ? 1 : 0,
             stock_quantity: p.quantity,
           };
         }),

@@ -1,7 +1,6 @@
 import { apiFetch } from "@/shared/lib/api";
-import type { ApiResponse } from "@/shared/types";
+import type { ApiResponse, PaginatedData } from "@/shared/types";
 import type {
-  CartListResponse,
   CartApiCart,
   CartItem,
   AddBulkPayload,
@@ -9,8 +8,8 @@ import type {
 
 export const cartService = {
   getCart: async (lang?: string): Promise<CartApiCart | null> => {
-    const response = await apiFetch<CartListResponse>("/cart", { lang });
-    return response.data?.[0] ?? null;
+    const response = await apiFetch<ApiResponse<PaginatedData<CartApiCart>>>("/cart", { lang });
+    return response.data.data[0] ?? null;
   },
 
   addItem: async (
