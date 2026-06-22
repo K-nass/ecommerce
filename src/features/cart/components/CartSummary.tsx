@@ -2,7 +2,8 @@
 
 import { ShoppingBag, Truck, Zap, ChevronRight } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { cn } from "@/shared/utils/cn";
+import { useRouter } from "next/navigation";
+import { useAuthStore } from "@/features/auth/store/useAuthStore";
 
 interface CartSummaryProps {
   scheduledSubtotal: number;
@@ -22,6 +23,8 @@ export function CartSummary({
   minimumOrderAmount,
 }: CartSummaryProps) {
   const t = useTranslations("cartPage");
+  const router = useRouter();
+  const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
   const total = scheduledSubtotal + fastSubtotal;
   const totalItems = scheduledQuantity + fastQuantity;
 
@@ -65,6 +68,7 @@ export function CartSummary({
 
       <button
         disabled={!checkoutEnabled}
+        onClick={() => router.push(isAuthenticated ? "/payment" : "/auth?redirect=/payment")}
         className="flex w-full items-center justify-center gap-2 rounded-xl bg-primary py-3.5 text-sm font-bold text-white transition-all hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-40"
       >
         <ShoppingBag className="h-4 w-4" />

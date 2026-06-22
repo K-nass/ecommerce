@@ -4,6 +4,7 @@ import { useEffect, useRef, useState, useActionState, useCallback } from "react"
 import { useLocale } from "next-intl";
 import { toast } from "sonner";
 import { useRouter } from "@/i18n/navigation";
+import { useSearchParams } from "next/navigation";
 
 import { PatternTiles } from "./PatternTiles";
 import { AuthHeader } from "./AuthHeader";
@@ -34,6 +35,8 @@ export default function AuthGateway() {
   const [otpStatus, setOtpStatus] = useState<string | undefined>();
 
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const redirectTo = searchParams.get("redirect") || "/";
   const setAuthData = useAuthStore((s) => s.setAuthData);
 
   const [loginState, loginFormAction, loginPending] = useActionState(loginAction, null);
@@ -101,7 +104,7 @@ export default function AuthGateway() {
   useEffect(() => {
     if (otpState?.success) {
       toast.success(otpState.message || "Verified successfully!");
-      router.push("/auth");
+      router.push(redirectTo);
     }
   }, [otpState, router]);
 
@@ -109,7 +112,7 @@ export default function AuthGateway() {
     if (loginState?.success && loginState.data) {
       setAuthData(loginState.data);
       toast.success(loginState.message || "Logged in successfully!");
-      router.push("/");
+      router.push(redirectTo);
     }
   }, [loginState, setAuthData, router]);
 
