@@ -114,6 +114,7 @@ export interface ProductListItem {
   price_after_flash_sale: number | null;
   has_discount: boolean;
   has_flash_sale?: boolean;
+  has_variants: boolean;
   discount_type: string | null;
   discount_amount: number | null;
   quantity: number;

@@ -36,6 +36,7 @@ export default function CategoryProducts({
             originalPrice={product.price}
             discountPercent={discountPercent}
             slug={product.slug}
+            hasVariants={product.has_variants}
           />
         );
       })}

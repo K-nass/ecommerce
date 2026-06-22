@@ -20,5 +20,6 @@ export function toProductItem(p: ApiProduct): ProductItem {
     originalPrice: p.price,
     inStock: p.quantity > 0 ? p.quantity : 0,
     stockQuantity: p.quantity,
+    hasVariants: p.has_variants,
   };
 }

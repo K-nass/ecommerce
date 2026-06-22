@@ -33,6 +33,7 @@ export interface CategoryProduct {
   price_after_discount: number | null;
   price_after_flash_sale: number | null;
   has_discount: boolean;
+  has_variants: boolean;
   discount_type: string;
   discount_amount: number;
   quantity: number;
