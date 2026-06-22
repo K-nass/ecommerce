@@ -72,6 +72,7 @@ export default function ProductSlider({
               inStock={product.inStock}
               stockQuantity={product.stockQuantity}
               priority={index < 2}
+              hasVariants={product.hasVariants}
             />
           </SwiperSlide>
         ))}

@@ -22,6 +22,7 @@ interface ProductCardProps {
   inStock?: number;
   stockQuantity?: number;
   priority?: boolean;
+  hasVariants?: boolean;
 }
 
 export default function ProductCard({
@@ -38,6 +39,7 @@ export default function ProductCard({
   stockQuantity = 10,
   deliveryType = "scheduled",
   priority: priorityProp,
+  hasVariants = false,
 }: ProductCardProps) {
   const { quantity, isPending, addItem, increment, decrement } = useCartActions(productId);
   const [animating, setAnimating] = useState(false);
@@ -81,7 +83,14 @@ export default function ProductCard({
           />
         </Link>
 
-        {quantity === 0 ? (
+        {quantity === 0 && hasVariants ? (
+          <Link
+            href={`/products/${slug}`}
+            className="absolute right-0 bottom-0 bg-primary rounded-full w-10 h-10 text-white font-medium text-2xl border border-white flex items-center justify-center transition-transform duration-200 hover:scale-105"
+          >
+            <Plus className="h-5 w-5" />
+          </Link>
+        ) : quantity === 0 ? (
           <button
             type="button"
             onClick={handleAdd}
