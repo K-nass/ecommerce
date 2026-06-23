@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import { User, LogOut, ChevronDown } from "lucide-react";
 import { useAuthStore } from "../store/useAuthStore";
+import { Link } from "@/i18n/navigation";
 
 export function UserMenu() {
   const { isAuthenticated, logout } = useAuthStore();
@@ -35,13 +36,14 @@ export function UserMenu() {
 
       {open && (
         <div className="absolute right-0 top-full mt-2 w-48 rounded-xl border border-border bg-white shadow-lg z-50 py-2">
-          <button
-            type="button"
+          <Link
+            href="/profile"
+            onClick={() => setOpen(false)}
             className="flex w-full items-center gap-3 px-4 py-2.5 text-sm text-text-primary hover:bg-surface transition"
           >
             <User className="h-4 w-4" />
             Profile
-          </button>
+          </Link>
           <button
             type="button"
             onClick={() => { logout(); setOpen(false); }}

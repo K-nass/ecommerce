@@ -15,9 +15,12 @@ type AuthState = {
   isAuthenticated: boolean;
   email: string | null;
   phoneNumber: string | null;
+  name: string | null;
+  image: string | null;
   loading: boolean;
   error: string | null;
   setAuthData: (authData: AuthLoginData) => void;
+  setProfile: (name: string | null, image: string | null) => void;
   clearAuth: () => void;
   login: (payload: LoginPayload) => Promise<void>;
   register: (payload: RegisterPayload) => Promise<void>;
@@ -43,6 +46,8 @@ const initialState = {
   isAuthenticated: false,
   email: null as string | null,
   phoneNumber: null as string | null,
+  name: null as string | null,
+  image: null as string | null,
   loading: false,
   error: null as string | null,
 };
@@ -63,6 +68,9 @@ export const useAuthStore = create<AuthState>()(
           phoneNumber: authData.phone_number ?? null,
           error: null,
         });
+      },
+      setProfile: (name, image) => {
+        set({ name, image });
       },
       clearAuth: () => {
         writeTokenToStorage(null);
@@ -149,6 +157,8 @@ export const useAuthStore = create<AuthState>()(
         isAuthenticated: state.isAuthenticated,
         email: state.email,
         phoneNumber: state.phoneNumber,
+        name: state.name,
+        image: state.image,
       }),
       onRehydrateStorage: () => (state) => {
         if (state?.token) {
