@@ -201,6 +201,84 @@
       "goHome": "Go Home"
     }
   },
+  "profile": {
+    "metaTitle": "My Account",
+    "metaDescription": "Manage your profile, orders, addresses, and security settings.",
+    "breadcrumb": "My Account",
+    "loadError": "Failed to load profile data.",
+    "tabs": {
+      "info": "Profile Info",
+      "orders": "Orders",
+      "addresses": "Addresses",
+      "security": "Security"
+    },
+    "info": {
+      "name": "Full Name",
+      "email": "Email",
+      "phone": "Phone",
+      "status": "Account Status",
+      "active": "Active",
+      "inactive": "Inactive"
+    },
+    "password": {
+      "title": "Change Password",
+      "currentPassword": "Current Password",
+      "newPassword": "New Password",
+      "confirmPassword": "Confirm New Password",
+      "update": "Update Password",
+      "updating": "Updating...",
+      "fillAll": "Please fill in all password fields.",
+      "minLength": "Password must be at least 6 characters.",
+      "mismatch": "New passwords do not match.",
+      "success": "Password updated successfully!",
+      "error": "Failed to update password."
+    },
+    "address": {
+      "addNew": "Add New Address",
+      "empty": "No saved addresses yet.",
+      "edit": "Edit",
+      "delete": "Delete",
+      "loadError": "Failed to load addresses.",
+      "deleteError": "Failed to delete address.",
+      "form": {
+        "addTitle": "Add Address",
+        "editTitle": "Edit Address",
+        "title": "Address Title",
+        "titlePlaceholder": "Home, Work, etc.",
+        "type": "Type",
+        "billing": "Billing",
+        "shipping": "Shipping",
+        "country": "Country",
+        "countryPlaceholder": "Country",
+        "state": "State",
+        "statePlaceholder": "State",
+        "city": "City",
+        "cityPlaceholder": "City",
+        "streetAddress": "Street Address",
+        "streetPlaceholder": "123 Main Street",
+        "zip": "ZIP Code",
+        "zipPlaceholder": "ZIP Code",
+        "add": "Add Address",
+        "save": "Save Changes",
+        "saving": "Saving...",
+        "required": "Please fill in all required fields.",
+        "error": "Failed to save address."
+      }
+    },
+    "orders": {
+      "empty": "No orders yet.",
+      "loadError": "Failed to load orders.",
+      "total": "Total",
+      "discount": "Discount",
+      "status": {
+        "completed": "Completed",
+        "pending": "Pending",
+        "cancelled": "Cancelled",
+        "processing": "Processing",
+        "shipped": "Shipped"
+      }
+    }
+  },
   "error": {
     "genericTitle": "Something went wrong",
     "retry": "Try again",
