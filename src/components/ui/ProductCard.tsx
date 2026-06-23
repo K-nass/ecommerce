@@ -44,6 +44,9 @@ export default function ProductCard({
   const { quantity, isPending, addItem, increment, decrement } = useCartActions(productId);
   const [animating, setAnimating] = useState(false);
 
+  const safePrice = price ?? 0;
+  const safeOriginalPrice = originalPrice ?? 0;
+
   const handleAdd = useCallback(async () => {
     await addItem({ quantity: 1, deliveryType });
     setAnimating(true);
@@ -58,7 +61,7 @@ export default function ProductCard({
     await decrement();
   }, [decrement]);
 
-  const priceStr = price.toString();
+  const priceStr = safePrice.toString();
   const integerPart = priceStr.split(".")[0];
   const decimalPart = priceStr.includes(".")
     ? "." + priceStr.split(".")[1]
@@ -154,7 +157,7 @@ export default function ProductCard({
         </div>
         <div>
           <p className="text-sm leading-4 font-medium text-gray-500 text-left self-center line-through">
-            {currency} {originalPrice.toFixed(2)}
+            {currency} {safeOriginalPrice.toFixed(2)}
           </p>
         </div>
       </div>

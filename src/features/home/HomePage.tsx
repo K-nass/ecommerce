@@ -29,6 +29,7 @@ function SectionRenderer({
     case "promotions":
     case "flash-sales":
     case "coupons":
+    case "brands":
       return <FlashSalesSection type={type} title={title} locale={locale} setting={setting} endpoint={endpoint} />;
     case "categories":
       return <ContentSection type={type} title={title} locale={locale} setting={setting} endpoint={endpoint} />;
@@ -47,6 +48,7 @@ const sectionSkeletonMap: Record<string, React.ReactNode> = {
   promotions: <FlashSalesSkeleton />,
   "flash-sales": <FlashSalesSkeleton />,
   coupons: <FlashSalesSkeleton />,
+  brands: <FlashSalesSkeleton />,
   categories: <ContentSectionSkeleton />,
   products: <ProductSliderSkeleton />,
   banners: <BrandProductsSectionSkeleton />,
