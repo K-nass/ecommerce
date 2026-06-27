@@ -23,6 +23,7 @@ interface ProductCardProps {
   stockQuantity?: number;
   priority?: boolean;
   hasVariants?: boolean;
+  badgeText?: string;
 }
 
 export default function ProductCard({
@@ -40,6 +41,7 @@ export default function ProductCard({
   deliveryType = "scheduled",
   priority: priorityProp,
   hasVariants = false,
+  badgeText,
 }: ProductCardProps) {
   const { quantity, isPending, addItem, increment, decrement } = useCartActions(productId);
   const [animating, setAnimating] = useState(false);
@@ -70,11 +72,18 @@ export default function ProductCard({
   return (
     <div className="w-full">
       <div className="relative w-full aspect-square p-2 border-2 border-border-subtle rounded-2xl">
-        {discountPercent && discountPercent > 0 ? (
-          <div className="absolute top-0 left-0 bg-discount text-white font-bold text-xs px-2.5 py-1 z-10 rounded-br-[16px] rounded-tl-[14px]">
-            {discountPercent}% OFF
-          </div>
-        ) : null}
+        <div className="absolute top-0 left-0 z-10 flex flex-col gap-1">
+          {discountPercent && discountPercent > 0 ? (
+            <div className="bg-discount text-white font-bold text-xs px-2.5 py-1 rounded-br-[16px] rounded-tl-[14px]">
+              {discountPercent}% OFF
+            </div>
+          ) : null}
+          {badgeText ? (
+            <div className="bg-primary text-white font-bold text-xs px-2.5 py-1 rounded-br-[16px] rounded-tl-[14px]">
+              {badgeText}
+            </div>
+          ) : null}
+        </div>
         <Link href={`/products/${slug}`} className="block w-full h-full relative">
           <Image
             className="object-contain"

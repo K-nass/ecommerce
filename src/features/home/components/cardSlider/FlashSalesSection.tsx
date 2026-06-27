@@ -68,7 +68,7 @@ export default async function FlashSalesSection({
   const sectionContent = setting?.layout === "grid" ? (
     <CardGrid title={title} items={items} />
   ) : (
-    <CardSlider title={title} items={items} />
+    <CardSlider title={title} items={items} autoplay={setting?.autoplay} sliderSpeed={setting?.slider_speed} />
   );
 
   if (setting?.theme === "dark") {

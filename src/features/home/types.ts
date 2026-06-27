@@ -108,6 +108,8 @@ export interface BannerPaginationProps {
 export interface CardSliderProps {
   title?: string;
   items: CardSlideItem[];
+  autoplay?: boolean;
+  sliderSpeed?: number;
   className?: string;
   cardClassName?: string;
   imageClassName?: string;
@@ -197,6 +199,7 @@ export interface HeroBanner {
 
 export interface HeroSwiperProps {
   type: string;
+  title?: string;
   locale: string;
   setting?: SectionFrontSetting;
   endpoint?: string;

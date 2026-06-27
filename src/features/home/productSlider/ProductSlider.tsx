@@ -71,8 +71,9 @@ export default function ProductSlider({
               sku={product.sku}
               inStock={product.inStock}
               stockQuantity={product.stockQuantity}
-              priority={index < 2}
+              priority={index < Math.round(cols)}
               hasVariants={product.hasVariants}
+              badgeText={badgeText}
             />
           </SwiperSlide>
         ))}

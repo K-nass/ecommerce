@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useLocale } from "next-intl";
-import { Navigation, Pagination } from "swiper/modules";
+import { Autoplay, Navigation, Pagination } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import type { Swiper as SwiperType } from "swiper/types";
 import "swiper/css";
@@ -19,6 +19,8 @@ import type { CardSliderProps } from "../../types";
 export default function CardSlider({
   title,
   items,
+  autoplay,
+  sliderSpeed,
   showArrows = true,
   className,
   cardClassName = "aspect-3/4",
@@ -42,8 +44,13 @@ export default function CardSlider({
       <Swiper
         key={locale}
         dir={isRtl ? "rtl" : "ltr"}
-        modules={[Navigation, Pagination]}
+        modules={[Autoplay, Navigation, Pagination]}
         spaceBetween={12}
+        autoplay={
+          autoplay && items.length > 1
+            ? { delay: sliderSpeed ?? 4500, disableOnInteraction: false, pauseOnMouseEnter: true }
+            : false
+        }
         slidesPerView={1.3}
         onSwiper={(s) => {
           setSwiper(s);
