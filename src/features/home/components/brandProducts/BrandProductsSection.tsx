@@ -57,7 +57,7 @@ export default async function BrandProductsSection({
       <div className="flex flex-col gap-y-12">
         {brands.map((brand) => (
           <div key={brand.id} className="flex flex-col gap-y-4">
-            <Banner promotion={brand} locale={locale} />
+            <Banner promotion={brand} locale={locale} setting={setting} />
             {brand.products && brand.products.length > 0 && (
               <ProductSlider title={brand.name} items={brand.products.map(toProductItem)} columnsCount={setting?.columns_count} />
             )}

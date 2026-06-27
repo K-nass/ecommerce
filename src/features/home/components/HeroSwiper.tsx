@@ -2,7 +2,7 @@ import { homePageService } from "../services/homePageService";
 import HeroSwiperClient from "./HeroSwiperClient";
 import type { HeroBanner, HeroSwiperProps } from "../types";
 
-export default async function HeroSwiper({ endpoint, locale }: HeroSwiperProps) {
+export default async function HeroSwiper({ endpoint, locale, title, setting }: HeroSwiperProps) {
   if (!endpoint) return null;
 
   let banners: HeroBanner[] = [];
@@ -20,5 +20,5 @@ export default async function HeroSwiper({ endpoint, locale }: HeroSwiperProps) 
   );
   if (validBanners.length === 0) return null;
 
-  return <HeroSwiperClient banners={validBanners} />;
+  return <HeroSwiperClient banners={validBanners} title={title} setting={setting} />;
 }

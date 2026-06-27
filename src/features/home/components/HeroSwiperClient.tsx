@@ -10,10 +10,12 @@ import type { Swiper as SwiperType } from "swiper/types";
 import "swiper/css";
 
 import { BannerArrows, BannerPagination } from "./banner";
+import SectionTitle from "@/components/ui/SectionTitle";
 import type { HeroBanner, SectionFrontSetting } from "../types";
 
 interface HeroSwiperClientProps {
   banners: HeroBanner[];
+  title?: string;
   setting?: SectionFrontSetting;
 }
 
@@ -40,6 +42,7 @@ function HeroBannerImage({
     src: banner.image.desktop,
     width: 1440,
     height: 300,
+    unoptimized: true,
     ...(isFirst ? { priority: true } : {}),
   });
   const { props: mobileImageProps } = getImageProps({
@@ -47,6 +50,7 @@ function HeroBannerImage({
     src: banner.image.mobile,
     width: 640,
     height: 170,
+    unoptimized: true,
     ...(isFirst ? { priority: true } : {}),
   });
 
@@ -58,7 +62,7 @@ function HeroBannerImage({
   );
 }
 
-export default function HeroSwiperClient({ banners, setting }: HeroSwiperClientProps) {
+export default function HeroSwiperClient({ banners, title, setting }: HeroSwiperClientProps) {
   const locale = useLocale();
   const isRtl = locale === "ar";
   const total = banners.length;
@@ -83,6 +87,7 @@ export default function HeroSwiperClient({ banners, setting }: HeroSwiperClientP
 
   return (
     <section className="w-full" dir={isRtl ? "rtl" : "ltr"} aria-label="Hero promotions">
+      {title ? <SectionTitle title={title} /> : null}
       <div className="group relative h-[170px] w-full overflow-hidden rounded-[20px] sm:h-[230px] lg:h-[300px]">
         <Swiper
           modules={[Autoplay, A11y, Keyboard]}

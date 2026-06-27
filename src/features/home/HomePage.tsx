@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import { withRetry } from "@/shared/utils/retry";
 import { homePageService } from "./services/homePageService";
-import type { HomeContentPage, HomePageSection } from "./types";
+import type { HomeContentPage, HomePageSection, SectionFrontSetting } from "./types";
 import HeroSwiper from "./components/HeroSwiper";
 import FlashSalesSection from "./components/cardSlider/FlashSalesSection";
 import ContentSection from "./components/contentSection/ContentSection";
@@ -25,7 +25,7 @@ function SectionRenderer({
 
   switch (type) {
     case "sliders":
-      return <HeroSwiper type={type} locale={locale} setting={setting} endpoint={endpoint} />;
+      return <HeroSwiper type={type} title={title} locale={locale} setting={setting} endpoint={endpoint} />;
     case "promotions":
     case "flash-sales":
     case "coupons":
@@ -43,16 +43,25 @@ function SectionRenderer({
   }
 }
 
-const sectionSkeletonMap: Record<string, React.ReactNode> = {
-  sliders: <HeroSwiperSkeleton />,
-  promotions: <FlashSalesSkeleton />,
-  "flash-sales": <FlashSalesSkeleton />,
-  coupons: <FlashSalesSkeleton />,
-  brands: <FlashSalesSkeleton />,
-  categories: <ContentSectionSkeleton />,
-  products: <ProductSliderSkeleton />,
-  banners: <BrandProductsSectionSkeleton />,
-};
+function getSkeleton(type: string, setting?: SectionFrontSetting): React.ReactNode {
+  switch (type) {
+    case "sliders":
+      return <HeroSwiperSkeleton />;
+    case "promotions":
+    case "flash-sales":
+    case "coupons":
+    case "brands":
+      return <FlashSalesSkeleton setting={setting} />;
+    case "categories":
+      return <ContentSectionSkeleton setting={setting} />;
+    case "products":
+      return <ProductSliderSkeleton />;
+    case "banners":
+      return <BrandProductsSectionSkeleton setting={setting} />;
+    default:
+      return null;
+  }
+}
 
 export async function HomePage({ locale }: { locale: string }) {
   let page: HomeContentPage;
@@ -66,7 +75,7 @@ export async function HomePage({ locale }: { locale: string }) {
   return (
     <main className="flex flex-col gap-y-5">
       {page.sections.map((section) => (
-        <Suspense key={section.id} fallback={sectionSkeletonMap[section.type] ?? null}>
+        <Suspense key={section.id} fallback={getSkeleton(section.type, section.setting?.front)}>
           <SectionRenderer section={section} locale={locale} />
         </Suspense>
       ))}
