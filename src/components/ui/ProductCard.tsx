@@ -72,7 +72,7 @@ export default function ProductCard({
   return (
     <div className="w-full">
       <div className="relative w-full aspect-square p-2 border-2 border-border-subtle rounded-2xl">
-        <div className="absolute top-0 left-0 z-10 flex flex-col gap-1">
+        <div className="absolute top-0 start-0 z-10 flex flex-col gap-1">
           {discountPercent && discountPercent > 0 ? (
             <div className="bg-discount text-white font-bold text-xs px-2.5 py-1 rounded-br-[16px] rounded-tl-[14px]">
               {discountPercent}% OFF
@@ -98,7 +98,7 @@ export default function ProductCard({
         {quantity === 0 && hasVariants ? (
           <Link
             href={`/products/${slug}`}
-            className="absolute right-0 bottom-0 bg-primary rounded-full w-10 h-10 text-white font-medium text-2xl border border-white flex items-center justify-center transition-transform duration-200 hover:scale-105"
+            className="absolute end-0 bottom-0 bg-primary rounded-full w-10 h-10 text-white font-medium text-2xl border border-white flex items-center justify-center transition-transform duration-200 hover:scale-105"
           >
             <Plus className="h-5 w-5" />
           </Link>
@@ -108,7 +108,7 @@ export default function ProductCard({
             onClick={handleAdd}
             disabled={isPending}
             className={cn(
-              "absolute right-0 bottom-0 bg-primary rounded-full w-10 h-10 text-white font-medium text-2xl border border-white flex items-center justify-center transition-transform duration-200 hover:scale-105",
+              "absolute end-0 bottom-0 bg-primary rounded-full w-10 h-10 text-white font-medium text-2xl border border-white flex items-center justify-center transition-transform duration-200 hover:scale-105",
               animating && "scale-110",
               isPending && "opacity-70 cursor-not-allowed"
             )}
@@ -116,7 +116,7 @@ export default function ProductCard({
             <Plus className="h-5 w-5" />
           </button>
         ) : (
-          <div className={cn("absolute right-0 bottom-0 flex items-center gap-1 bg-primary rounded-full h-10 px-1 border border-white text-white transition-all duration-300", isPending && "opacity-70 pointer-events-none")}>
+          <div className={cn("absolute end-0 bottom-0 flex items-center gap-1 bg-primary rounded-full h-10 px-1 border border-white text-white transition-all duration-300", isPending && "opacity-70 pointer-events-none")}>
             <button
               type="button"
               onClick={handleDecrement}
@@ -147,7 +147,7 @@ export default function ProductCard({
       </div>
       <div>
         <Link href={`/products/${slug}`}>
-            <p className="text-sm leading-4 font-medium line-clamp-2 text-left md:text-base hover:text-primary transition-colors cursor-pointer">
+            <p className="text-sm leading-4 font-medium line-clamp-2 md:text-base hover:text-primary transition-colors cursor-pointer">
             {title}
           </p>
         </Link>
@@ -165,7 +165,7 @@ export default function ProductCard({
           </div>
         </div>
         <div>
-          <p className="text-sm leading-4 font-medium text-gray-500 text-left self-center line-through">
+          <p className="text-sm leading-4 font-medium text-gray-500 self-center line-through">
             {currency} {safeOriginalPrice.toFixed(2)}
           </p>
         </div>
