@@ -9,6 +9,7 @@ const nextConfig: NextConfig = {
     NEXT_PUBLIC_XHR_LOGS: process.env.NEXT_PUBLIC_XHR_LOGS ?? "false",
   },
   images: {
+    unoptimized: true,
     remotePatterns: [
       {
         protocol: "https",

@@ -18,7 +18,7 @@ export function AuthHeader({ isLogin, isOtp }: AuthHeaderProps) {
             alt="Kareem Shop"
             width={112}
             height={34}
-            style={{ width: "auto", height: "auto" }}
+            style={{ maxWidth: "100%", height: "auto" }}
             className="h-8 object-contain"
             priority
             loading="eager"
@@ -43,7 +43,7 @@ export function AuthHeader({ isLogin, isOtp }: AuthHeaderProps) {
           alt="Kareem Shop"
           width={112}
           height={34}
-          style={{ width: "auto", height: "auto" }}
+          style={{ maxWidth: "100%", height: "auto" }}
           className="h-8 object-contain"
           priority
           loading="eager"
