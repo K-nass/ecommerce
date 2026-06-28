@@ -279,6 +279,12 @@
       }
     }
   },
+  "notFound": {
+    "title": "Page not found",
+    "description": "Sorry, we couldn't find the page you're looking for.",
+    "goHome": "Go home",
+    "browseProducts": "Browse products"
+  },
   "error": {
     "genericTitle": "Something went wrong",
     "retry": "Try again",
