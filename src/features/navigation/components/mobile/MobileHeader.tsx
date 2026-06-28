@@ -1,6 +1,7 @@
 import { getTranslations } from "next-intl/server";
 import DeliveryModes from "../header/DeliveryModes";
 import { SearchInput } from "../header/SearchInput";
+import MobileLocaleSwitcher from "./MobileLocaleSwitcher";
 
 export default async function MobileHeader() {
   const t = await getTranslations("header.search");
@@ -8,7 +9,10 @@ export default async function MobileHeader() {
   return (
     <div className="block lg:hidden">
       <div className="flex flex-col gap-3 px-4 py-2.5">
-        <DeliveryModes />
+        <div className="flex items-center gap-3">
+          <DeliveryModes />
+          <MobileLocaleSwitcher />
+        </div>
         <SearchInput
           prefixText={t("mainPlaceholderPrefix")}
           highlightText={t("mainPlaceholderHighlight")}
