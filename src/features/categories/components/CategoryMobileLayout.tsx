@@ -85,7 +85,7 @@ export function CategoryMobileLayout({
           </div>
         )}
         {/* Products — independent scroll */}
-        <div className="flex-1 overflow-y-auto overflow-x-hidden">
+        <div className="flex-1 overflow-y-auto overflow-x-hidden pb-32">
           {content}
         </div>
       </div>
