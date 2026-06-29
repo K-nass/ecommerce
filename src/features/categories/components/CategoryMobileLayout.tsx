@@ -40,15 +40,17 @@ export function CategoryMobileLayout({
 
     const BOTTOM_NAV_H = 56; // px — MobileBottomNav fixed height
 
-    /** Measure the sticky <header> that precedes our container in the DOM. */
-    const header = document.querySelector<HTMLElement>("header");
-    const headerH = header ? header.getBoundingClientRect().height : 90;
-
-    /** Apply the correct height to our container. */
     const el = containerRef.current;
-    if (el) {
-      el.style.height = `calc(100dvh - ${headerH}px - ${BOTTOM_NAV_H}px)`;
-    }
+    if (!el) return;
+
+    /**
+     * Use the container's own top offset instead of querying the header.
+     * This is always accurate: it's the exact distance from the viewport
+     * top to where our panel begins, regardless of how many headers are
+     * in the DOM or whether any are CSS-hidden.
+     */
+    const top = el.getBoundingClientRect().top;
+    el.style.height = `calc(100dvh - ${top}px - ${BOTTOM_NAV_H}px)`;
 
     /** Lock body + html so the page itself does NOT scroll. */
     const html = document.documentElement;
@@ -68,8 +70,8 @@ export function CategoryMobileLayout({
     <div
       ref={containerRef}
       className="hidden max-[991px]:flex overflow-hidden -mx-4"
-      /* fallback height until JS runs */
-      style={{ height: "calc(100dvh - 90px - 56px)" }}
+      /* JS corrects this immediately on mount via getBoundingClientRect */
+      style={{ height: "100dvh" }}
     >
       {/* Sidebar panel — independent scroll */}
       <div className="shrink-0 w-[85px] bg-[#f4f5f7] overflow-y-auto overflow-x-hidden">
