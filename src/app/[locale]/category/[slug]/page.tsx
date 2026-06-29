@@ -8,6 +8,7 @@ import MobileCategorySidebar from "@/features/categories/components/MobileCatego
 import SidebarContent from "@/features/categories/components/SidebarContent";
 import MobileSidebarContent from "@/features/categories/components/MobileSidebarContent";
 import ProductsGridContent from "@/features/categories/components/ProductsGridContent";
+import { CategoryMobileLayout } from "@/features/categories/components/CategoryMobileLayout";
 import { categoryMenuService } from "@/features/categories/services/categoryMenuService";
 import { getCategoryPageData, getCachedCategoryPageData } from "@/features/categories/services/categoryProductsService";
 import { findCategoryPath } from "@/features/categories/utils/categoryBreadcrumbs";
@@ -102,7 +103,7 @@ export default async function Page({
   // banner/promotion page — slug is not a category
   if (!categoryPath) {
     return (
-      <div className="w-full pb-16">
+      <div className="w-full flex flex-col flex-1">
         <Breadcrumb
           items={[
             { label: t("home"), href: "/" },
@@ -111,7 +112,7 @@ export default async function Page({
         />
         <Suspense
           fallback={
-            <div className="flex gap-5 max-[991px]:gap-0 items-stretch">
+            <div className="flex gap-5 max-[991px]:gap-0 items-stretch flex-1">
               <div className="max-[991px]:hidden block">
                 <ProductsSidebarSkeleton />
               </div>
@@ -151,22 +152,53 @@ export default async function Page({
   const sidebarPromise = getCachedCategoryPageData(decodedSlug, locale, resolvedSearchParams);
 
   return (
-    <div className="w-full pb-16">
+    <div className="w-full flex flex-col flex-1">
+      {/* Breadcrumb — desktop only */}
       <div className="max-[991px]:hidden">
         <Breadcrumb items={breadcrumbItems} />
       </div>
-      <div className="flex gap-5 max-[991px]:gap-0 items-stretch">
-        {/* Mobile Category Sidebar — renders immediately */}
-        <div className="hidden max-[991px]:flex shrink-0 -ms-4 self-stretch">
+
+      {/* ── MOBILE (≤991px) ─────────────────────────────────────────────────
+       *  CategoryMobileLayout is a client component that:
+       *   1. Measures the real header height on mount.
+       *   2. Locks document body overflow so the PAGE itself doesn't scroll.
+       *   3. Renders two panels (sidebar / content) each with their own
+       *      overflow-y-auto so they scroll completely independently.
+       * ──────────────────────────────────────────────────────────────────── */}
+      <CategoryMobileLayout
+        sidebar={
           <MobileCategorySidebar
             subCategories={sliderCategories}
             currentSlug={decodedSlug}
             parentSlug={sliderParentSlug}
           />
-        </div>
+        }
+        topBar={
+          <Suspense fallback={null}>
+            <MobileSidebarContent
+              sidebarPromise={sidebarPromise}
+              seeMoreText={tf("seeMore")}
+              seeLessText={tf("seeLess")}
+            />
+          </Suspense>
+        }
+        content={
+          <div className="p-3">
+            <Suspense fallback={<CategoryProductsSkeleton />}>
+              <ProductsGridContent
+                slug={decodedSlug}
+                locale={locale}
+                searchParams={resolvedSearchParams}
+              />
+            </Suspense>
+          </div>
+        }
+      />
 
-        {/* Desktop Sidebar — hidden on mobile/tablet, streams independently */}
-        <div className="max-[991px]:hidden block">
+      {/* ── DESKTOP (>991px) ─────────────────────────────────────────────── */}
+      <div className="hidden min-[992px]:flex gap-5 items-stretch flex-1">
+        {/* Desktop Sidebar — streams independently */}
+        <div>
           <Suspense fallback={<ProductsSidebarSkeleton />}>
             <SidebarContent
               sidebarPromise={sidebarPromise}
@@ -176,37 +208,21 @@ export default async function Page({
           </Suspense>
         </div>
 
-        <div className="flex-1 max-[991px]:p-0">
-          {/* Desktop Slider — renders immediately */}
-          <div className="max-[991px]:hidden block">
-            <CategorySlider
-              subCategories={sliderCategories}
-              currentSlug={decodedSlug}
-              parentSlug={sliderParentSlug}
+        <div className="flex-1">
+          {/* Desktop Category Slider */}
+          <CategorySlider
+            subCategories={sliderCategories}
+            currentSlug={decodedSlug}
+            parentSlug={sliderParentSlug}
+          />
+          {/* Products grid */}
+          <Suspense fallback={<CategoryProductsSkeleton />}>
+            <ProductsGridContent
+              slug={decodedSlug}
+              locale={locale}
+              searchParams={resolvedSearchParams}
             />
-          </div>
-
-          {/* Mobile Filter Bar — streams, sits above the grid */}
-          <div className="hidden max-[991px]:block">
-            <Suspense fallback={null}>
-              <MobileSidebarContent
-                sidebarPromise={sidebarPromise}
-                seeMoreText={tf("seeMore")}
-                seeLessText={tf("seeLess")}
-              />
-            </Suspense>
-          </div>
-
-          {/* Products grid — streams independently */}
-          <div className="max-[991px]:p-3">
-            <Suspense fallback={<CategoryProductsSkeleton />}>
-              <ProductsGridContent
-                slug={decodedSlug}
-                locale={locale}
-                searchParams={resolvedSearchParams}
-              />
-            </Suspense>
-          </div>
+          </Suspense>
         </div>
       </div>
     </div>

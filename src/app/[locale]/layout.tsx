@@ -67,7 +67,7 @@ export default async function RootLayout({
           </div>
           <MobileBottomNav />
           <CartSyncProvider>
-            <div className="container mx-auto px-4 flex flex-col min-h-screen pb-16 lg:pb-0">
+            <div className="container mx-auto px-4 flex flex-col min-h-screen pb-[56px] lg:pb-0">
               {children}
             </div>
           </CartSyncProvider>

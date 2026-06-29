@@ -24,8 +24,7 @@ export default function MobileCategorySidebar({
   if (!subCategories || subCategories.length === 0) return null;
 
   return (
-    <div className="w-[85px] min-h-full bg-[#f4f5f7] relative">
-      <div className="sticky top-0 h-screen overflow-y-auto overflow-x-hidden py-4">
+    <div className="w-[85px] bg-[#f4f5f7] py-4">
       <div className="flex flex-col items-center gap-6">
         <Link
           href={`/category/${parentSlug}`}
@@ -97,7 +96,6 @@ export default function MobileCategorySidebar({
             </Link>
           );
         })}
-      </div>
       </div>
     </div>
   );
