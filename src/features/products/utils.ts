@@ -34,6 +34,17 @@ export function getAverageRating(reviews: { rating: number }[]): number {
   return Math.round((sum / reviews.length) * 10) / 10;
 }
 
+export function getVariantPriceRange(variants: { current_price: number }[]): { min: number; max: number } | null {
+  if (variants.length === 0) return null;
+  let min = Infinity;
+  let max = -Infinity;
+  for (const v of variants) {
+    if (v.current_price < min) min = v.current_price;
+    if (v.current_price > max) max = v.current_price;
+  }
+  return { min, max };
+}
+
 export function getStockStatus(product: { in_stock: number; quantity: number; sold_quantity: number }): {
   inStock: boolean;
   remaining: number;

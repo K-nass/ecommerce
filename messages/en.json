@@ -143,6 +143,8 @@
     "shippingDesc": "Free shipping on orders over 500 K.D",
     "returnsTitle": "Easy Returns",
     "returnsDesc": "14-day hassle-free returns",
+    "options": "Options",
+    "fromPrice": "{min} – {max}",
     "relatedProducts": "Related Products",
     "anonymous": "Anonymous"
   },

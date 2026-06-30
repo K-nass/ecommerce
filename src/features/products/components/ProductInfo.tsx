@@ -3,24 +3,47 @@
 import { useTranslations } from "next-intl";
 import { Star } from "lucide-react";
 import { cn } from "@/shared/utils/cn";
-import type { ProductDetail } from "../types";
+import type { ProductDetail, ProductVariant } from "../types";
 import {
   getDisplayPrice,
   getOriginalPrice,
   getDiscountPercent,
   getAverageRating,
+  getVariantPriceRange,
 } from "../utils";
 
 interface ProductInfoProps {
   product: ProductDetail;
+  selectedVariant?: ProductVariant | null;
 }
 
-export function ProductInfo({ product }: ProductInfoProps) {
+export function ProductInfo({ product, selectedVariant }: ProductInfoProps) {
   const t = useTranslations("product");
-  const displayPrice = getDisplayPrice(product);
-  const originalPrice = getOriginalPrice(product);
-  const discountPercent = getDiscountPercent(product);
   const avgRating = getAverageRating(product.reviews);
+  const hasVariants = product.variants.length > 0;
+  const range = hasVariants ? getVariantPriceRange(product.variants) : null;
+
+  let displayPrice: number;
+  let originalPrice: number;
+  let discountPercent: number | null;
+
+  if (selectedVariant) {
+    displayPrice = selectedVariant.current_price;
+    originalPrice = selectedVariant.price;
+    discountPercent =
+      originalPrice > displayPrice
+        ? Math.round(((originalPrice - displayPrice) / originalPrice) * 100)
+        : null;
+  } else if (hasVariants && range) {
+    displayPrice = range.min;
+    originalPrice = displayPrice;
+    discountPercent = null;
+  } else {
+    displayPrice = getDisplayPrice(product);
+    originalPrice = getOriginalPrice(product);
+    discountPercent = getDiscountPercent(product);
+  }
+
   const hasDiscount = displayPrice < originalPrice;
 
   return (
@@ -51,20 +74,35 @@ export function ProductInfo({ product }: ProductInfoProps) {
       )}
 
       <div className="flex items-baseline gap-3">
-        <span className="text-3xl font-bold text-text-primary">
-          {displayPrice.toFixed(2)} {t("currency")}
-        </span>
-        {hasDiscount && (
+        {selectedVariant || !hasVariants ? (
           <>
-            <span className="text-lg text-text-secondary line-through">
-              {originalPrice.toFixed(2)} {t("currency")}
+            <span className="text-3xl font-bold text-text-primary">
+              {displayPrice.toFixed(2)} {t("currency")}
             </span>
-            {discountPercent && (
-              <span className="rounded-md bg-discount px-2 py-0.5 text-xs font-bold text-white">
-                -{discountPercent}%
-              </span>
+            {hasDiscount && (
+              <>
+                <span className="text-lg text-text-secondary line-through">
+                  {originalPrice.toFixed(2)} {t("currency")}
+                </span>
+                {discountPercent && (
+                  <span className="rounded-md bg-discount px-2 py-0.5 text-xs font-bold text-white">
+                    -{discountPercent}%
+                  </span>
+                )}
+              </>
             )}
           </>
+        ) : range!.min === range!.max ? (
+          <span className="text-3xl font-bold text-text-primary">
+            {range!.min.toFixed(2)} {t("currency")}
+          </span>
+        ) : (
+          <span className="text-3xl font-bold text-text-primary">
+            {t("fromPrice", {
+              min: `${range!.min.toFixed(2)} ${t("currency")}`,
+              max: `${range!.max.toFixed(2)} ${t("currency")}`,
+            })}
+          </span>
         )}
       </div>
 
