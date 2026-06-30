@@ -24,8 +24,8 @@ export default function MobileCategorySidebar({
   if (!subCategories || subCategories.length === 0) return null;
 
   return (
-    <div className="w-[85px] bg-[#f4f5f7] py-4">
-      <div className="flex flex-col items-center gap-6">
+    <div className="w-[85px] bg-[#f4f5f7] py-4 h-full">
+      <div className="flex flex-col items-center gap-6 h-full justify-start">
         <Link
           href={`/category/${parentSlug}`}
           className="flex flex-col items-center gap-2 px-1 w-full"
