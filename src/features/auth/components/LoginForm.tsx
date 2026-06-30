@@ -108,7 +108,7 @@ export function LoginForm({
           <button
             type="button"
             onClick={onToggleMode}
-            className="rounded-md border border-border px-2 py-1 text-xs font-semibold text-text-primary transition hover:border-primary hover:text-primary"
+            className="rounded-md border border-border px-2 py-1 text-xs font-semibold text-text-primary whitespace-nowrap transition hover:border-primary hover:text-primary"
           >
             Sign up
           </button>
