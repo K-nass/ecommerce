@@ -136,5 +136,35 @@ export async function getSearchPageData(
   };
 }
 
+export async function getBannerBySlug(
+  slug: string,
+  locale: string,
+): Promise<{
+  id: number;
+  title: string;
+  slug: string;
+  description: string;
+  image: { desktop: string; mobile: string };
+  status: boolean;
+  products: unknown[];
+} | null> {
+  try {
+    const response = await apiFetch<ApiResponse<{
+      id: number;
+      title: string;
+      slug: string;
+      description: string;
+      image: { desktop: string; mobile: string };
+      status: boolean;
+      products: unknown[];
+    }>>(`/general/banners?slug=${encodeURIComponent(slug)}`, {
+      headers: { lang: locale },
+    });
+    return response.data;
+  } catch {
+    return null;
+  }
+}
+
 export const getCachedCategoryPageData = cache(getCategoryPageData);
 export const getCachedSearchPageData = cache(getSearchPageData);

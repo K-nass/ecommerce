@@ -10,7 +10,7 @@ import MobileSidebarContent from "@/features/categories/components/MobileSidebar
 import ProductsGridContent from "@/features/categories/components/ProductsGridContent";
 import { CategoryMobileLayout } from "@/features/categories/components/CategoryMobileLayout";
 import { categoryMenuService } from "@/features/categories/services/categoryMenuService";
-import { getCategoryPageData, getCachedCategoryPageData } from "@/features/categories/services/categoryProductsService";
+import { getCategoryPageData, getCachedCategoryPageData, getBannerBySlug } from "@/features/categories/services/categoryProductsService";
 import { findCategoryPath } from "@/features/categories/utils/categoryBreadcrumbs";
 import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
@@ -52,7 +52,10 @@ async function BannerPromotionContent({
     result = await getCategoryPageData(slug, locale, searchParams, "promotion");
   }
   if (result.products.length === 0) {
-    notFound();
+    const banner = await getBannerBySlug(slug, locale);
+    if (!banner) {
+      notFound();
+    }
   }
   const { products, filters, filterLabels } = result;
 
