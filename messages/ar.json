@@ -78,6 +78,9 @@
       "clearAll": "مسح الكل",
       "show": "عرض النتائج",
       "searchBrand": "البحث عن ماركة"
+    },
+    "location": {
+      "loading": "جاري التحديد..."
     }
   },
   "home": {
