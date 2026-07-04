@@ -16,6 +16,7 @@ import { usePathname, useRouter } from "@/i18n/navigation";
 import { useLocale } from "next-intl";
 import { cn } from "@/shared/utils/cn";
 import { Link } from "@/i18n/navigation";
+import { LocationDisplay } from "@/features/location";
 
 export default function MainNav() {
   const mounted = useSyncExternalStore(
@@ -48,8 +49,7 @@ export default function MainNav() {
     <div className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 md:gap-6">
       <div className="flex items-center gap-2 md:gap-3 shrink-0">
         <Logo src="/meem-logo.png" alt="Carrefour" priority />
-
-
+        <LocationDisplay />
       </div>
 
       <div className="flex justify-center">

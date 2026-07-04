@@ -78,6 +78,9 @@
       "clearAll": "Clear All",
       "show": "Show results",
       "searchBrand": "Search Brand"
+    },
+    "location": {
+      "loading": "Detecting..."
     }
   },
   "home": {
