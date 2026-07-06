@@ -39,6 +39,8 @@ export interface CategoryProduct {
   quantity: number;
   discount_valid: boolean;
   ratings: number;
+  in_stock?: boolean;
+  is_fast_shipping_available: boolean;
   image: CategoryProductImage;
 }
 

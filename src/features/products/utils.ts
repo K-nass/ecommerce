@@ -45,13 +45,13 @@ export function getVariantPriceRange(variants: { current_price: number }[]): { m
   return { min, max };
 }
 
-export function getStockStatus(product: { in_stock: number; quantity: number; sold_quantity: number }): {
+export function getStockStatus(product: { in_stock: boolean; quantity: number; sold_quantity: number }): {
   inStock: boolean;
   remaining: number;
 } {
   const remaining = product.quantity - product.sold_quantity;
   return {
-    inStock: product.in_stock === 1 && remaining > 0,
+    inStock: product.in_stock && remaining > 0,
     remaining: Math.max(0, remaining),
   };
 }

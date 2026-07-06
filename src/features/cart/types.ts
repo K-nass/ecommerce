@@ -15,7 +15,7 @@ export interface CartItemProduct {
     original: Record<string, string>;
   };
   sku: string;
-  in_stock: number;
+  in_stock: boolean;
   quantity: number;
 }
 
@@ -45,7 +45,7 @@ export interface HydratedCartItem extends GuestCartItem {
   current_price: number;
   slug: string;
   sku: string;
-  in_stock: number;
+  in_stock: boolean;
   stock_quantity: number;
 }
 
@@ -53,6 +53,8 @@ export interface AddBulkPayload {
   items: Array<{
     product_id: number;
     quantity: number;
+    product_variant_id?: number | null;
+    shipping_method?: "scheduled" | "fast";
   }>;
 }
 
@@ -85,4 +87,8 @@ export interface CartApiCart {
   total_quantity: number;
   total_price: number;
   items: CartApiItem[];
+  normal_items?: CartApiItem[];
+  fast_items?: CartApiItem[];
+  normal_items_count?: number;
+  fast_items_count?: number;
 }

@@ -10,6 +10,7 @@ import { cartService } from "../services/cartService";
 import { productService } from "@/features/products/services/productService";
 import { CartSection } from "./CartSection";
 import { CartSummary } from "./CartSummary";
+import { FastShippingSection } from "@/features/fast-shipping/components/FastShippingSection";
 import ProductSlider from "@/features/home/productSlider/ProductSlider";
 import { calcSubtotal, calcTotalQuantity } from "../utils";
 import type { ProductListItem } from "@/features/products/types";
@@ -159,8 +160,8 @@ export function CartPageContent() {
 
       if (controller.signal.aborted) return;
 
-      if (cart && cart.items.length > 0) {
-        const items: HydratedCartItem[] = cart.items.map((item) => ({
+      if (cart && (cart.items?.length || cart.fast_items?.length || cart.normal_items?.length)) {
+        const mapItem = (item: typeof cart.items[0], deliveryType: "scheduled" | "fast"): HydratedCartItem => ({
           product_id: item.product.id,
           product_variant_id: item.product_variant_id ?? null,
           cartItemId: item.id,
@@ -171,10 +172,23 @@ export function CartPageContent() {
           current_price: Number(item.price),
           slug: item.product.slug,
           sku: "",
-          in_stock: 1,
+          in_stock: true,
           stock_quantity: 999,
-          deliveryType: "scheduled",
-        }));
+          deliveryType,
+        });
+
+        const items: HydratedCartItem[] = [];
+
+        if (cart.normal_items) {
+          items.push(...cart.normal_items.map((i) => mapItem(i, "scheduled")));
+        }
+        if (cart.fast_items) {
+          items.push(...cart.fast_items.map((i) => mapItem(i, "fast")));
+        }
+
+        if (items.length === 0) {
+          items.push(...cart.items.map((i) => mapItem(i, "scheduled")));
+        }
 
         dispatch({ type: "SET_SERVER", items });
       } else {
@@ -209,9 +223,15 @@ export function CartPageContent() {
       return;
     }
 
+    if (syncError) {
+      // Sync failed — fall back to guest items so the user can retry.
+      dispatch({ type: "SET_GUEST" });
+      return;
+    }
+
     // Authenticated and sync complete (or no guest items): load from server.
     loadServerCart();
-  }, [isAuthenticated, isSyncing, loadServerCart]);
+  }, [isAuthenticated, isSyncing, syncError, loadServerCart]);
 
   // Abort any in-flight request on unmount (navigation away).
   useEffect(() => {
@@ -261,7 +281,7 @@ export function CartPageContent() {
             current_price: p.current_price,
             slug: p.slug,
             sku: p.sku ?? "",
-            in_stock: p.quantity > 0 ? 1 : 0,
+            in_stock: p.quantity > 0,
             stock_quantity: p.quantity,
           };
         }),
@@ -292,7 +312,7 @@ export function CartPageContent() {
               current_price: 0,
               slug: "",
               sku: "",
-              in_stock: 0,
+              in_stock: false,
               stock_quantity: 0,
             };
           }
@@ -304,7 +324,7 @@ export function CartPageContent() {
             current_price: p.current_price,
             slug: p.slug,
             sku: p.sku ?? "",
-            in_stock: p.quantity > 0 ? 1 : 0,
+            in_stock: p.quantity > 0,
             stock_quantity: p.quantity,
           };
         }),
@@ -513,8 +533,7 @@ export function CartPageContent() {
               onUpdateQuantity={handleUpdateQuantity}
               onRemove={handleRemove}
             />
-            <CartSection
-              deliveryType="fast"
+            <FastShippingSection
               items={fastItems}
               pendingItemIds={state.pendingItemIds}
               onUpdateQuantity={handleUpdateQuantity}

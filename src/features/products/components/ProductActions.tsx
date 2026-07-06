@@ -30,7 +30,7 @@ export function ProductActions({ product, selectedVariant }: ProductActionsProps
   async function handleAddToCart() {
     await addItem({
       quantity,
-      deliveryType: "scheduled",
+      deliveryType: product.is_fast_shipping_available ? "fast" : "scheduled",
       product_variant_id: variant?.id ?? null,
     });
     toast.success(t("addedToCart", { name: product.name, count: quantity }));

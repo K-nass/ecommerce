@@ -24,6 +24,7 @@ interface ProductCardProps {
   priority?: boolean;
   hasVariants?: boolean;
   badgeText?: string;
+  isInStock?: boolean;
 }
 
 export default function ProductCard({
@@ -42,6 +43,7 @@ export default function ProductCard({
   priority: priorityProp,
   hasVariants = false,
   badgeText,
+  isInStock = true,
 }: ProductCardProps) {
   const { quantity, isPending, addItem, increment, decrement } = useCartActions(productId);
   const [animating, setAnimating] = useState(false);
@@ -95,7 +97,15 @@ export default function ProductCard({
           />
         </Link>
 
-        {quantity === 0 && hasVariants ? (
+        {!isInStock && quantity === 0 ? (
+          <button
+            type="button"
+            disabled
+            className="absolute end-1 bottom-1 bg-gray-300 rounded-full w-10 h-10 text-white font-medium text-2xl flex items-center justify-center shadow-[0_2px_3px_1px_rgba(0,0,0,0.14)] z-10 cursor-not-allowed"
+          >
+            <Plus className="h-5 w-5" />
+          </button>
+        ) : quantity === 0 && hasVariants ? (
           <Link
             href={`/products/${slug}`}
             className="absolute end-1 bottom-1 bg-primary rounded-full w-10 h-10 text-white font-medium text-2xl flex items-center justify-center shadow-[0_2px_3px_1px_rgba(0,0,0,0.14)] z-10 transition-transform duration-200 hover:scale-105"
@@ -136,8 +146,11 @@ export default function ProductCard({
             <button
               type="button"
               onClick={handleIncrement}
-              disabled={isPending}
-              className="flex h-8 w-8 items-center justify-center rounded-full hover:bg-white/20 transition-colors"
+              disabled={isPending || !isInStock}
+              className={cn(
+                "flex h-8 w-8 items-center justify-center rounded-full transition-colors",
+                !isInStock ? "cursor-not-allowed opacity-40" : "hover:bg-white/20",
+              )}
               aria-label="Increase quantity"
             >
               <Plus className="h-4 w-4" />

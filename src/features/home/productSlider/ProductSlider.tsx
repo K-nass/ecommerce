@@ -74,6 +74,8 @@ export default function ProductSlider({
               priority={index < Math.round(cols)}
               hasVariants={product.hasVariants}
               badgeText={badgeText}
+              deliveryType={product.isFastShippingAvailable ? "fast" : "scheduled"}
+              isInStock={product.isInStock}
             />
           </SwiperSlide>
         ))}

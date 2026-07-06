@@ -21,5 +21,7 @@ export function toProductItem(p: ApiProduct): ProductItem {
     inStock: p.quantity > 0 ? p.quantity : 0,
     stockQuantity: p.quantity,
     hasVariants: p.has_variants,
+    isFastShippingAvailable: p.is_fast_shipping_available,
+    isInStock: p.in_stock ?? p.quantity > 0,
   };
 }
