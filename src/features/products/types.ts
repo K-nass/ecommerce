@@ -73,7 +73,7 @@ export interface ProductDetail {
   sku: string;
   quantity: number;
   sold_quantity: number;
-  in_stock: number;
+  in_stock: boolean;
   status: boolean;
   product_type: string;
   height: number;
@@ -82,6 +82,7 @@ export interface ProductDetail {
   weight: number;
   has_flash_sale: boolean;
   has_discount: boolean;
+  is_fast_shipping_available: boolean;
   images: ProductImages;
   variants: ProductVariant[];
   reviews: ProductReview[];
@@ -120,7 +121,8 @@ export interface ProductListItem {
   quantity: number;
   discount_valid: boolean;
   sku?: string;
-  in_stock?: number;
+  in_stock?: boolean;
+  is_fast_shipping_available: boolean;
   image: {
     thumbnail: string;
     original: Record<string, string>;

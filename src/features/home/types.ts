@@ -57,6 +57,8 @@ export interface ApiProduct {
   quantity: number;
   discount_valid: boolean;
   ratings: number;
+  in_stock?: boolean;
+  is_fast_shipping_available: boolean;
   image: {
     thumbnail: string;
     original: Record<string, string>;
@@ -74,6 +76,8 @@ export interface ProductItem {
   inStock?: number;
   stockQuantity?: number;
   hasVariants?: boolean;
+  isFastShippingAvailable?: boolean;
+  isInStock?: boolean;
 }
 
 export interface BannerProps {

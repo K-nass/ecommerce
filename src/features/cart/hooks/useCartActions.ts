@@ -65,6 +65,7 @@ export function useCartActions(productId: number) {
           product_id: productId,
           quantity: item.quantity,
           product_variant_id: item.product_variant_id ?? null,
+          shipping_method: item.deliveryType ?? "scheduled",
         }, locale);
       } catch {
         // Rollback on failure.
