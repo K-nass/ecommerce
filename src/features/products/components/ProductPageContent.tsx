@@ -18,7 +18,7 @@ interface ProductPageContentProps {
 export function ProductPageContent({ product }: ProductPageContentProps) {
   const t = useTranslations("product");
   const [selectedVariantId, setSelectedVariantId] = useState<number | null>(
-    () => product.variants[0]?.id ?? null,
+    () => product.variants.find((v) => v.quantity > 0)?.id ?? product.variants[0]?.id ?? null,
   );
   const images = getSortedImages(product);
 

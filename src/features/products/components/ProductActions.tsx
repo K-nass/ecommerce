@@ -18,7 +18,7 @@ export function ProductActions({ product, selectedVariant }: ProductActionsProps
   const t = useTranslations("product");
   const variant = selectedVariant;
   const stock = variant
-    ? { inStock: variant.quantity > 0, remaining: variant.quantity }
+    ? { inStock: product.in_stock && variant.quantity > 0, remaining: variant.quantity }
     : getStockStatus(product);
 
   const maxQuantity = Math.min(stock.remaining, 99);
