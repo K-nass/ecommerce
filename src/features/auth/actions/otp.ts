@@ -29,20 +29,12 @@ export async function otpAction(
       ? { email: email.trim(), code }
       : { phone_number: phone.trim(), code, ...(otpId ? { otp_id: otpId } : {}) };
 
-    const response = await authService.otpLogin(payload, locale);
-
-    if (!response.success) {
-      return {
-        success: false,
-        message: response.message || "Verification failed.",
-        payload: { email, phone },
-      };
-    }
+    const data = await authService.otpLogin(payload, locale);
 
     return {
       success: true,
-      message: response.message || "Email verified successfully!",
-      data: response.data,
+      message: "Email verified successfully!",
+      data,
     };
   } catch (error) {
     if (error instanceof ApiError) {

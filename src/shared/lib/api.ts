@@ -164,6 +164,9 @@ export async function apiFetch<T>(
     if (enableLogs) {
       console.log("? " + method + " " + url + " " + response.status + " " + duration + "ms");
     }
+    if (parsedBody && typeof parsedBody === "object" && "data" in parsedBody) {
+      return (parsedBody as Record<string, unknown>).data as T;
+    }
     return parsedBody as T;
   }
 

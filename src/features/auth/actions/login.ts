@@ -32,8 +32,8 @@ export async function loginAction(
       : { phone_number: phone.trim(), password };
 
   try {
-    const response = await authService.login(payload, locale);
-    return { success: true, message: response.message || "Login successful.", data: response.data };
+    const data = await authService.login(payload, locale);
+    return { success: true, message: "Login successful.", data };
   } catch (error) {
     if (error instanceof ApiError) {
       const mapped: Record<string, string> = {};

@@ -79,20 +79,17 @@ export const useAuthStore = create<AuthState>()(
       login: async (payload) => {
         set({ loading: true, error: null });
         try {
-          const response = await authService.login(payload);
-          if (!response.success) {
-            throw new Error(response.message || "Unable to login.");
-          }
+          const data = await authService.login(payload);
 
-          writeTokenToStorage(response.data.token);
+          writeTokenToStorage(data.token);
           set({
-            token: response.data.token,
-            permissions: response.data.permissions ?? [],
-            role: response.data.role ?? [],
-            emailVerified: response.data.email_verified ?? false,
-            isAuthenticated: Boolean(response.data.token),
-            email: response.data.email ?? null,
-            phoneNumber: response.data.phone_number ?? null,
+            token: data.token,
+            permissions: data.permissions ?? [],
+            role: data.role ?? [],
+            emailVerified: data.email_verified ?? false,
+            isAuthenticated: Boolean(data.token),
+            email: data.email ?? null,
+            phoneNumber: data.phone_number ?? null,
             loading: false,
             error: null,
           });
@@ -106,12 +103,7 @@ export const useAuthStore = create<AuthState>()(
       register: async (payload) => {
         set({ loading: true, error: null });
         try {
-          const response = await authService.register(payload);
-          if (!response.success) {
-            throw new Error(response.message || "Unable to register.");
-          }
-
-          const data = response.data as AuthLoginData;
+          const data = await authService.register(payload) as AuthLoginData;
           if (data?.token) {
             writeTokenToStorage(data.token);
             set({

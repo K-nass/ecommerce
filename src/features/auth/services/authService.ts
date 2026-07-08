@@ -11,7 +11,6 @@ import type {
   SocialLoginPayload,
   VerifyPasswordPayload,
 } from "@/features/auth/types";
-import type { ApiResponse } from "@/shared/types";
 
 function toRegisterBody(payload: RegisterPayload) {
   if (payload.avatar instanceof File) {
@@ -38,12 +37,9 @@ function toRegisterBody(payload: RegisterPayload) {
   });
 }
 
-type AuthResponse = ApiResponse<AuthLoginData>;
-type MessageResponse = ApiResponse<Record<string, unknown>>;
-
 export const authService = {
-  login: async (payload: LoginPayload, lang?: string): Promise<AuthResponse> => {
-    return apiFetch<AuthResponse>("/token", {
+  login: async (payload: LoginPayload, lang?: string): Promise<AuthLoginData> => {
+    return apiFetch<AuthLoginData>("/token", {
       method: "POST",
       body: JSON.stringify(payload),
       lang,
@@ -53,8 +49,8 @@ export const authService = {
   sendOtpCode: async (
     payload: SendOtpCodePayload,
     lang?: string,
-  ): Promise<MessageResponse> => {
-    return apiFetch<MessageResponse>("/send-otp-code", {
+  ): Promise<Record<string, unknown>> => {
+    return apiFetch<Record<string, unknown>>("/send-otp-code", {
       method: "POST",
       body: JSON.stringify(payload),
       lang,
@@ -64,8 +60,8 @@ export const authService = {
   register: async (
     payload: RegisterPayload,
     lang?: string,
-  ): Promise<ApiResponse<AuthLoginData | Record<string, unknown>>> => {
-    return apiFetch<ApiResponse<AuthLoginData | Record<string, unknown>>>("/register", {
+  ): Promise<AuthLoginData | Record<string, unknown>> => {
+    return apiFetch<AuthLoginData | Record<string, unknown>>("/register", {
       method: "POST",
       body: toRegisterBody(payload),
       lang,
@@ -75,8 +71,8 @@ export const authService = {
   otpLogin: async (
     payload: OtpLoginPayload,
     lang?: string,
-  ): Promise<AuthResponse> => {
-    return apiFetch<AuthResponse>("/otp-login", {
+  ): Promise<AuthLoginData> => {
+    return apiFetch<AuthLoginData>("/otp-login", {
       method: "POST",
       body: JSON.stringify(payload),
       lang,
@@ -86,8 +82,8 @@ export const authService = {
   requestForgetPassword: async (
     payload: ForgetPasswordPayload,
     lang?: string,
-  ): Promise<MessageResponse> => {
-    return apiFetch<MessageResponse>("/forget-password", {
+  ): Promise<Record<string, unknown>> => {
+    return apiFetch<Record<string, unknown>>("/forget-password", {
       method: "POST",
       body: JSON.stringify(payload),
       lang,
@@ -97,8 +93,8 @@ export const authService = {
   forgetPassword: async (
     payload: VerifyPasswordPayload,
     lang?: string,
-  ): Promise<MessageResponse> => {
-    return apiFetch<MessageResponse>("/verify-forget-password-token", {
+  ): Promise<Record<string, unknown>> => {
+    return apiFetch<Record<string, unknown>>("/verify-forget-password-token", {
       method: "POST",
       body: JSON.stringify(payload),
       lang,
@@ -108,15 +104,15 @@ export const authService = {
   verifyForgetPasswordToken: async (
     payload: VerifyPasswordPayload,
     lang?: string,
-  ): Promise<MessageResponse> => {
+  ): Promise<Record<string, unknown>> => {
     return authService.forgetPassword(payload, lang);
   },
 
   verifyPassword: async (
     payload: VerifyPasswordPayload,
     lang?: string,
-  ): Promise<MessageResponse> => {
-    return apiFetch<MessageResponse>("/verify-password", {
+  ): Promise<Record<string, unknown>> => {
+    return apiFetch<Record<string, unknown>>("/verify-password", {
       method: "POST",
       body: JSON.stringify(payload),
       lang,
@@ -126,8 +122,8 @@ export const authService = {
   resetPassword: async (
     payload: ResetPasswordPayload,
     lang?: string,
-  ): Promise<MessageResponse> => {
-    return apiFetch<MessageResponse>("/reset-password", {
+  ): Promise<Record<string, unknown>> => {
+    return apiFetch<Record<string, unknown>>("/reset-password", {
       method: "POST",
       body: JSON.stringify(payload),
       lang,
@@ -137,8 +133,8 @@ export const authService = {
   changePassword: async (
     payload: ChangePasswordPayload,
     lang?: string,
-  ): Promise<MessageResponse> => {
-    return apiFetch<MessageResponse>("/change-password", {
+  ): Promise<Record<string, unknown>> => {
+    return apiFetch<Record<string, unknown>>("/change-password", {
       method: "POST",
       body: JSON.stringify(payload),
       lang,
@@ -148,16 +144,16 @@ export const authService = {
   socialLogin: async (
     payload: SocialLoginPayload,
     lang?: string,
-  ): Promise<ApiResponse<AuthLoginData | Record<string, unknown>>> => {
-    return apiFetch<ApiResponse<AuthLoginData | Record<string, unknown>>>("/social-login", {
+  ): Promise<AuthLoginData | Record<string, unknown>> => {
+    return apiFetch<AuthLoginData | Record<string, unknown>>("/social-login", {
       method: "POST",
       body: JSON.stringify(payload),
       lang,
     });
   },
 
-  logout: async (lang?: string): Promise<MessageResponse> => {
-    return apiFetch<MessageResponse>("/logout", {
+  logout: async (lang?: string): Promise<Record<string, unknown>> => {
+    return apiFetch<Record<string, unknown>>("/logout", {
       method: "POST",
       lang,
     });

@@ -1,5 +1,5 @@
 import { apiFetch } from "@/shared/lib/api";
-import type { ApiResponse, PaginatedData } from "@/shared/types";
+import type { PaginatedData } from "@/shared/types";
 import type {
   CartApiCart,
   CartItem,
@@ -8,8 +8,8 @@ import type {
 
 export const cartService = {
   getCart: async (lang?: string): Promise<CartApiCart | null> => {
-    const response = await apiFetch<ApiResponse<PaginatedData<CartApiCart>>>("/cart", { lang });
-    return response.data.data[0] ?? null;
+    const response = await apiFetch<PaginatedData<CartApiCart>>("/cart", { lang });
+    return response.data[0] ?? null;
   },
 
   addItem: async (
@@ -21,12 +21,11 @@ export const cartService = {
     },
     lang?: string,
   ): Promise<CartItem> => {
-    const response = await apiFetch<ApiResponse<CartItem>>("/cart", {
+    return apiFetch<CartItem>("/cart", {
       method: "POST",
       body: JSON.stringify({ item: payload }),
       lang,
     });
-    return response.data;
   },
 
   updateItem: async (
@@ -39,16 +38,15 @@ export const cartService = {
     },
     lang?: string,
   ): Promise<CartApiCart> => {
-    const response = await apiFetch<ApiResponse<CartApiCart>>("/cart/update-item", {
+    return apiFetch<CartApiCart>("/cart/update-item", {
       method: "PUT",
       body: JSON.stringify(payload),
       lang,
     });
-    return response.data;
   },
 
   removeItem: async (itemId: number, lang?: string): Promise<void> => {
-    await apiFetch<ApiResponse<{ message: string }>>("/cart/delete-items", {
+    await apiFetch<{ message: string }>("/cart/delete-items", {
       method: "DELETE",
       body: JSON.stringify({ item_id: itemId }),
       lang,
@@ -56,7 +54,7 @@ export const cartService = {
   },
 
   addBulkToCart: async (payload: AddBulkPayload, lang?: string): Promise<void> => {
-    await apiFetch<ApiResponse<{ message: string }>>("/cart/bulk-items", {
+    await apiFetch<{ message: string }>("/cart/bulk-items", {
       method: "POST",
       body: JSON.stringify(payload),
       lang,

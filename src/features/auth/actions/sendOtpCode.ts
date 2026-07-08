@@ -19,11 +19,11 @@ export async function sendOtpCodeAction(
 
   try {
     const payload = email ? { email: email.trim() } : { phone_number: phone.trim() };
-    const response = await authService.sendOtpCode(payload, locale);
+    await authService.sendOtpCode(payload, locale);
 
     return {
       success: true,
-      message: response.message || "OTP code sent successfully!",
+      message: "OTP code sent successfully!",
     };
   } catch (error) {
     if (error instanceof ApiError) {

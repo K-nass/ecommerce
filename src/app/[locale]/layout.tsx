@@ -13,6 +13,7 @@ import { ChannelThemeProvider } from "@/features/fast-shipping/components/Channe
 import { CartSyncProvider } from "@/features/cart/components/CartSyncProvider";
 import { Montserrat } from "next/font/google";
 import { cn } from "@/shared/utils/cn";
+import { settingsService } from "@/features/settings";
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
@@ -24,20 +25,38 @@ const montserrat = Montserrat({
   variable: "--font-montserrat",
 });
 
+const DEFAULT_EN_TITLE = "Meem Market";
+const DEFAULT_AR_TITLE = "ميم ماركت";
+const DEFAULT_EN_DESC = "Shop the best products at Meem Market — electronics, fashion, home goods, and more.";
+const DEFAULT_AR_DESC = "تسوق أفضل المنتجات في ميم ماركت - إلكترونيات، أزياء، منتجات المنزل والمزيد";
+const DEFAULT_FAVICON = "/meem-icon.jpeg";
+
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params;
+  const isAr = locale === "ar";
+
+  let siteName = isAr ? DEFAULT_AR_TITLE : DEFAULT_EN_TITLE;
+  let description = isAr ? DEFAULT_AR_DESC : DEFAULT_EN_DESC;
+  let favicon = DEFAULT_FAVICON;
+
+  try {
+    const settings = await settingsService.getSettings(locale);
+    if (settings?.site_name) siteName = settings.site_name;
+    if (settings?.meta_desc) description = settings.meta_desc;
+    else if (settings?.site_desc) description = settings.site_desc;
+    if (settings?.favicon) favicon = settings.favicon;
+  } catch {
+    // Use defaults
+  }
 
   return {
     title: {
-      default: locale === "ar" ? "ميم ماركت" : "Meem Market",
-      template: "%s | Meem Market",
+      default: siteName,
+      template: `%s | ${siteName}`,
     },
-    description:
-      locale === "ar"
-        ? "تسوق أفضل المنتجات في ميم ماركت - إلكترونيات، أزياء، منتجات المنزل والمزيد"
-        : "Shop the best products at Meem Market - electronics, fashion, home goods and more.",
+    description,
     icons: {
-      icon: "/meem-icon.jpeg",
+      icon: favicon,
     },
   };
 }
@@ -54,6 +73,14 @@ export default async function RootLayout({
   setRequestLocale(locale);
   
   const dir = locale === "ar" ? "rtl" : "ltr";
+
+  let settingsLogo: string | null = null;
+  try {
+    const settings = await settingsService.getSettings(locale);
+    if (settings?.logo) settingsLogo = settings.logo;
+  } catch {
+    // Use default
+  }
   
   return (
       <html lang={locale} dir={dir} className="overflow-x-hidden">
@@ -61,7 +88,7 @@ export default async function RootLayout({
         <link rel="preconnect" href={process.env.NEXT_PUBLIC_API_URL} />
         <NextIntlClientProvider>
           <div className="hidden lg:block">
-            <Header params={params} />
+            <Header params={params} settingsLogo={settingsLogo} />
           </div>
           <div className="block lg:hidden">
             <MobileHeader />
