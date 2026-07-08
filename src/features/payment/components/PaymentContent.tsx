@@ -2,16 +2,21 @@
 
 import { useState } from "react";
 import { useTranslations } from "next-intl";
-import { Loader2, CreditCard } from "lucide-react";
+import { Loader2, CreditCard, Zap } from "lucide-react";
+import { useChannelStore } from "@/features/fast-shipping/store/useChannelStore";
 import { checkoutService } from "../services/paymentService";
-import type { CheckoutRequest, CheckoutFormData } from "../types";
+import type { CheckoutRequest, FastCheckoutRequest, CheckoutFormData } from "../types";
+
+interface CheckoutFormDataExtended extends CheckoutFormData {
+  governorate_id: string;
+}
 
 interface FieldError {
   field: string;
   message: string;
 }
 
-function validate(form: CheckoutFormData): FieldError[] {
+function validate(form: CheckoutFormDataExtended, isFast: boolean): FieldError[] {
   const errors: FieldError[] = [];
 
   if (!form.name.trim()) {
@@ -38,10 +43,14 @@ function validate(form: CheckoutFormData): FieldError[] {
     errors.push({ field: "street_address", message: "Street address is required" });
   }
 
+  if (isFast && !form.governorate_id.trim()) {
+    errors.push({ field: "governorate_id", message: "Governorate is required for fast shipping" });
+  }
+
   return errors;
 }
 
-const initialForm: CheckoutFormData = {
+const initialForm: CheckoutFormDataExtended = {
   name: "",
   user_phone: "",
   user_email: "",
@@ -50,11 +59,14 @@ const initialForm: CheckoutFormData = {
   country: "",
   street_address: "",
   notes: "",
+  governorate_id: "",
 };
 
 export function PaymentContent() {
   const t = useTranslations("payment");
-  const [form, setForm] = useState<CheckoutFormData>(initialForm);
+  const channel = useChannelStore((s) => s.channel);
+  const isFast = channel === "fast-shipping";
+  const [form, setForm] = useState<CheckoutFormDataExtended>(initialForm);
   const [errors, setErrors] = useState<FieldError[]>([]);
   const [submitting, setSubmitting] = useState(false);
   const [apiError, setApiError] = useState<string | null>(null);
@@ -62,7 +74,7 @@ export function PaymentContent() {
   const fieldError = (name: string) =>
     errors.find((e) => e.field === name)?.message;
 
-  const set = (field: keyof CheckoutFormData) => (
+  const set = (field: keyof CheckoutFormDataExtended) => (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     setForm((prev) => ({ ...prev, [field]: e.target.value }));
@@ -74,7 +86,7 @@ export function PaymentContent() {
     e.preventDefault();
     setApiError(null);
 
-    const validationErrors = validate(form);
+    const validationErrors = validate(form, isFast);
     if (validationErrors.length > 0) {
       setErrors(validationErrors);
       return;
@@ -82,25 +94,39 @@ export function PaymentContent() {
 
     setSubmitting(true);
 
-    const payload: CheckoutRequest = {
-      name: form.name.trim(),
-      user_phone: form.user_phone.trim(),
-      user_email: form.user_email.trim(),
-      address: {
-        city: form.city.trim(),
-        state: form.state.trim(),
-        country: form.country.trim(),
-        street_address: form.street_address.trim(),
-      },
-    };
-
-    if (form.notes.trim()) {
-      payload.notes = form.notes.trim();
-    }
-
     try {
-      const result = await checkoutService.processCheckout(payload);
-      window.location.href = result.url;
+      if (isFast) {
+        const payload: FastCheckoutRequest = {
+          governorate_id: Number(form.governorate_id.trim()),
+          name: form.name.trim(),
+          user_phone: form.user_phone.trim(),
+          user_email: form.user_email.trim(),
+          address: {
+            city: form.city.trim(),
+            state: form.state.trim(),
+            country: form.country.trim(),
+            street_address: form.street_address.trim(),
+          },
+        };
+        if (form.notes.trim()) payload.notes = form.notes.trim();
+        const result = await checkoutService.processFastCheckout(payload);
+        window.location.href = "/orders/" + result.id;
+      } else {
+        const payload: CheckoutRequest = {
+          name: form.name.trim(),
+          user_phone: form.user_phone.trim(),
+          user_email: form.user_email.trim(),
+          address: {
+            city: form.city.trim(),
+            state: form.state.trim(),
+            country: form.country.trim(),
+            street_address: form.street_address.trim(),
+          },
+        };
+        if (form.notes.trim()) payload.notes = form.notes.trim();
+        const result = await checkoutService.processCheckout(payload);
+        window.location.href = result.url;
+      }
     } catch (err) {
       const msg = err instanceof Error ? err.message : t("errorProcessing");
       setApiError(msg);
@@ -128,6 +154,14 @@ export function PaymentContent() {
 
   return (
     <div className="mx-auto max-w-lg space-y-6">
+      {isFast && (
+        <div className="rounded-2xl border-2 border-accent bg-amber-50 p-4">
+          <div className="flex items-center gap-2 text-sm font-semibold text-amber-800">
+            <Zap className="h-4 w-4" />
+            Fast Shipping Checkout
+          </div>
+        </div>
+      )}
       {apiError && (
         <div className="rounded-xl border-2 border-red-200 bg-red-50 p-4 text-sm text-red-700">
           {apiError}
@@ -245,6 +279,21 @@ export function PaymentContent() {
               <p className="text-xs text-red-500">{fieldError("street_address")}</p>
             )}
           </div>
+
+          {isFast && (
+            <div className="space-y-1.5">
+              <label className={labelClass}>{t("governorate") || "Governorate"}</label>
+              <input
+                className={fieldError("governorate_id") ? errorClass : inputClass}
+                placeholder={"Governorate ID"}
+                value={form.governorate_id}
+                onChange={set("governorate_id")}
+              />
+              {fieldError("governorate_id") && (
+                <p className="text-xs text-red-500">{fieldError("governorate_id")}</p>
+              )}
+            </div>
+          )}
         </div>
 
         <div className="space-y-1.5">

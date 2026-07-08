@@ -9,6 +9,7 @@ import MobileHeader from "@/features/navigation/components/mobile/MobileHeader";
 import MobileBottomNav from "@/features/navigation/components/mobile/MobileBottomNav";
 import Footer from "@/features/navigation/components/footer/Footer";
 import { AuthModal } from "@/features/auth/components/AuthModal";
+import { ChannelThemeProvider } from "@/features/fast-shipping/components/ChannelThemeProvider";
 import { CartSyncProvider } from "@/features/cart/components/CartSyncProvider";
 import { Montserrat } from "next/font/google";
 import { cn } from "@/shared/utils/cn";
@@ -66,6 +67,7 @@ export default async function RootLayout({
             <MobileHeader />
           </div>
           <MobileBottomNav />
+          <ChannelThemeProvider />
           <CartSyncProvider>
             <div className="container mx-auto px-4 flex flex-col min-h-screen pb-[56px] lg:pb-0">
               {children}

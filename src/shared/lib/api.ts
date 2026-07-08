@@ -1,4 +1,4 @@
-import { AUTH_TOKEN_STORAGE_KEY } from "@/shared/constants/storageKeys";
+import { AUTH_TOKEN_STORAGE_KEY, CHANNEL_STORAGE_KEY } from "@/shared/constants/storageKeys";
 
 export class ApiError extends Error {
   status: number;
@@ -19,10 +19,22 @@ function getAuthToken() {
   return window.localStorage.getItem(AUTH_TOKEN_STORAGE_KEY);
 }
 
+async function getChannel() {
+  if (typeof window === "undefined") {
+    try {
+      const { cookies } = await import("next/headers");
+      const cookieStore = await cookies();
+      return cookieStore.get(CHANNEL_STORAGE_KEY)?.value ?? "home";
+    } catch {
+      return "home";
+    }
+  }
+  return window.localStorage.getItem(CHANNEL_STORAGE_KEY) ?? "home";
+}
+
 function extractApiMessage(body: Record<string, unknown>): string | undefined {
   return (body.message as string) || (body.data as Record<string, unknown> | undefined)?.message as string | undefined;
 }
-
 function extractApiErrors(body: Record<string, unknown>): Record<string, string[]> | undefined {
   const isErrorMap = (obj: Record<string, unknown>): obj is Record<string, string[]> => {
     const skipKeys = new Set(["message", "status", "success", "data"]);
@@ -56,6 +68,8 @@ type ApiFetchOptions = RequestInit & {
   lang?: string;
   /** Request timeout in ms. Defaults to 15000. Set to 0 to disable. */
   timeout?: number;
+  /** Set to false to skip the X-Channel header (e.g. status endpoint). */
+  channel?: boolean;
 };
 
 export async function apiFetch<T>(
@@ -86,7 +100,16 @@ export async function apiFetch<T>(
     headers.set("lang", options.lang);
   }
 
+  const channel = options.channel !== false ? await getChannel() : null;
+  if (channel && !headers.has("X-Channel")) {
+    headers.set("X-Channel", channel);
+  }
+
   const enableLogs = process.env.NEXT_PUBLIC_XHR_LOGS === "true";
+
+  if (enableLogs) {
+    console.log("[apiFetch] Headers:", Object.fromEntries(headers.entries()));
+  }
   const method = (options.method ?? "GET").toUpperCase();
   const start = Date.now();
 
@@ -139,7 +162,7 @@ export async function apiFetch<T>(
 
   if (response.ok) {
     if (enableLogs) {
-      console.log("? " + method + " " + url + " " + response.status + " " + duration + "ms", parsedBody);
+      console.log("? " + method + " " + url + " " + response.status + " " + duration + "ms");
     }
     return parsedBody as T;
   }
@@ -165,10 +188,7 @@ export async function apiFetch<T>(
   }
 
   if (enableLogs) {
-    console.error("? " + method + " " + url + " " + response.status + " " + duration + "ms", {
-      errorMessage,
-      response: parsedBody,
-    });
+    console.error("? " + method + " " + url + " " + response.status + " " + duration + "ms — " + errorMessage);
   }
 
   throw new ApiError(errorMessage, response.status);

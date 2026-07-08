@@ -25,6 +25,16 @@ button {
   --color-discount: #bc1e20;
 }
 
+:root {
+  --header-gradient-start: rgb(157, 176, 196);
+  --header-gradient-end: rgb(255, 255, 255);
+}
+
+[data-channel="fast-shipping"] {
+  --header-gradient-start: rgb(252, 238, 190);
+  --header-gradient-end: rgb(255, 253, 248);
+}
+
 @layer base {
   body {
     font-family: var(--font-montserrat), sans-serif;
@@ -32,7 +42,7 @@ button {
 }
 @layer utilities {
   .header-gradient {
-    background: linear-gradient(rgb(157, 176, 196), rgb(255, 255, 255));
+    background: linear-gradient(var(--header-gradient-start), var(--header-gradient-end));
   }
   .header-shadow {
     box-shadow: 0 4px 24px 0 rgba(0, 0, 0, 0.06);
