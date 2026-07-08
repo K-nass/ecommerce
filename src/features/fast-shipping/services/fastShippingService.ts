@@ -1,5 +1,4 @@
 import { apiFetch } from "@/shared/lib/api";
-import type { ApiResponse } from "@/shared/types";
 
 export interface FastShippingStatus {
   enabled: boolean;
@@ -13,10 +12,9 @@ export interface FastShippingStatus {
 
 export const fastShippingService = {
   getStatus: async (lang?: string): Promise<FastShippingStatus> => {
-    const response = await apiFetch<ApiResponse<FastShippingStatus>>(
+    return apiFetch<FastShippingStatus>(
       "/general/fast-shipping/status",
       { channel: false, lang },
     );
-    return response.data;
   },
 };
