@@ -6,13 +6,15 @@ import FooterBottomRow from "./FooterBottomRow";
 import FooterContactCard from "./FooterContactCard";
 import FooterAccordion from "./FooterAccordion";
 import FooterAccordionItem from "./FooterAccordionItem";
+import { settingsService } from "@/features/settings";
+import { ContactFormMini } from "@/features/contacts";
 
 
 interface FooterProps {
   params: Promise<{ locale: string }>;
 }
 
-const socialIconUrls: Record<string, string> = {
+const socialIconUrls: Record<string, string | undefined> = {
   facebook:
     "https://cdnprod.mafretailproxy.com/assets/images/Facebook_0ddadaef3b_ea343675c7.svg",
   twitter:
@@ -23,20 +25,46 @@ const socialIconUrls: Record<string, string> = {
     "https://cdnprod.mafretailproxy.com/assets/images/Youtube_9cc9f992ab_ad97908e18.svg",
 };
 
+function getSocialIconUrl(platform: string): string {
+  return socialIconUrls[platform] || "https://cdnprod.mafretailproxy.com/assets/images/Facebook_0ddadaef3b_ea343675c7.svg";
+}
+
 export default async function Footer({ params }: FooterProps) {
   const { locale } = await params;
   const data = await footerService.getFooter(locale);
 
+  let settingsLogo: string | null = null;
+  let settingsSocial: { platform: string; url: string; label: string }[] | null = null;
+  let settingsCopyright: string | null = null;
+  let settingsPhone: string | null = null;
+  try {
+    const settings = await settingsService.getSettings(locale);
+    if (settings?.logo) settingsLogo = settings.logo;
+    if (settings?.site_copy_right) settingsCopyright = settings.site_copy_right;
+    if (settings?.phone) settingsPhone = settings.phone;
+    const socialLinks: { platform: string; url: string; label: string }[] = [];
+    if (settings?.facebook) socialLinks.push({ platform: "facebook", url: settings.facebook, label: "Facebook" });
+    if (settings?.instagram) socialLinks.push({ platform: "instagram", url: settings.instagram, label: "Instagram" });
+    if (settings?.youtube) socialLinks.push({ platform: "youtube", url: settings.youtube, label: "YouTube" });
+    if (settings?.linkedin) socialLinks.push({ platform: "linkedin", url: settings.linkedin, label: "LinkedIn" });
+    if (socialLinks.length > 0) settingsSocial = socialLinks;
+  } catch {
+    // Use footer defaults
+  }
+
+  const socialIcons = settingsSocial || data.socialLinks;
+  const logoUrl = settingsLogo || "/Meem-logox-white.png";
+
   return (
     <footer className="bg-primary text-white hidden lg:block mt-10">
       <div className="px-4 py-6 md:px-10">
-        {/* ── Mobile Accordion ── */}
+        {/* أ¢â€‌â‚¬أ¢â€‌â‚¬ Mobile Accordion أ¢â€‌â‚¬أ¢â€‌â‚¬ */}
         <div className="lg:hidden">
           <div className="border-b border-white pb-4">
-              <Logo src="/Meem-logox-white.png" alt="Kareem Shop" />
+              <Logo src={logoUrl} alt="Logo" />
             <p className="mt-4 text-xs leading-normal font-normal text-white">{data.contactInfo.stayInTouchText}</p>
             <div className="mt-2 flex">
-              {data.socialLinks.map((s) => (
+              {socialIcons.map((s) => (
                 <a
                   key={s.platform}
                   href={s.url}
@@ -47,7 +75,7 @@ export default async function Footer({ params }: FooterProps) {
                     alt={s.label}
                     width={24}
                     height={24}
-                    src={socialIconUrls[s.platform]}
+                    src={getSocialIconUrl(s.platform)}
                     unoptimized
                   />
                 </a>
@@ -66,16 +94,19 @@ export default async function Footer({ params }: FooterProps) {
           <div className="pt-4">
             <FooterContactCard contactInfo={data.contactInfo} />
           </div>
+          <div className="mt-4 border-t border-white/20 pt-4">
+            <ContactFormMini />
+          </div>
         </div>
 
-        {/* ── Desktop Grid ── */}
+        {/* أ¢â€‌â‚¬أ¢â€‌â‚¬ Desktop Grid أ¢â€‌â‚¬أ¢â€‌â‚¬ */}
         <div className="hidden lg:block">
           <div className="grid grid-cols-5 gap-4">
             <div>
-              <Logo src="/Meem-logox-white.png" alt="Kareem Shop" />
+              <Logo src={logoUrl} alt="Logo" />
               <p className="mt-4 text-xs leading-normal font-normal text-white">{data.contactInfo.stayInTouchText}</p>
               <div className="mt-2 flex">
-                {data.socialLinks.map((s) => (
+                {socialIcons.map((s) => (
                   <a
                     key={s.platform}
                     href={s.url}
@@ -86,7 +117,7 @@ export default async function Footer({ params }: FooterProps) {
                       alt={s.label}
                       width={24}
                       height={24}
-                      src={socialIconUrls[s.platform]}
+                      src={getSocialIconUrl(s.platform)}
                       unoptimized
                     />
                   </a>
@@ -109,6 +140,10 @@ export default async function Footer({ params }: FooterProps) {
           <div className="flex justify-end">
             <FooterBottomRow data={data.bottomRow} />
           </div>
+        </div>
+
+        <div className="mt-6 border-t border-white/20 pt-4">
+          <ContactFormMini />
         </div>
       </div>
     </footer>

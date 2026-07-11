@@ -1,6 +1,5 @@
 import { cache } from "react";
 import { apiFetch } from "@/shared/lib/api";
-import type { ApiResponse } from "@/shared/types";
 import type {
   CategoryFilters,
   CategoryProduct,
@@ -44,7 +43,7 @@ export async function getCategoryPageData(
     });
   }
 
-  const response = await apiFetch<ApiResponse<CategoryProductsResponse>>(
+  const response = await apiFetch<CategoryProductsResponse>(
     `/general/products?${params.toString()}`,
     {
       headers: {
@@ -54,7 +53,7 @@ export async function getCategoryPageData(
     },
   );
 
-  const rawFilters = response.data.filters as unknown as RawFilter[];
+  const rawFilters = response.filters as unknown as RawFilter[];
   const filters: CategoryFilters = {};
   const filterLabels: Record<string, string> = {};
 
@@ -71,7 +70,7 @@ export async function getCategoryPageData(
   }
 
   return {
-    products: response.data.data,
+    products: response.data,
     filters,
     filterLabels,
   };
@@ -105,7 +104,7 @@ export async function getSearchPageData(
     });
   }
 
-  const response = await apiFetch<ApiResponse<CategoryProductsResponse>>(
+  const response = await apiFetch<CategoryProductsResponse>(
     `/general/products?${params.toString()}`,
     {
       headers: { "lang": locale },
@@ -113,7 +112,7 @@ export async function getSearchPageData(
     },
   );
 
-  const rawFilters = response.data.filters as unknown as RawFilter[];
+  const rawFilters = response.filters as unknown as RawFilter[];
   const filters: CategoryFilters = {};
   const filterLabels: Record<string, string> = {};
 
@@ -130,7 +129,7 @@ export async function getSearchPageData(
   }
 
   return {
-    products: response.data.data,
+    products: response.data,
     filters,
     filterLabels,
   };
@@ -149,7 +148,7 @@ export async function getBannerBySlug(
   products: unknown[];
 } | null> {
   try {
-    const response = await apiFetch<ApiResponse<{
+    const response = await apiFetch<{
       id: number;
       title: string;
       slug: string;
@@ -157,10 +156,10 @@ export async function getBannerBySlug(
       image: { desktop: string; mobile: string };
       status: boolean;
       products: unknown[];
-    }>>(`/general/banners?slug=${encodeURIComponent(slug)}`, {
+    }>(`/general/banners?slug=${encodeURIComponent(slug)}`, {
       headers: { lang: locale },
     });
-    return response.data;
+    return response;
   } catch {
     return null;
   }
